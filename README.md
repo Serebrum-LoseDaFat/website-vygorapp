@@ -19,6 +19,52 @@ npm run dev      # http://localhost:3000
 
 ---
 
+## Repository layout
+
+The Next.js app is at the repository root, so Vercel needs no Root Directory
+override and every command runs from one place.
+
+```
+├── src/            app router pages, components, copy, config
+├── public/         generated web assets (committed — see ## Assets)
+│   ├── app/        phone screenshots
+│   └── brand/      logo and wordmark
+├── scripts/        build-assets.mjs — regenerates public/ from assets/
+├── assets/         SOURCE artwork, not served to the browser
+│   ├── screenshots/  raw 1290×2796 device captures
+│   ├── composites/   hand-composed feature artboards (Split 1–6)
+│   ├── brand/        logo.png + prepared cut-out mockups
+│   └── reference/    misc reference material, unused by the build
+└── .env.example    every environment variable, documented
+```
+
+`assets/` is source material only. Nothing in `src/` imports from it — the
+build reads `public/`, which is committed, so a fresh clone builds without
+running `npm run assets`.
+
+---
+
+## Deploy to Vercel
+
+The site is a stock Next.js app with no server-side secrets, no database and no
+external API calls at runtime, so deployment is the default path:
+
+1. **vercel.com** → **Add New…** → **Project** → import this repository.
+2. Framework preset auto-detects as **Next.js**. Leave Root Directory, build
+   command, output directory and install command on their defaults.
+3. Under **Environment Variables**, add the entries from `.env.example`. Every
+   one is a public `NEXT_PUBLIC_*` value — there are no secrets to protect.
+   Leave `NEXT_PUBLIC_PLAY_URL` and `NEXT_PUBLIC_LOGIN_URL` empty.
+4. **Deploy.**
+5. Point the domain at it under **Settings → Domains**, then set
+   `NEXT_PUBLIC_SITE_URL` to the final URL so canonical tags, `sitemap.xml`,
+   `robots.txt` and Open Graph images resolve correctly.
+
+Skipping step 3 still produces a working build, but the App Store button and
+footer social icons hide themselves, since blank means "not available yet".
+
+---
+
 ## Connect it up
 
 Everything that points off-site lives in `src/lib/config.ts` and is driven by
@@ -168,7 +214,7 @@ screenshot in the folder was checked and is correctly oriented.
 
 ### The features section uses hand-composed product shots
 
-`Images- pop up edits/Split 1–6.png` are finished 1290×2796 artboards — a
+`assets/composites/Split 1–6.png` are finished 1290×2796 artboards — a
 complete phone with its pop-out card already laid out over it, on a pure-white
 ground. `AiModules` renders them **bare**: they carry their own device frame, so
 wrapping them in `PhoneFrame` would double the bezel, and no transform of any
@@ -215,7 +261,7 @@ lifetime is safe. `npm run assets` also clears `.next/cache/images`.
 because that composition does not exist in the full-resolution screenshot
 folder. The mockup is 339px wide, so this card is **upscaled and visibly softer
 than everything else**. To fix: drop the full-resolution "Macro Tracker"
-screenshot into `App screenshots/`, move the entry from `LOWRES_HIGHLIGHT` into
+screenshot into `assets/screenshots/`, move the entry from `LOWRES_HIGHLIGHT` into
 `HIGHLIGHTS`, and re-run `npm run assets`.
 
 ### Why the supplied mockups are no longer used

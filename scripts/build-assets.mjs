@@ -28,23 +28,28 @@ import { createHash } from "node:crypto";
 import { mkdir, writeFile, rm, readdir, unlink } from "node:fs/promises";
 import path from "node:path";
 
-const SRC = path.resolve(process.cwd(), "..");
-const SHOTS = path.join(SRC, "App screenshots");
+const SRC = path.resolve(process.cwd(), "assets");
+const SHOTS = path.join(SRC, "screenshots");
+const BRAND = path.join(SRC, "brand");
 const OUT_APP = path.resolve(process.cwd(), "public/app");
 const OUT_BRAND = path.resolve(process.cwd(), "public/brand");
 
 /**
  * Sources whose pixels are stored upside down.
  *
- * IMG_9973 is saved 180-degree rotated while its EXIF orientation tag claims
- * "normal", so nothing downstream corrects it — every consumer of the home
- * screen rendered the whole UI inverted. Every other screenshot in the folder
- * was checked and is correctly oriented; this is the only one.
+ * IMG_9973 used to belong here: it was saved 180-degree rotated while its EXIF
+ * orientation tag claimed "normal", so nothing downstream corrected it and the
+ * home screen rendered inverted. The source file has since been re-saved
+ * upright, which turned this entry into a double-correction that flipped the
+ * export back over. Verified 2026-08: every file in assets/screenshots is now
+ * correctly oriented, so the set is empty.
  *
- * Corrected here, at ingest, so the exported asset is upright and no component
- * ever needs a compensating CSS transform.
+ * Keep the mechanism. If a future capture arrives upside down, add it here and
+ * it is corrected at ingest, so no component ever needs a compensating CSS
+ * transform. Check the source with `sharp(file).metadata()` first — a wrong
+ * entry here is invisible until someone reruns `npm run assets`.
  */
-const ROTATE_180 = new Set(["IMG_9973.PNG"]);
+const ROTATE_180 = new Set([]);
 
 /** Screen exports. 1080px covers a 360 CSS px phone at 3x. */
 const SCREENS = [
@@ -236,7 +241,7 @@ for (const [file, slug] of SCREENS) {
 // --- hand-composed product shots -------------------------------------------
 const composites = {};
 for (const [file, slug, pad, crop] of COMPOSITES) {
-  const source = path.join(SRC, "Images- pop up edits", file);
+  const source = path.join(SRC, "composites", file);
   const padded = Object.keys(pad).length
     ? await sharp(source)
         .extend({ top: 0, bottom: 0, left: 0, right: 0, ...pad, background: "#ffffff" })
@@ -258,7 +263,7 @@ for (const [file, slug, pad, crop] of COMPOSITES) {
 
 // --- brand -----------------------------------------------------------------
 
-const logo = sharp(path.join(SRC, "logo.png")).trim();
+const logo = sharp(path.join(BRAND, "logo.png")).trim();
 const { info: logoInfo } = await logo.clone().toBuffer({ resolveWithObject: true });
 const logoAsset = await writeHashed(
   logo.clone().resize({ width: 320, withoutEnlargement: true }).png({ compressionLevel: 9 }),
@@ -269,7 +274,7 @@ const logoAsset = await writeHashed(
 console.log(`logo trimmed to ${logoInfo.width}x${logoInfo.height}`);
 
 const iconAsset = await writeHashed(
-  sharp(path.join(SRC, "logo.png"))
+  sharp(path.join(BRAND, "logo.png"))
     .trim()
     .resize({ width: 180, height: 180, fit: "contain", background: { r: 255, g: 255, b: 255, alpha: 0 } })
     .png(),
@@ -279,14 +284,14 @@ const iconAsset = await writeHashed(
 );
 
 const markAsset = await writeHashed(
-  sharp(path.join(SRC, "image__6_-removebg-preview.png")).webp({ quality: 92 }),
+  sharp(path.join(BRAND, "image__6_-removebg-preview.png")).webp({ quality: 92 }),
   "leaf-mark",
   OUT_BRAND,
 );
 
 // Official Apple "Download on the App Store" badge artwork, as supplied.
 const badgeAsset = await writeHashed(
-  sharp(path.join(SRC, "image__8_-removebg-preview.png")).png({ compressionLevel: 9 }),
+  sharp(path.join(BRAND, "image__8_-removebg-preview.png")).png({ compressionLevel: 9 }),
   "app-store-badge",
   OUT_BRAND,
   "png",
