@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "vygor-prod",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "vygor-web", "run", "start"],
+      "port": 3000
+    }
+  ]
+}

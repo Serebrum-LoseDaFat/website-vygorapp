@@ -1,0 +1,106 @@
+{
+  "logo": {
+    "src": "/brand/vygor-logo.Iw62sJJl.png",
+    "width": 320,
+    "height": 107
+  },
+  "icon": {
+    "src": "/brand/icon-180.Bsx29WY-.png",
+    "width": 180,
+    "height": 180
+  },
+  "leafMark": {
+    "src": "/brand/leaf-mark.ngE9qd6K.webp",
+    "width": 259,
+    "height": 287
+  },
+  "appStoreBadge": {
+    "src": "/brand/app-store-badge.4pLAJf7_.png",
+    "width": 243,
+    "height": 93
+  },
+  "screens": {
+    "home": {
+      "src": "/app/home.wF9Mk3Oc.webp",
+      "width": 1080,
+      "height": 2341
+    },
+    "meal-plan": {
+      "src": "/app/meal-plan.x5hS2h8D.webp",
+      "width": 1080,
+      "height": 2341
+    },
+    "recipes": {
+      "src": "/app/recipes.-6EwyH8G.webp",
+      "width": 1080,
+      "height": 2341
+    },
+    "recipe-detail": {
+      "src": "/app/recipe-detail.qGyObXS6.webp",
+      "width": 1080,
+      "height": 2341
+    },
+    "recipe-videos": {
+      "src": "/app/recipe-videos.DLwEX6c5.webp",
+      "width": 1080,
+      "height": 2341
+    },
+    "macro-tracker": {
+      "src": "/app/macro-tracker.NnsuMGKB.webp",
+      "width": 1080,
+      "height": 2341
+    },
+    "coach": {
+      "src": "/app/coach.8zYMHeO1.webp",
+      "width": 1080,
+      "height": 2341
+    },
+    "exercise-plan": {
+      "src": "/app/exercise-plan.mCYp31zX.webp",
+      "width": 1080,
+      "height": 2341
+    },
+    "contests": {
+      "src": "/app/contests.fpmv999s.webp",
+      "width": 1080,
+      "height": 2341
+    },
+    "analytics": {
+      "src": "/app/analytics.KLi_1uWp.webp",
+      "width": 1080,
+      "height": 2341
+    }
+  },
+  "composites": {
+    "c-dietitian": {
+      "src": "/app/c-dietitian.kM1GZCC5.webp",
+      "width": 1274,
+      "height": 2264
+    },
+    "c-recipes": {
+      "src": "/app/c-recipes.IxV7La5r.webp",
+      "width": 1274,
+      "height": 2264
+    },
+    "c-macros": {
+      "src": "/app/c-macros.K_vfLqRM.webp",
+      "width": 1274,
+      "height": 2264
+    },
+    "c-trainer": {
+      "src": "/app/c-trainer.-Z_OMfM6.webp",
+      "width": 1274,
+      "height": 2264
+    },
+    "c-contests": {
+      "src": "/app/c-contests.CdgRaatW.webp",
+      "width": 1274,
+      "height": 2264
+    },
+    "c-analytics": {
+      "src": "/app/c-analytics.P7Ben9Db.webp",
+      "width": 1274,
+      "height": 2264
+    }
+  }
+}

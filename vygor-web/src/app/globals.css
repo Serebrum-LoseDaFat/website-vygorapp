@@ -1,0 +1,260 @@
+@import "tailwindcss";
+
+/* ===========================================================================
+   Vygor design tokens.
+   Palette sampled directly from the Vygor Health logo: cyan #009CE4, leaf
+   #84C054, rule grey #787878. Every pairing below was contrast-checked; the
+   notes record the ratios so future edits do not silently break AA.
+   =========================================================================== */
+@theme {
+  /* Ink — text. */
+  --color-ink: #0a1a26;        /* 17.7:1 on white   AAA */
+  --color-ink-2: #3d5566;      /*  7.8:1 on white   AAA — body/muted */
+  --color-ink-3: #5a7385;      /*  5.0:1 on white   AA  — meta only */
+
+  /* Brand cyan. 500 is the logo colour: it is a FILL, never a white-text bed
+     (only 3.05:1). Use 600/700 for anything carrying white text. */
+  --color-cyan-50: #eaf7fe;
+  --color-cyan-100: #d3eefc;
+  --color-cyan-200: #a8ddf8;
+  --color-cyan-300: #6ec7f3;
+  --color-cyan-400: #2eafec;
+  --color-cyan-500: #009ce4;
+  --color-cyan-600: #0079b4;   /*  4.8:1 with white  AA  — primary CTA */
+  --color-cyan-700: #015e8c;   /*  7.0:1 with white  AAA — links, CTA end */
+  --color-cyan-800: #064a6d;
+
+  /* Leaf — the logo's green. Carries DARK text only (8.1:1); white fails. */
+  --color-leaf-100: #e9f5dc;
+  --color-leaf-300: #b6dc90;
+  --color-leaf-500: #84c054;
+  --color-leaf-600: #5e9a34;
+  --color-leaf-700: #4a7b27;   /*  5.1:1 with white  AA */
+  --color-leaf-800: #3e6620;   /*  5.9:1 on leaf-100 — for text on leaf tints */
+
+  /* Aqua — highlight and gradient stop. Light bed for dark text (11.3:1).
+     aqua-500 is a FILL only: at 2.46:1 on white it must never carry text.
+     aqua-600 is its text-safe sibling (4.15:1 on white). */
+  --color-aqua-200: #b6f2f0;
+  --color-aqua-300: #4fe3e0;
+  --color-aqua-500: #17b8b4;
+  --color-aqua-600: #0a8b87;
+
+  /* Sage + slate, from the logo's cooler neighbours. */
+  --color-sage: #9db99a;
+  --color-slate-brand: #4c6971;
+
+  /* Surfaces. */
+  --color-canvas: #ffffff;
+  --color-tint: #f4fafd;
+  --color-mist: #eaf6fb;
+  --color-deep: #062231;       /* dark editorial bed, 16.4:1 with white AAA */
+  --color-deep-2: #0b3448;
+  --color-line: #dfe9ef;
+  --color-line-strong: #c3d6e0;
+
+  --color-danger: #b42318;
+  --color-success: #4a7b27;
+
+  /* --font-jakarta is injected by next/font in layout.tsx. Referencing the
+     variable (not the literal family name) is required — next/font emits a
+     hashed @font-face family, so a literal name would silently fall back. */
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* Type scale — fluid, clamps so nothing overflows at 320px. */
+  --text-display: clamp(2.5rem, 1.55rem + 4.2vw, 5.25rem);
+  --text-h1: clamp(2.15rem, 1.5rem + 2.9vw, 4rem);
+  --text-h2: clamp(1.85rem, 1.4rem + 2.1vw, 3.15rem);
+  --text-h3: clamp(1.3rem, 1.13rem + 0.78vw, 1.85rem);
+  --text-lead: clamp(1.05rem, 0.99rem + 0.3vw, 1.3rem);
+
+  --radius-card: 1.5rem;
+  --radius-pill: 999px;
+
+  --shadow-soft: 0 1px 2px rgb(6 34 49 / 0.04), 0 8px 24px -8px rgb(6 34 49 / 0.10);
+  --shadow-lift: 0 2px 4px rgb(6 34 49 / 0.05), 0 18px 44px -12px rgb(6 34 49 / 0.16);
+  --shadow-phone: 0 4px 10px rgb(6 34 49 / 0.10), 0 40px 80px -24px rgb(6 34 49 / 0.34);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* --- base ---------------------------------------------------------------- */
+* { min-width: 0; }
+
+html {
+  scroll-behavior: smooth;
+  /* Sticky header height + breathing room, so anchored sections are not
+     hidden under the bar when a nav link jumps to them. */
+  scroll-padding-top: 5.75rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* Belt and braces against a stray wide child causing a sideways scroll. */
+  overflow-x: clip;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 700;
+  letter-spacing: -0.028em;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+p { text-wrap: pretty; }
+
+/* Two-tone focus ring.
+   No single colour clears 3:1 against every surface here — brand cyan is
+   strong on the white and tinted beds but vanishes on the cyan gradient, and
+   white is the reverse. An inner white ring plus an outer cyan-700 ring always
+   leaves one half contrasting (the two are 7:1 apart from each other), so the
+   indicator stays visible on white, on tint, on the deep navy and on the
+   gradients.
+
+   box-shadow is used rather than outline because it inherits the element's own
+   border-radius — a pill button keeps its pill ring. The transparent outline is
+   the Windows High Contrast fallback, where box-shadow is stripped. */
+:focus-visible {
+  outline: 3px solid transparent;
+  outline-offset: 2px;
+  box-shadow:
+    0 0 0 2px var(--color-canvas),
+    0 0 0 5px var(--color-cyan-700);
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline-color: Highlight;
+  }
+}
+
+/* Only remove the ring for pointer users who did not tab here. */
+:focus:not(:focus-visible) { outline: none; }
+
+::selection {
+  background: var(--color-aqua-200);
+  color: var(--color-ink);
+}
+
+/* --- utilities ----------------------------------------------------------- */
+@utility shell {
+  width: 100%;
+  max-width: 78rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (width >= 48rem) { padding-inline: 2rem; }
+  @media (width >= 80rem) { padding-inline: 2.5rem; }
+}
+
+/* The brand gradient. Ends dark enough to hold white text at 4.8:1+. */
+@utility brand-gradient {
+  background-image: linear-gradient(115deg, var(--color-cyan-600) 0%, var(--color-cyan-700) 55%, #04506f 100%);
+}
+
+/* Gradient headline text. Every stop is checked against white for large text
+   (>=3:1): cyan-600 4.78, aqua-600 4.15, leaf-700 5.06. The lighter aqua-500
+   and leaf-500 are deliberately excluded — they fail as text on white. */
+@utility brand-text-gradient {
+  background-image: linear-gradient(100deg, var(--color-cyan-600), var(--color-aqua-600) 55%, var(--color-leaf-700));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* Safety net: if background-clip:text is unsupported, fall back to a solid
+     accessible colour instead of invisible text. */
+  @supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+    color: var(--color-cyan-700);
+  }
+}
+
+/* Darker sibling of brand-gradient for beds that carry translucent white text.
+   brand-gradient starts at cyan-600, where white/80 is only 3.6:1; this starts
+   at cyan-700 so white/75 and above clear AA across every stop. */
+@utility cta-gradient {
+  background-image: linear-gradient(115deg, var(--color-cyan-700) 0%, #04506f 52%, #062f42 100%);
+}
+
+/* Fine grain over large flat gradients — kills banding on wide screens. */
+@utility grain {
+  position: relative;
+  isolation: isolate;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.4;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+  }
+}
+
+/* --- motion -------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --- component motion ----------------------------------------------------- */
+
+/* Hero cards drift very slowly on their own axis. Three different durations and
+   delays keep them from marching in step, which is what would make it read as
+   an animation rather than as floating. Transform only, so it stays on the
+   compositor and never triggers layout. */
+@keyframes float-card {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(var(--tilt, 0deg)); }
+  50%      { transform: translate3d(0, calc(var(--drift, 8px) * -1), 0) rotate(var(--tilt, 0deg)); }
+}
+
+@utility float-slow {
+  animation: float-card var(--float-duration, 7s) ease-in-out infinite;
+  animation-delay: var(--float-delay, 0s);
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float-slow { animation: none; }
+}
+@keyframes fade-slide {
+  from { opacity: 0; transform: translate3d(0, 8px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* FAQ open/close. `interpolate-size` lets height animate to `auto`; browsers
+   without it fall back to an instant — still fully working — toggle. */
+@supports (interpolate-size: allow-keywords) {
+  :root { interpolate-size: allow-keywords; }
+
+  .faq-item::details-content {
+    block-size: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      block-size 320ms var(--ease-out-soft),
+      content-visibility 320ms var(--ease-out-soft) allow-discrete,
+      opacity 240ms var(--ease-out-soft);
+  }
+
+  .faq-item[open]::details-content {
+    block-size: auto;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-item::details-content { transition: none; }
+}
