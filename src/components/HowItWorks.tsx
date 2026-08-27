@@ -34,7 +34,13 @@ export function HowItWorks() {
           </div>
         </Reveal>
 
-        <div className="mt-10 grid gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:items-center lg:gap-14">
+        {/* items-start, NOT items-center. The screen cluster is ~330px taller
+            than the three steps, and centring split that difference evenly —
+            leaving a large empty band between the heading and step 01 that read
+            as a mistake. Top-aligning puts step 01 directly under the heading;
+            the leftover height now sits beside the lower phones, where the
+            images account for it. */}
+        <div className="mt-10 grid gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:items-start lg:gap-14">
           <ol className="flex flex-col">
             {howItWorks.map((item, i) => (
               <Reveal as="li" key={item.step} delay={i * 90}>
