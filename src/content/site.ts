@@ -311,52 +311,63 @@ export const contact = {
   footnote: "We read everything that comes in.",
 };
 
-export const faqs = [
+/**
+ * The FAQ header, centred above the list.
+ *
+ * The support address is deliberately NOT written here — the component reads
+ * it from config so the page keeps a single source for it.
+ */
+export const faqIntro = {
+  kicker: "FAQ",
+  title: "Frequently asked questions",
+  lead: "How Vygor builds your plan, what it can track, and what the subscription covers.",
+};
+
+/**
+ * Questions grouped by what the reader is trying to find out.
+ *
+ * Eleven questions in one undifferentiated list gave no sense of where to look;
+ * three labelled groups let someone scan straight to the part that concerns
+ * them. Every answer is unchanged — only the arrangement.
+ */
+export const faqGroups = [
   {
-    q: "What is Vygor?",
-    a: "Vygor is a super app for weight management and wellness, with human-driven AI tools for meal planning, exercise plans, recipes and macro tracking. Instead of running several apps that don't talk to each other, you get one plan that adapts as your goals and routine change.",
+    id: "basics",
+    title: "The basics",
+    items: [
+      { q: "What is Vygor?", a: "Vygor is a super app for weight management and wellness, with human-driven AI tools for meal planning, exercise plans, recipes and macro tracking. Instead of running several apps that don't talk to each other, you get one plan that adapts as your goals and routine change." },
+      { q: "How does Vygor personalize my plan?", a: "You start by telling Vygor about your goals, food preferences, fitness level and routine. It builds your meals, workouts and daily targets from that, then adjusts automatically as your weight, activity and preferences change over time." },
+      { q: "Is Vygor suitable for beginners?", a: "Yes. Vygor is designed so you don't need to know how to build a meal plan or a training programme — you answer questions about yourself and it does the planning. The plan starts where your fitness level actually is." },
+    ],
   },
   {
-    q: "How does Vygor personalize my plan?",
-    a: "You start by telling Vygor about your goals, food preferences, fitness level and routine. It builds your meals, workouts and daily targets from that, then adjusts automatically as your weight, activity and preferences change over time.",
+    id: "inside",
+    title: "Inside the app",
+    items: [
+      { q: "Can Vygor create meal plans?", a: "Yes. The AI Dietitian generates meal plans for your goals rather than handing you a fixed template, laid out day by day with calories, carbs, protein and fat for each meal." },
+      { q: "Can Vygor generate recipes?", a: "Yes. AI Recipes generates recipes around your macros and taste preferences, each with ingredients, step-by-step instructions and a nutrition breakdown. There is also a video library in the app if you would rather watch a recipe being made." },
+      { q: "Can Vygor create workouts?", a: "Yes. The AI Trainer builds routines around your fitness level and goals, including a warm-up, main workout and cool-down, along with the equipment needed. The routine changes from session to session as you progress." },
+      { q: "Can I track calories and macros?", a: "Yes. You can log a meal by photo, barcode scan, gallery image or by typing it in, and Vygor returns the calorie, carb, protein and fat breakdown and syncs it to your daily plan." },
+      { q: "What are contests?", a: "Contests let you set a weight goal alongside friends or family over a fixed period, with a shared start date, a target and a countdown. Social support is one of the more reliable ways to keep a new habit going, so it is built into the app rather than bolted on." },
+    ],
   },
   {
-    q: "Can Vygor create meal plans?",
-    a: "Yes. The AI Dietitian generates meal plans for your goals rather than handing you a fixed template, laid out day by day with calories, carbs, protein and fat for each meal.",
-  },
-  {
-    q: "Can Vygor generate recipes?",
-    a: "Yes. AI Recipes generates recipes around your macros and taste preferences, each with ingredients, step-by-step instructions and a nutrition breakdown. There is also a video library in the app if you would rather watch a recipe being made.",
-  },
-  {
-    q: "Can Vygor create workouts?",
-    a: "Yes. The AI Trainer builds routines around your fitness level and goals, including a warm-up, main workout and cool-down, along with the equipment needed. The routine changes from session to session as you progress.",
-  },
-  {
-    q: "Can I track calories and macros?",
-    a: "Yes. You can log a meal by photo, barcode scan, gallery image or by typing it in, and Vygor returns the calorie, carb, protein and fat breakdown and syncs it to your daily plan.",
-  },
-  {
-    q: "What are contests?",
-    a: "Contests let you set a weight goal alongside friends or family over a fixed period, with a shared start date, a target and a countdown. Social support is one of the more reliable ways to keep a new habit going, so it is built into the app rather than bolted on.",
-  },
-  {
-    q: "Is Vygor suitable for beginners?",
-    a: "Yes. Vygor is designed so you don't need to know how to build a meal plan or a training programme — you answer questions about yourself and it does the planning. The plan starts where your fitness level actually is.",
-  },
-  {
-    q: "Is my data private?",
-    a: "Vygor states that it never sells your profile information to anyone. According to its App Store privacy disclosure, the data it collects — including contact info, photos and device identifiers — is not linked to your identity. The full privacy policy has the complete detail.",
-  },
-  {
-    q: "Which devices does Vygor support?",
-    a: "Vygor runs on iPhone, and also supports Apple Watch and Apple Vision. It syncs with Apple Health automatically so your progress stays in one place. An Android version is not available yet.",
-  },
-  {
-    q: "How much does Vygor cost?",
-    a: "Vygor is free to download and the basic version is free to use for as long as you like. Upgrading is a single subscription — Premium at $79.99 per year — with no tiers to compare and nothing held back. Prices shown on the App Store are the definitive ones and may vary by region.",
+    id: "practical",
+    title: "Devices, privacy and pricing",
+    items: [
+      { q: "Which devices does Vygor support?", a: "Vygor runs on iPhone, and also supports Apple Watch and Apple Vision. It syncs with Apple Health automatically so your progress stays in one place. An Android version is not available yet." },
+      { q: "Is my data private?", a: "Vygor states that it never sells your profile information to anyone. According to its App Store privacy disclosure, the data it collects — including contact info, photos and device identifiers — is not linked to your identity. The full privacy policy has the complete detail." },
+      { q: "How much does Vygor cost?", a: "Vygor is free to download and the basic version is free to use for as long as you like. Upgrading is a single subscription — Premium at $79.99 per year — with no tiers to compare and nothing held back. Prices shown on the App Store are the definitive ones and may vary by region." },
+    ],
   },
 ] as const;
+
+/**
+ * Flat list, derived. The FAQPage structured data in JsonLd.tsx consumes this,
+ * so grouping the display must not change what search engines are handed.
+ */
+export const faqs: ReadonlyArray<{ readonly q: string; readonly a: string }> =
+  faqGroups.flatMap((group) => [...group.items]);
 
 export const downloadCta = {
   title: "Ready to make your next healthy choice easier?",
