@@ -18,7 +18,7 @@ const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
 });
 
-const title = "Vygor — Eat Better, Train Smarter, Lose the Weight";
+const title = "Vygor — Weight Management That Lasts";
 const description =
   "Vygor is a super app for weight management and wellness, with human-driven AI tools for meal planning, exercise plans, recipes and macro tracking.";
 
