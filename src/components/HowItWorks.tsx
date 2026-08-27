@@ -34,7 +34,7 @@ export function HowItWorks() {
           </div>
         </Reveal>
 
-        <div className="mt-10 grid gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:items-center lg:gap-20">
+        <div className="mt-10 grid gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:items-center lg:gap-14">
           <ol className="flex flex-col">
             {howItWorks.map((item, i) => (
               <Reveal as="li" key={item.step} delay={i * 90}>
@@ -73,16 +73,16 @@ export function HowItWorks() {
 
                   `proportional` matters at this size — the bezel and dynamic
                   island are authored for a 300px frame and would otherwise stay
-                  at full size on a 170px phone. The second column is nudged
+                  at full size on a 200px phone. The second column is nudged
                   down so the four read as a group rather than a rigid grid. */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-4">
-                  <PhoneFrame id="goals" width={170} proportional />
-                  <PhoneFrame id="tracker" width={170} proportional />
+                  <PhoneFrame id="goals" width={200} proportional />
+                  <PhoneFrame id="tracker" width={200} proportional />
                 </div>
-                <div className="flex translate-y-5 flex-col gap-4">
-                  <PhoneFrame id="progress" width={170} proportional />
-                  <PhoneFrame id="meal-calendar" width={170} proportional />
+                <div className="flex translate-y-6 flex-col gap-4">
+                  <PhoneFrame id="progress" width={200} proportional />
+                  <PhoneFrame id="meal-calendar" width={200} proportional />
                 </div>
               </div>
             </div>
