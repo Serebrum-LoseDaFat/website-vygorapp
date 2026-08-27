@@ -46,7 +46,7 @@ export function Footer() {
     },
     {
       title: "Company",
-      items: [{ label: "Contact us", href: "/#contact" }],
+      items: [{ label: "Support", href: "/#contact" }],
     },
     {
       title: "Business",

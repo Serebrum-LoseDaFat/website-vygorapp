@@ -69,6 +69,26 @@
       "src": "/app/analytics.KLi_1uWp.webp",
       "width": 1080,
       "height": 2341
+    },
+    "goals": {
+      "src": "/app/goals.huy8pSGZ.webp",
+      "width": 1080,
+      "height": 2341
+    },
+    "progress": {
+      "src": "/app/progress.OgCqI8rT.webp",
+      "width": 1080,
+      "height": 2341
+    },
+    "tracker": {
+      "src": "/app/tracker.6QUb2Ceh.webp",
+      "width": 1080,
+      "height": 2341
+    },
+    "meal-calendar": {
+      "src": "/app/meal-calendar.dYp6XbpV.webp",
+      "width": 1080,
+      "height": 2341
     }
   },
   "composites": {

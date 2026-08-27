@@ -91,18 +91,32 @@ export function DownloadCta() {
                     with `relative`, and Tailwind emits `relative` after
                     `absolute` in the cascade, so passing `absolute` down would
                     lose and the phones would stack vertically instead. */}
-                {/* Offsets are tighter on small screens: the outer phones are
-                    rotated, so their bounding boxes spill sideways and the
-                    panel's overflow:hidden would shave the last one otherwise. */}
-                <div className="relative h-[23rem] w-[15.5rem] sm:h-[28rem] sm:w-[21rem]">
-                  <div className="absolute left-0 top-0 rotate-[-9deg]">
-                    <PhoneFrame id="recipe-videos" width={150} decorative />
-                  </div>
-                  <div className="absolute left-[3.2rem] top-[2.2rem] z-10 rotate-[-2deg] sm:left-[5.2rem]">
-                    <PhoneFrame id="home" width={158} decorative />
-                  </div>
-                  <div className="absolute left-[6.4rem] top-[4.4rem] z-20 rotate-[6deg] sm:left-[10.4rem]">
-                    <PhoneFrame id="coach" width={150} />
+                {/* The fan is laid out ONCE, at its full desktop size, and
+                    scaled down as a whole on small screens.
+
+                    Two reasons. The phones were 150px wide while the bezel and
+                    dynamic island are authored for a 300px frame, so the island
+                    covered 55% of each phone's width instead of 27% and the
+                    group read as three toys — hence `proportional`, which ties
+                    that geometry to the width. And a rotated, overlapping fan
+                    cannot be re-laid-out per breakpoint without re-tuning every
+                    offset, so one transform on the wrapper keeps the
+                    composition identical at every size while staying inside the
+                    panel's overflow:hidden on narrow screens. The outer box
+                    reserves the scaled height, so nothing collapses. */}
+                <div className="relative h-[20rem] w-[16rem] sm:h-[34rem] sm:w-[27.5rem]">
+                  <div className="absolute left-0 top-0 origin-top-left scale-[0.58] sm:scale-100">
+                    <div className="relative h-[34rem] w-[27.5rem]">
+                      <div className="absolute left-0 top-0 rotate-[-9deg]">
+                        <PhoneFrame id="recipe-videos" width={198} proportional decorative />
+                      </div>
+                      <div className="absolute left-[6.9rem] top-[2.9rem] z-10 rotate-[-2deg]">
+                        <PhoneFrame id="home" width={208} proportional decorative />
+                      </div>
+                      <div className="absolute left-[13.7rem] top-[5.8rem] z-20 rotate-[6deg]">
+                        <PhoneFrame id="coach" width={198} proportional />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

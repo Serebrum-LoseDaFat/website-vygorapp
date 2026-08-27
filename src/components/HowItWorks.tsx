@@ -34,7 +34,7 @@ export function HowItWorks() {
           </div>
         </Reveal>
 
-        <div className="mt-14 grid gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:items-center lg:gap-20">
+        <div className="mt-10 grid gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:items-center lg:gap-20">
           <ol className="flex flex-col">
             {howItWorks.map((item, i) => (
               <Reveal as="li" key={item.step} delay={i * 90}>
@@ -62,9 +62,29 @@ export function HowItWorks() {
             <div className="relative flex justify-center lg:justify-end">
               <div
                 aria-hidden="true"
-                className="absolute inset-0 -z-10 m-auto h-[65%] w-[80%] rounded-[50%] bg-cyan-500/25 blur-3xl"
+                className="absolute inset-0 -z-10 m-auto h-[70%] w-[92%] rounded-[50%] bg-cyan-500/25 blur-3xl"
               />
-              <PhoneFrame id="analytics" width={300} />
+              {/* Four screens rather than one. The single analytics phone that
+                  used to sit here is also the subject of a card in the features
+                  section, so the page showed the same screen twice and this
+                  section read as a repeat. These four are the ones a new user
+                  actually moves through: set a goal, watch progress, log a
+                  meal, see the day.
+
+                  `proportional` matters at this size — the bezel and dynamic
+                  island are authored for a 300px frame and would otherwise stay
+                  at full size on a 170px phone. The second column is nudged
+                  down so the four read as a group rather than a rigid grid. */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-4">
+                  <PhoneFrame id="goals" width={170} proportional />
+                  <PhoneFrame id="tracker" width={170} proportional />
+                </div>
+                <div className="flex translate-y-5 flex-col gap-4">
+                  <PhoneFrame id="progress" width={170} proportional />
+                  <PhoneFrame id="meal-calendar" width={170} proportional />
+                </div>
+              </div>
             </div>
           </Reveal>
         </div>

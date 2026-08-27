@@ -1,6 +1,5 @@
 import { Reveal } from "./Reveal";
 import { Plus } from "./Icons";
-import { ButtonLink } from "./Button";
 import { faqs } from "@/content/site";
 
 /**
@@ -32,13 +31,6 @@ export function Faq() {
             <h2 id="faq-heading" className="mt-3 text-[length:var(--text-h2)] text-ink">
               Questions, answered.
             </h2>
-            <p className="mt-5 max-w-sm leading-relaxed text-ink-2">
-              Still not sure about something? We read everything that comes in.
-            </p>
-            {/* One contact form on the page, in its own section. */}
-            <ButtonLink href="/#contact" variant="secondary" size="md" className="mt-6" withArrow>
-              Ask us a question
-            </ButtonLink>
           </div>
         </Reveal>
 

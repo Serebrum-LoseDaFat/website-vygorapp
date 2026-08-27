@@ -63,6 +63,12 @@ const SCREENS = [
   ["IMG_9954.PNG", "exercise-plan"],
   ["IMG_9957.PNG", "contests"],
   ["IMG_9961.PNG", "analytics"],
+  // The "How it works" cluster. Slugged "meal-calendar" rather than
+  // "meal-plans" so it cannot be confused with the existing "meal-plan".
+  ["IMG_9972.PNG", "goals"],
+  ["IMG_9960.PNG", "progress"],
+  ["IMG_9948.PNG", "tracker"],
+  ["IMG_9952.PNG", "meal-calendar"],
 ];
 
 /**

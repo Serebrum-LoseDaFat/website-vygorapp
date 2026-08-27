@@ -27,19 +27,22 @@ export const nav = [
   { label: "Why AI", href: "/#why-ai" },
   { label: "Pricing", href: "/#pricing" },
   { label: "FAQ", href: "/#faq" },
-  { label: "Contact us", href: "/#contact" },
+  { label: "Support", href: "/#contact" },
 ] as const;
 
 export const hero = {
   eyebrow: "Weight management & wellness, in one app",
   /**
-   * Explicit about all three things the reader came for — diet, exercise and
-   * weight loss — in the imperative, so it reads as a plan rather than a
-   * product description.
+   * Deliberately promises management, not an outcome.
+   *
+   * The previous line ("Eat better, train smarter, lose the weight.") promised
+   * weight loss, which is a result no app can guarantee and which the team
+   * decided not to claim. "Lasts" carries the real differentiator instead — the
+   * plan adapts rather than resetting — without asserting a medical outcome.
    */
-  title: "Eat better, train smarter, lose the weight.",
+  title: "Weight management that lasts.",
   /** Rendered with the brand gradient; must appear verbatim in `title`. */
-  accent: "lose the weight.",
+  accent: "that lasts.",
   lead:
     "Vygor is a super app for weight management and wellness, with human-driven AI tools for meal planning, exercise plans, recipes and macro tracking.",
   /** Sits directly under the device in the hero. */
@@ -84,7 +87,7 @@ export const modules = [
   {
     id: "macros",
     name: "AI Macro Tracker",
-    headline: "Log it in a photo.",
+    headline: "Log it with a photo.",
     body:
       "Photograph the plate, scan a barcode, pick from your gallery or just type it. Vygor works out the calories, carbs, protein and fat and folds them into your day — no scrolling through a database to find your lunch.",
     points: ["Photo, barcode, gallery or text", "Full macro breakdown", "Synced straight to your plan"],
@@ -116,7 +119,7 @@ export const modules = [
   },
   {
     id: "analytics",
-    name: "Detailed Analytics",
+    name: "Analytics",
     headline: "See what's actually working.",
     body:
       "Weight, BMI and body-fat trends across days, weeks and months, next to steps, distance, VO2 max and pace. A weekly report reads your own numbers back to you, so you can tell a plateau from a bad week.",
@@ -275,7 +278,7 @@ export const pricing = {
     { job: "Meditation", app: "Headspace", annual: 69.99, note: "annual plan" },
   ],
   plan: {
-    name: "Vygor Premium Basic",
+    name: "Vygor Premium",
     price: "$79.99",
     period: "per year",
     blurb: "One plan. Everything included. No tiers to compare.",
@@ -285,12 +288,12 @@ export const pricing = {
       "AI Macro Tracker",
       "AI Trainer",
       "Contests",
-      "Detailed analytics",
+      "Analytics",
     ],
     cta: "Get Vygor",
   },
   disclaimer:
-    "Competitor prices are list prices for a standard individual annual plan in the US, checked in August 2026, and are shown for comparison only — they change with promotions and region. Vygor is free to download; Premium Basic is $79.99 per year on the App Store.",
+    "Competitor prices are list prices for a standard individual annual plan in the US, checked in August 2026, and are shown for comparison only — they change with promotions and region. Vygor is free to download and the basic version is free to use for as long as you like; Premium is $79.99 per year on the App Store.",
 };
 
 /**
@@ -351,7 +354,7 @@ export const faqs = [
   },
   {
     q: "How much does Vygor cost?",
-    a: "Vygor is free to download. There is a single subscription — Premium Basic at $79.99 per year — with no tiers to compare and nothing held back. Prices shown on the App Store are the definitive ones and may vary by region.",
+    a: "Vygor is free to download and the basic version is free to use for as long as you like. Upgrading is a single subscription — Premium at $79.99 per year — with no tiers to compare and nothing held back. Prices shown on the App Store are the definitive ones and may vary by region.",
   },
 ] as const;
 
@@ -366,7 +369,7 @@ export const downloadCta = {
     { name: "AI Macro Tracker", detail: "Log a meal from a photo" },
     { name: "AI Trainer", detail: "Workouts that adapt as you go" },
     { name: "Contests", detail: "Progress with friends and family" },
-    { name: "Detailed analytics", detail: "See what is actually working" },
+    { name: "Analytics", detail: "See what is actually working" },
   ],
 };
 

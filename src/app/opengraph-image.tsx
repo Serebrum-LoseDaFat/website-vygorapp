@@ -8,7 +8,7 @@ import { ImageResponse } from "next/og";
  * versions, no external assets — so this is written plainly on purpose.
  */
 
-export const alt = "Vygor — eat better, train smarter, lose the weight.";
+export const alt = "Vygor — weight management that lasts.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -71,7 +71,7 @@ export default function OpengraphImage() {
               lineHeight: 1.02,
             }}
           >
-            Eat better, train smarter,
+            Weight management
           </div>
           <div
             style={{
@@ -83,7 +83,7 @@ export default function OpengraphImage() {
               color: "#8BF0EE",
             }}
           >
-            lose the weight.
+            that lasts.
           </div>
           <div
             style={{

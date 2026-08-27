@@ -39,6 +39,14 @@ const ALT: Record<string, string> = {
     "The Vygor home screen showing a weight trend chart above a live weight contest with its progress gauge and days remaining.",
   analytics:
     "Vygor cardio analytics showing daily step counts as a bar chart, alongside distance, VO2 max and walking and running speed.",
+  goals:
+    "The Vygor goal screen, with a BMI scale from underweight to obese, the current weight of 147.0 lb and a target weight of 145.5 lb ready to confirm.",
+  progress:
+    "The Vygor progress screen, charting logged weight over several weeks, with daily, weekly and monthly views.",
+  tracker:
+    "The Vygor macro tracker mid-log, with a photographed meal and the options to add it by photo, gallery, barcode or typing, then pick the meal type.",
+  "meal-calendar":
+    "A day in the Vygor macro tracker, with a calendar strip above the calorie, carb, protein and fat totals for the day and the meals logged against them.",
 };
 
 

@@ -118,7 +118,9 @@ export function Pricing() {
                 </ul>
 
                 <StoreBadges className="mt-8" height={52} />
-                <p className="mt-4 text-sm text-white/70">Free to download.</p>
+                <p className="mt-4 text-sm text-white/70">
+                  Free to download — the basic version stays free.
+                </p>
               </div>
             </div>
           </Reveal>
