@@ -1,5 +1,5 @@
 /**
- * Content for the creator programme page at /creators.
+ * Content for the creator program page at /creators.
  *
  * Audience note: this page is NOT for the consumer the homepage is written for.
  * It is read by influencers and partners deciding whether to work with Vygor and
@@ -16,11 +16,64 @@
  * precisely to stop creators from asserting one.
  */
 
+/**
+ * Hero. The headline is the one the team wrote for creators — it frames the six
+ * AI tools as the roles they stand in for, which is the angle a creator can
+ * actually say on camera.
+ *
+ * `accent` must appear verbatim inside `title`; the page renders it in the brand
+ * gradient, the same treatment the homepage hero uses.
+ */
 export const creatorsIntro = {
-  kicker: "Creator programme",
-  title: "Create with Vygor.",
+  kicker: "Creator program",
+  title: "Your dietitian, trainer and coach — without the appointments.",
+  accent: "without the appointments.",
   lead:
-    "Everything you need to make honest, effective content about Vygor — how the product works, what makes short-form land, the rules every post has to follow, and angles written for your niche.",
+    "Vygor is a weight management super app: six AI tools in one subscription, all working from the same plan. Partner with us and get the angles, the rules and the code you need to make content that actually converts.",
+  price: "Free to download. Premium is $79.99 a year.",
+};
+
+/**
+ * What a creator gets in return.
+ *
+ * IMPORTANT — every item here is something the team has already committed to in
+ * the creator brief. Nothing about money appears, because no commission, rev
+ * share or fee has been specified anywhere, and inventing one would be a
+ * promise the business has not made.
+ *
+ * `commercial` is the slot for it. Fill in the title and body once the terms are
+ * agreed and it renders as a fifth card with no other change needed; leave it
+ * null and the section simply shows four.
+ */
+export const creatorBenefits = {
+  kicker: "What you get",
+  title: "What you get out of it.",
+  lead:
+    "A partnership rather than a brief thrown over the wall. Here is what comes with it.",
+  items: [
+    {
+      title: "A code and a link that are yours",
+      body:
+        "Your own promo code and tracking link, so everything that comes from your audience is attributed to you and never to another creator.",
+    },
+    {
+      title: "Angles written for your niche",
+      body:
+        "Seven segment playbooks with hooks, formats and a specific do and do-not list. You never start from a blank page.",
+    },
+    {
+      title: "A reply within two working days",
+      body:
+        "Send a caption, a script or a cut and get it back approved or annotated, fast enough that you can still post on schedule.",
+    },
+    {
+      title: "A direct line to the team",
+      body:
+        "One inbox, read by the people who build the product. Ask about a feature, a claim or an edge case and get a real answer.",
+    },
+  ],
+  /** e.g. { title: "...", body: "..." } once commercial terms are agreed. */
+  commercial: null as { title: string; body: string } | null,
 };
 
 /**
@@ -34,7 +87,7 @@ export const creatorProduct = {
   tools: [
     [
       "AI Dietitian",
-      "Personalised meal plans for the member's goals, with calories and macros per meal. Adapts as weight and preferences change.",
+      "Personalized meal plans for the member's goals, with calories and macros per meal. Adapts as weight and preferences change.",
     ],
     [
       "AI Recipes",
@@ -208,7 +261,7 @@ export const creatorSegments = [
       "A community question on staying consistent",
     ],
     dos: [
-      "Centre habit consistency",
+      "Center habit consistency",
       "Speak from personal experience",
       "Frame it as a support tool alongside medical care",
       "Acknowledge that every body is different",
@@ -238,7 +291,7 @@ export const creatorSegments = [
     ],
     dos: [
       "Show workouts progressing session to session",
-      "Show the nutrition side fuelling the training",
+      "Show the nutrition side fueling the training",
       "Use contests for audience challenges",
     ],
     donts: [
@@ -307,17 +360,17 @@ export const creatorSegments = [
     id: "clinical",
     name: "Medical and clinical",
     summary:
-      "The gap between clinical advice and follow-through is behavioural. Vygor is a patient-side habit tool that complements care. It is not a medical device and it is not clinically validated.",
+      "The gap between clinical advice and follow-through is behavioral. Vygor is a patient-side habit tool that complements care. It is not a medical device and it is not clinically validated.",
     hooks: [
       "Why patients struggle to stick to healthy habits.",
       "The gap between knowing what to do and doing it.",
-      "Behaviour change is the strongest predictor of sustainable weight management.",
+      "Behavior change is the strongest predictor of sustainable weight management.",
       "Willpower is not the problem.",
     ],
     formats: [
       "An explainer on habit formation",
       "Apps I actually mention to patients",
-      "Why diets fail, and what behaviour tools do differently",
+      "Why diets fail, and what behavior tools do differently",
       "An honest review of what it does and does not do",
     ],
     dos: [

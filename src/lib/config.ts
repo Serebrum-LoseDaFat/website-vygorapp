@@ -29,7 +29,15 @@
  */
 
 const DEFAULTS = {
-  site: "https://www.vygor.health",
+  /**
+   * The consumer site is deployed at vygor.app. This default used to be
+   * vygor.health, which is a DIFFERENT site — the older enterprise one, still
+   * live, and still linked from here as `business`. With the variable unset in
+   * production every canonical tag, the sitemap and every Open Graph URL
+   * pointed at that other site, which is exactly the signal that tells a search
+   * engine this page is a duplicate of it.
+   */
+  site: "https://www.vygor.app",
   appStore: "https://apps.apple.com/us/app/vygor-ai-wellness-coach/id1565632505",
   privacy: "https://www.vygor.health/privacy-policy",
   terms: "https://www.vygor.health/terms-of-service",

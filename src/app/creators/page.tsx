@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Reveal } from "@/components/Reveal";
 import { ButtonLink } from "@/components/Button";
 import { StoreBadges } from "@/components/StoreBadges";
-import { Check, Close, Plus, ArrowRight } from "@/components/Icons";
+import { PhoneFrame } from "@/components/PhoneFrame";
+import { Check, Close, Plus, Sparkle, Instagram, Tiktok } from "@/components/Icons";
 import {
   creatorsIntro,
+  creatorBenefits,
   creatorProduct,
   creatorPractices,
   creatorCompliance,
@@ -15,7 +16,7 @@ import {
 import { partnersEmail, siteUrl } from "@/lib/config";
 
 /**
- * The creator programme page.
+ * The creator program page.
  *
  * Its own route rather than a homepage section. The homepage is written for a
  * consumer deciding whether to download; this is written for a creator deciding
@@ -29,8 +30,8 @@ import { partnersEmail, siteUrl } from "@/lib/config";
  */
 
 // The root layout applies a "%s — Vygor" template, so this must NOT carry its
-// own suffix or the tab reads "Creator programme — Vygor — Vygor".
-const title = "Creator programme";
+// own suffix or the tab reads "Creator program — Vygor — Vygor".
+const title = "Creator program";
 const description =
   "Brief for creators working with Vygor: how the app works, what makes short-form content land, the disclosure and claim rules every post must follow, and content angles by niche.";
 
@@ -54,42 +55,139 @@ function SectionKicker({ children }: { children: React.ReactNode }) {
   );
 }
 
+/**
+ * A platform pill that drifts beside the hero phone. Decoration, so it carries
+ * no metrics — a follower count or an engagement figure here would be invented,
+ * and the site does not publish numbers it cannot stand behind.
+ */
+function SocialChip({ icon, label }: { icon: React.ReactNode; label: string }) {
+  return (
+    <span className="flex items-center gap-2 rounded-full bg-white/95 px-3.5 py-2 text-[0.82rem] font-semibold text-ink shadow-[0_10px_30px_-12px_rgb(6_34_49/0.45)] ring-1 ring-line backdrop-blur-sm">
+      <span className="text-cyan-700">{icon}</span>
+      {label}
+    </span>
+  );
+}
+
 export default function CreatorsPage() {
   const mailto = `mailto:${partnersEmail}?subject=${encodeURIComponent("Vygor creator submission")}`;
+  // Same split the homepage hero uses: everything before the accent renders
+  // plain, the accent itself takes the brand gradient.
+  const heroLead = creatorsIntro.title.slice(0, creatorsIntro.title.lastIndexOf(creatorsIntro.accent));
 
   return (
     <>
       {/* ---------------- hero ---------------- */}
-      <section className="relative overflow-hidden bg-tint pb-16 pt-28 sm:pb-20 sm:pt-36">
+      <section className="relative overflow-hidden bg-tint pb-16 pt-28 sm:pb-20 sm:pt-32">
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute -right-32 -top-24 h-[30rem] w-[30rem] rounded-full bg-[radial-gradient(closest-side,rgb(0_156_228/0.16),transparent)]" />
+          <div className="absolute -left-40 bottom-0 h-[26rem] w-[26rem] rounded-full bg-[radial-gradient(closest-side,rgb(132_192_84/0.12),transparent)]" />
         </div>
 
         <div className="shell">
-          <Reveal>
-            <div className="max-w-3xl">
-              <SectionKicker>{creatorsIntro.kicker}</SectionKicker>
-              <h1 className="mt-3 text-[length:var(--text-h1)] text-ink">{creatorsIntro.title}</h1>
-              <p className="mt-6 max-w-2xl text-[length:var(--text-lead)] leading-relaxed text-ink-2">
-                {creatorsIntro.lead}
-              </p>
+          <div className="grid items-center gap-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-12">
+            <Reveal>
+              <div>
+                <SectionKicker>{creatorsIntro.kicker}</SectionKicker>
+                <h1 className="mt-3 text-[length:var(--text-h1)] text-ink">
+                  {heroLead}
+                  <span className="brand-text-gradient">{creatorsIntro.accent}</span>
+                </h1>
+                <p className="mt-6 max-w-xl text-[length:var(--text-lead)] leading-relaxed text-ink-2">
+                  {creatorsIntro.lead}
+                </p>
+                <p className="mt-4 text-[0.95rem] font-medium text-ink-3">{creatorsIntro.price}</p>
 
-              <div className="mt-9 flex flex-wrap items-center gap-4">
-                <ButtonLink href={mailto} variant="primary" size="lg" withArrow>
-                  Apply to the programme
-                </ButtonLink>
-                <Link
-                  href="/"
-                  className="group inline-flex items-center gap-1 rounded-full px-2 py-2 text-[0.95rem] font-medium text-ink-3 transition-colors duration-200 hover:text-cyan-700"
-                >
-                  See the product
-                  <ArrowRight
-                    size={15}
-                    className="transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:group-hover:translate-x-0"
-                  />
-                </Link>
+                <div className="mt-9 flex flex-wrap items-center gap-4">
+                  <ButtonLink href={mailto} variant="primary" size="lg" withArrow>
+                    Apply to the program
+                  </ButtonLink>
+                  {/* Out to the consumer site, not to "/" — a creator wants to
+                      see what their audience will land on. */}
+                  <ButtonLink href={siteUrl} variant="secondary" size="lg" external withArrow>
+                    Visit vygor.app
+                  </ButtonLink>
+                </div>
               </div>
+            </Reveal>
+
+            {/* Phone with the contest screen — the one feature a creator can
+                point their own audience at — and two platform chips drifting
+                beside it.
+
+                Only the chips move. The screenshot never rotates, tilts or
+                drifts: product UI stays upright and unaltered, and the chips are
+                our own decoration rather than cropped app pixels floated back
+                over the screen they came from. Motion guidance says keep moving
+                elements to one or two per view, so it is two, both slow and
+                low-amplitude, and `float-slow` already switches itself off under
+                prefers-reduced-motion. */}
+            <Reveal delay={120} y={24}>
+              <div className="relative mx-auto w-fit lg:ml-auto lg:mr-0">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 -z-10 m-auto h-[70%] w-[85%] rounded-[50%] bg-cyan-500/18 blur-3xl"
+                />
+
+                <PhoneFrame id="contests" width={286} proportional priority />
+
+                <div
+                  className="float-slow absolute -left-4 top-[16%] sm:-left-10"
+                  style={{ "--drift": "9px", "--float-duration": "8.5s" } as React.CSSProperties}
+                >
+                  <SocialChip icon={<Instagram size={16} />} label="@vygorapp" />
+                </div>
+
+                <div
+                  className="float-slow absolute -right-3 bottom-[18%] sm:-right-8"
+                  style={
+                    {
+                      "--drift": "7px",
+                      "--float-duration": "11s",
+                      "--float-delay": "-3s",
+                    } as React.CSSProperties
+                  }
+                >
+                  <SocialChip icon={<Tiktok size={16} />} label="@vygorapp" />
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------- what you get ---------------- */}
+      <section aria-labelledby="benefits-heading" className="bg-white py-20 sm:py-24">
+        <div className="shell">
+          <Reveal>
+            <div className="max-w-2xl">
+              <SectionKicker>{creatorBenefits.kicker}</SectionKicker>
+              <h2 id="benefits-heading" className="mt-3 text-[length:var(--text-h2)] text-ink">
+                {creatorBenefits.title}
+              </h2>
+              <p className="mt-5 text-[length:var(--text-lead)] leading-relaxed text-ink-2">
+                {creatorBenefits.lead}
+              </p>
             </div>
+          </Reveal>
+
+          <Reveal delay={80}>
+            <ul className="mt-12 grid gap-6 sm:grid-cols-2">
+              {[...creatorBenefits.items, ...(creatorBenefits.commercial ? [creatorBenefits.commercial] : [])].map(
+                (item) => (
+                  <li
+                    key={item.title}
+                    className="rounded-2xl bg-tint p-6 ring-1 ring-line transition-shadow duration-200 hover:shadow-sm"
+                  >
+                    <span className="inline-flex size-8 items-center justify-center rounded-full bg-white text-cyan-700 ring-1 ring-line">
+                      <Sparkle size={16} />
+                    </span>
+                    <h3 className="mt-4 font-semibold text-ink">{item.title}</h3>
+                    <p className="mt-2 text-[0.95rem] leading-relaxed text-ink-2">{item.body}</p>
+                  </li>
+                ),
+              )}
+            </ul>
           </Reveal>
         </div>
       </section>
