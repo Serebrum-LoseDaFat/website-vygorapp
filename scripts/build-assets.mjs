@@ -69,6 +69,12 @@ const SCREENS = [
   ["IMG_9960.PNG", "progress"],
   ["IMG_9948.PNG", "tracker"],
   ["IMG_9952.PNG", "meal-calendar"],
+  // Creator page product cards. Supplied already composed so the part that
+  // explains each tool sits at the top of the screen, which lets these cards
+  // use the same framing as every other card instead of a per-card offset.
+  ["creator-dietitian.png", "creator-dietitian"],
+  ["creator-contests.png", "creator-contests"],
+  ["creator-analytics.png", "creator-analytics"],
 ];
 
 /**
@@ -113,26 +119,8 @@ const COMPOSITE_SIZE = { width: 1274, height: 2264 };
  * dates that read as stale on a marketing page, and they add noise directly
  * under the header where the eye lands first.
  */
-const SCREEN_MASKS = {};
-
-/**
- * Bands removed from a screen entirely, with everything below pulled up to
- * close the gap.
- *
- * The meal plan screen carries an in-app month calendar directly under its
- * header. It shows 2026 dates, which read as stale on a marketing page. It used
- * to be painted over with the sampled page colour, but flat-filling a band 392px
- * tall does not hide it — it leaves an empty grey slab between the header and
- * the macro rings that looks like a broken image rather than an app screen.
- * Cutting the rows out and closing the gap gives the screen the app would show
- * if the calendar were collapsed.
- *
- * The export gets shorter, so only do this to a screen whose full height is not
- * rendered anywhere. meal-plan qualifies: it appears once, inside a fixed card
- * window on the creator page.
- */
-const SCREEN_CUTS = {
-  "meal-plan": [{ top: 358, height: 392 }],
+const SCREEN_MASKS = {
+  "meal-plan": [{ left: 0, top: 358, width: 1290, height: 392, sampleAt: { x: 645, y: 800 } }],
 };
 
 await mkdir(OUT_APP, { recursive: true });
@@ -226,34 +214,6 @@ async function normalize(file) {
   return await pipeline.toBuffer();
 }
 
-/** Removes SCREEN_CUTS bands and joins what is left, top over bottom. */
-async function cutBuffer(input, slug) {
-  const cuts = SCREEN_CUTS[slug];
-  if (!cuts) return input;
-
-  let buf = await sharp(input).toBuffer();
-  // Descending, so an earlier cut never shifts a later one's coordinates.
-  for (const c of [...cuts].sort((a, b) => b.top - a.top)) {
-    const { width, height } = await sharp(buf).metadata();
-    const belowTop = c.top + c.height;
-    const top = await sharp(buf).extract({ left: 0, top: 0, width, height: c.top }).toBuffer();
-    const bottom = await sharp(buf)
-      .extract({ left: 0, top: belowTop, width, height: height - belowTop })
-      .toBuffer();
-    buf = await sharp({
-      create: { width, height: height - c.height, channels: 4, background: { r: 255, g: 255, b: 255, alpha: 1 } },
-    })
-      .composite([
-        { input: top, left: 0, top: 0 },
-        { input: bottom, left: 0, top: c.top },
-      ])
-      .png()
-      .toBuffer();
-  }
-  console.log(`${slug.padEnd(16)} cut ${cuts.length} band(s)`);
-  return buf;
-}
-
 async function maskedBuffer(input, slug) {
   const masks = SCREEN_MASKS[slug];
   if (!masks) return input;
@@ -279,7 +239,7 @@ async function maskedBuffer(input, slug) {
 }
 
 for (const [file, slug] of SCREENS) {
-  const input = await cutBuffer(await maskedBuffer(await normalize(path.join(SHOTS, file)), slug), slug);
+  const input = await maskedBuffer(await normalize(path.join(SHOTS, file)), slug);
   for (const w of [1080, 540]) {
     const asset = await writeHashed(
       sharp(input).resize({ width: w, withoutEnlargement: true }).webp({ quality: 86, effort: 6 }),

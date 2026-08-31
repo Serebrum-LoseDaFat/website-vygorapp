@@ -83,12 +83,14 @@ export const creatorBenefits = {
 export const creatorProduct = {
   title: "Know what you are promoting.",
   lead:
-    "Vygor is a weight management super app — six AI tools in one subscription, all working from the same plan. Free to download, with Premium at $79.99 a year. iPhone only today.",
+    "Vygor is a weight management super app — six AI tools in one subscription, all working from the same plan. Free to download, with Premium at $79.99 a year.",
   /**
-   * `frameTop` shifts the screen inside the card window, in pixels, so each
-   * card frames the part that actually explains the tool rather than always
-   * showing the header. Contests needs the largest shift: its contest card
-   * sits below a weight trend chart. Omit it and the screen sits at the top.
+   * Three of these use their own source screenshot rather than the one the
+   * homepage uses. Those screens bury the part that explains the tool below a
+   * chart or a calendar, and sliding the phone up inside the card window to
+   * reach it cut off the top of the device and left those three looking
+   * misaligned beside the rest. The supplied sources put the relevant content
+   * at the top instead, so every card frames its phone identically.
    *
    * `screen` is a slug from the generated asset manifest — each card previews
    * the tool it describes rather than an icon. `tagline` is what shows closed;
@@ -99,8 +101,7 @@ export const creatorProduct = {
     {
       name: "AI Dietitian",
       tagline: "Hyper-personalized meal plans",
-      screen: "meal-plan",
-      frameTop: -4,
+      screen: "creator-dietitian",
       body: "Meal plans generated for the member's own goals, with calories and macros worked out per meal. They adapt as weight, activity and preferences change, so the plan is never the same one they started with.",
     },
     {
@@ -124,15 +125,13 @@ export const creatorProduct = {
     {
       name: "Contests",
       tagline: "Challenges they can run with followers",
-      screen: "contests",
-      frameTop: -118,
+      screen: "creator-contests",
       body: "Weight or step competitions with friends, family or an audience — a shared start, a target and a countdown. The most useful feature for a creator, because it turns a post into something their followers join.",
     },
     {
       name: "Analytics",
       tagline: "Trends they can actually read",
-      screen: "analytics",
-      frameTop: -16,
+      screen: "creator-analytics",
       body: "Weight, BMI and body-fat trends across days, weeks and months, with a weekly read-back of the numbers so a plateau is distinguishable from one bad week.",
     },
   ],

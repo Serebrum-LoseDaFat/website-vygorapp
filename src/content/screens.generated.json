@@ -26,9 +26,9 @@
       "height": 2341
     },
     "meal-plan": {
-      "src": "/app/meal-plan.u4vVdFX-.webp",
+      "src": "/app/meal-plan.x5hS2h8D.webp",
       "width": 1080,
-      "height": 2013
+      "height": 2341
     },
     "recipes": {
       "src": "/app/recipes.-6EwyH8G.webp",
@@ -87,6 +87,21 @@
     },
     "meal-calendar": {
       "src": "/app/meal-calendar.dYp6XbpV.webp",
+      "width": 1080,
+      "height": 2341
+    },
+    "creator-dietitian": {
+      "src": "/app/creator-dietitian.aurVgkJJ.webp",
+      "width": 1080,
+      "height": 2341
+    },
+    "creator-contests": {
+      "src": "/app/creator-contests.YCz7jtX-.webp",
+      "width": 1080,
+      "height": 2341
+    },
+    "creator-analytics": {
+      "src": "/app/creator-analytics.uUW8uwWu.webp",
       "width": 1080,
       "height": 2341
     }

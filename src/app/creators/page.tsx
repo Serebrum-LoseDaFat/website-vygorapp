@@ -240,14 +240,14 @@ export default function CreatorsPage() {
                 >
                   <div className="relative h-52 overflow-hidden bg-[linear-gradient(160deg,var(--color-mist),var(--color-cyan-100))]">
                     {/* Image sits outside the summary so its description is not
-                        read out as part of the button's name. `frameTop` slides
-                        the screen so the window lands on the part that explains
-                        the tool — the contest card, the macro rings, the bar
-                        chart — rather than always on the app header. */}
-                    <div
-                      className="absolute left-1/2 -translate-x-1/2"
-                      style={{ top: "frameTop" in tool ? tool.frameTop : 28 }}
-                    >
+                        read out as part of the button's name.
+
+                        Every card uses the same offset, deliberately. Sliding
+                        individual phones up to reach content buried lower in a
+                        screen cut off the top of the device and made those cards
+                        look misaligned next to the rest; the fix belongs in the
+                        source screenshot, not in the framing. */}
+                    <div className="absolute left-1/2 top-7 -translate-x-1/2">
                       <PhoneFrame id={tool.screen} width={148} proportional />
                     </div>
                   </div>
