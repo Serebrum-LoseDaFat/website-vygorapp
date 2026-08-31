@@ -3,35 +3,69 @@
  *
  * Rule: a blank value is not an error, it means "not connected yet". Consumers
  * check for `null` and hide the control rather than rendering something that
- * goes nowhere. Nothing in the UI hardcodes an external URL.
+ * goes nowhere. Nothing in the UI hardcodes an external URL inline.
+ *
+ * WHY THERE ARE DEFAULTS HERE
+ *
+ * Originally every link came from an environment variable with no fallback.
+ * That is correct for a destination nobody knows yet, but it made the whole
+ * public identity of the site conditional on a deploy-time checklist — and the
+ * first production deploy shipped without those variables set. The result was
+ * silent and total: every App Store badge, the "For Business" link, both social
+ * icons and the privacy and terms links simply vanished, with no error, no
+ * failed build and nothing in the logs. The page looked finished and was
+ * missing its only conversion path.
+ *
+ * So values that are permanent, public and already known now carry a default,
+ * exactly as `siteUrl` and `supportEmail` always have. The environment variable
+ * still wins when set, so staging or a rebrand can override any of them without
+ * a code change; the default only decides what happens when nothing is
+ * configured, and "nothing configured" should not mean "hide the download
+ * button".
+ *
+ * `play` and `login` deliberately keep no default. There is no Android app and
+ * no web sign-in, so blank is the honest answer and hiding those controls is
+ * the correct behaviour rather than a failure.
  */
 
-function env(value: string | undefined): string | null {
+const DEFAULTS = {
+  site: "https://www.vygor.health",
+  appStore: "https://apps.apple.com/us/app/vygor-ai-wellness-coach/id1565632505",
+  privacy: "https://www.vygor.health/privacy-policy",
+  terms: "https://www.vygor.health/terms-of-service",
+  business: "https://www.vygor.health/",
+  instagram: "https://www.instagram.com/vygorapp/",
+  tiktok: "https://www.tiktok.com/@vygorapp",
+  supportEmail: "hello@vygor.health",
+} as const;
+
+function env(value: string | undefined, fallback: string | null = null): string | null {
   const trimmed = value?.trim();
-  return trimmed ? trimmed : null;
+  return trimmed ? trimmed : fallback;
 }
 
-export const siteUrl =
-  env(process.env.NEXT_PUBLIC_SITE_URL) ?? "https://www.vygor.health";
+export const siteUrl = env(process.env.NEXT_PUBLIC_SITE_URL, DEFAULTS.site) as string;
 
 export const links = {
   /** Live iOS listing. */
-  appStore: env(process.env.NEXT_PUBLIC_APP_STORE_URL),
+  appStore: env(process.env.NEXT_PUBLIC_APP_STORE_URL, DEFAULTS.appStore),
   /** Not published yet — badge stays hidden until this is filled in. */
   play: env(process.env.NEXT_PUBLIC_PLAY_URL),
   /** No web sign-in exists today, so the nav control is hidden by default. */
   login: env(process.env.NEXT_PUBLIC_LOGIN_URL),
-  privacy: env(process.env.NEXT_PUBLIC_PRIVACY_URL),
-  terms: env(process.env.NEXT_PUBLIC_TERMS_URL),
+  privacy: env(process.env.NEXT_PUBLIC_PRIVACY_URL, DEFAULTS.privacy),
+  terms: env(process.env.NEXT_PUBLIC_TERMS_URL, DEFAULTS.terms),
   /** The existing Vygor site, which carries all the enterprise content. */
-  business: env(process.env.NEXT_PUBLIC_BUSINESS_URL),
-  instagram: env(process.env.NEXT_PUBLIC_INSTAGRAM_URL),
-  tiktok: env(process.env.NEXT_PUBLIC_TIKTOK_URL),
+  business: env(process.env.NEXT_PUBLIC_BUSINESS_URL, DEFAULTS.business),
+  instagram: env(process.env.NEXT_PUBLIC_INSTAGRAM_URL, DEFAULTS.instagram),
+  tiktok: env(process.env.NEXT_PUBLIC_TIKTOK_URL, DEFAULTS.tiktok),
 } as const;
 
 /** The one address the site exposes, for feedback, requests and problems. */
-export const supportEmail =
-  env(process.env.NEXT_PUBLIC_SUPPORT_EMAIL) ?? "hello@vygor.health";
+export const supportEmail = env(
+  process.env.NEXT_PUBLIC_SUPPORT_EMAIL,
+  DEFAULTS.supportEmail,
+) as string;
 
 /**
  * Where "Get Vygor" / "Get Started" point. Vygor is an app-first product, so

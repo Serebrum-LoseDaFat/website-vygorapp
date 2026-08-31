@@ -60,8 +60,15 @@ external API calls at runtime, so deployment is the default path:
    `NEXT_PUBLIC_SITE_URL` to the final URL so canonical tags, `sitemap.xml`,
    `robots.txt` and Open Graph images resolve correctly.
 
-Skipping step 3 still produces a working build, but the App Store button and
-footer social icons hide themselves, since blank means "not available yet".
+Step 3 is now belt-and-braces rather than load-bearing. The first production
+deploy went out without those variables and every App Store badge, the "For
+Business" link, both social icons and the privacy and terms links silently
+disappeared — no error, no failed build. Values that are permanent and already
+public therefore carry defaults in `src/lib/config.ts`, so the site is correct
+with nothing configured. Setting them still overrides, which is what staging or
+a rebrand would use. `NEXT_PUBLIC_PLAY_URL` and `NEXT_PUBLIC_LOGIN_URL` keep no
+default on purpose: there is no Android app and no web sign-in, so those
+controls should stay hidden.
 
 ---
 
