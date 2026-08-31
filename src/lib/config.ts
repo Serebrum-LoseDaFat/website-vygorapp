@@ -37,6 +37,7 @@ const DEFAULTS = {
   instagram: "https://www.instagram.com/vygorapp/",
   tiktok: "https://www.tiktok.com/@vygorapp",
   supportEmail: "hello@vygor.health",
+  partnersEmail: "partners@vygor.health",
 } as const;
 
 function env(value: string | undefined, fallback: string | null = null): string | null {
@@ -65,6 +66,17 @@ export const links = {
 export const supportEmail = env(
   process.env.NEXT_PUBLIC_SUPPORT_EMAIL,
   DEFAULTS.supportEmail,
+) as string;
+
+/**
+ * Where creators and influencers send drafts for review. Separate from
+ * supportEmail on purpose: consumer support and partnership submissions go to
+ * different people, and the creator page tells creators to expect a reply
+ * within two working days — a promise the support inbox has not made.
+ */
+export const partnersEmail = env(
+  process.env.NEXT_PUBLIC_PARTNERS_EMAIL,
+  DEFAULTS.partnersEmail,
 ) as string;
 
 /**

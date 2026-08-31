@@ -46,7 +46,10 @@ export function Footer() {
     },
     {
       title: "Company",
-      items: [{ label: "Support", href: "/#contact" }],
+      items: [
+        { label: "Support", href: "/#contact" },
+        { label: "Creators", href: "/creators" },
+      ],
     },
     {
       title: "Business",
