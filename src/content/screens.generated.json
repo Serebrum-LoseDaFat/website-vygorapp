@@ -19,16 +19,6 @@
     "width": 243,
     "height": 93
   },
-  "creatorIllustration": {
-    "src": "/brand/creator-illustration.E5Gkcdnq.webp",
-    "width": 1200,
-    "height": 699
-  },
-  "appStoreListing": {
-    "src": "/brand/appstore-listing.O296Un6u.webp",
-    "width": 1000,
-    "height": 361
-  },
   "screens": {
     "home": {
       "src": "/app/home.nouNS8OR.webp",
@@ -36,9 +26,9 @@
       "height": 2341
     },
     "meal-plan": {
-      "src": "/app/meal-plan.x5hS2h8D.webp",
+      "src": "/app/meal-plan.u4vVdFX-.webp",
       "width": 1080,
-      "height": 2341
+      "height": 2013
     },
     "recipes": {
       "src": "/app/recipes.-6EwyH8G.webp",

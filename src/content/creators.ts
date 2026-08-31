@@ -85,6 +85,11 @@ export const creatorProduct = {
   lead:
     "Vygor is a weight management super app — six AI tools in one subscription, all working from the same plan. Free to download, with Premium at $79.99 a year. iPhone only today.",
   /**
+   * `frameTop` shifts the screen inside the card window, in pixels, so each
+   * card frames the part that actually explains the tool rather than always
+   * showing the header. Contests needs the largest shift: its contest card
+   * sits below a weight trend chart. Omit it and the screen sits at the top.
+   *
    * `screen` is a slug from the generated asset manifest — each card previews
    * the tool it describes rather than an icon. `tagline` is what shows closed;
    * `body` only appears once the card is opened, so the grid stays scannable
@@ -95,6 +100,7 @@ export const creatorProduct = {
       name: "AI Dietitian",
       tagline: "Hyper-personalized meal plans",
       screen: "meal-plan",
+      frameTop: -4,
       body: "Meal plans generated for the member's own goals, with calories and macros worked out per meal. They adapt as weight, activity and preferences change, so the plan is never the same one they started with.",
     },
     {
@@ -119,12 +125,14 @@ export const creatorProduct = {
       name: "Contests",
       tagline: "Challenges they can run with followers",
       screen: "contests",
+      frameTop: -118,
       body: "Weight or step competitions with friends, family or an audience — a shared start, a target and a countdown. The most useful feature for a creator, because it turns a post into something their followers join.",
     },
     {
       name: "Analytics",
       tagline: "Trends they can actually read",
       screen: "analytics",
+      frameTop: -16,
       body: "Weight, BMI and body-fat trends across days, weeks and months, with a weekly read-back of the numbers so a plateau is distinguishable from one bad week.",
     },
   ],

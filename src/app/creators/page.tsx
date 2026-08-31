@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { ButtonLink } from "@/components/Button";
 import { PhoneFrame } from "@/components/PhoneFrame";
 import { Check, Close, Plus, Sparkle, InstagramColor, TiktokColor } from "@/components/Icons";
-import { creatorIllustration, appStoreListing } from "@/content/screens";
 import {
   creatorsIntro,
   creatorBenefits,
@@ -96,9 +94,7 @@ export default function CreatorsPage() {
   return (
     <>
       {/* ---------------- hero ---------------- */}
-      {/* Bottom padding is generous because the listing card hangs below the
-          artwork, and the section clips its own overflow. */}
-      <section className="relative overflow-hidden bg-tint pb-28 pt-28 sm:pb-32 sm:pt-32">
+      <section className="relative overflow-hidden bg-tint pb-16 pt-28 sm:pb-20 sm:pt-32">
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute -right-32 -top-24 h-[30rem] w-[30rem] rounded-full bg-[radial-gradient(closest-side,rgb(0_156_228/0.16),transparent)]" />
           <div className="absolute -left-40 bottom-0 h-[26rem] w-[26rem] rounded-full bg-[radial-gradient(closest-side,rgb(132_192_84/0.12),transparent)]" />
@@ -131,61 +127,48 @@ export default function CreatorsPage() {
               </div>
             </Reveal>
 
-            {/* Artwork, two drifting platform chips, and the real App Store
-                listing hanging off the bottom corner.
+            {/* Phone with the contest screen — the one feature a creator can
+                point their own audience at — and two platform chips drifting
+                beside it.
 
-                Only the chips move. The listing card stays still on purpose: the
-                motion guidance is to keep moving elements to one or two per
-                view, and a large card drifting under a static one reads as a
-                glitch rather than as depth. `float-slow` already disables itself
-                under prefers-reduced-motion. */}
+                An illustration with the App Store listing laid over it was tried
+                here and rejected: the product itself is the more persuasive
+                image on a page asking someone to make content about it.
+
+                Only the chips move. The screenshot never rotates, tilts or
+                drifts: product UI stays upright and unaltered, and the chips are
+                our own decoration rather than cropped app pixels floated back
+                over the screen they came from. Motion guidance is to keep moving
+                elements to one or two per view, so it is two, both slow and
+                low-amplitude, and `float-slow` already disables itself under
+                prefers-reduced-motion. */}
             <Reveal delay={120} y={24}>
-              <div className="relative mx-auto w-full max-w-[34rem] lg:ml-auto lg:mr-0">
-                <div className="overflow-hidden rounded-[1.75rem] shadow-[0_34px_70px_-34px_rgb(6_34_49/0.45)] ring-1 ring-line">
-                  <Image
-                    src={creatorIllustration.src}
-                    width={creatorIllustration.width}
-                    height={creatorIllustration.height}
-                    alt="An illustration of a creator speaking through a megaphone from a phone screen, surrounded by likes, hearts and comments from an audience."
-                    priority
-                    sizes="(min-width: 1024px) 34rem, 100vw"
-                    className="block h-auto w-full"
-                  />
-                </div>
+              <div className="relative mx-auto w-fit lg:ml-auto lg:mr-0">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 -z-10 m-auto h-[70%] w-[85%] rounded-[50%] bg-cyan-500/18 blur-3xl"
+                />
+
+                <PhoneFrame id="contests" width={286} proportional priority />
 
                 <div
-                  className="float-slow absolute -left-3 top-[13%] sm:-left-7"
+                  className="float-slow absolute -left-4 top-[16%] sm:-left-10"
                   style={{ "--drift": "9px", "--float-duration": "8.5s" } as React.CSSProperties}
                 >
                   <PlatformChip icon={<TiktokColor size={21} />} label="@vygorapp" />
                 </div>
 
                 <div
-                  className="float-slow absolute -left-1 top-[36%] sm:-left-4"
+                  className="float-slow absolute -right-3 bottom-[18%] sm:-right-8"
                   style={
                     {
                       "--drift": "7px",
                       "--float-duration": "11s",
-                      "--float-delay": "-3.5s",
+                      "--float-delay": "-3s",
                     } as React.CSSProperties
                   }
                 >
                   <PlatformChip icon={<InstagramColor size={21} />} label="@vygorapp" />
-                </div>
-
-                {/* The listing, framed in frosted glass so it reads as a card
-                    laid over the artwork rather than part of it. */}
-                <div className="absolute -bottom-10 -right-2 w-[78%] max-w-[20rem] sm:-right-6">
-                  <div className="rounded-[1.15rem] bg-white/70 p-1.5 shadow-[0_22px_50px_-20px_rgb(6_34_49/0.55)] ring-1 ring-white/70 backdrop-blur-md">
-                    <Image
-                      src={appStoreListing.src}
-                      width={appStoreListing.width}
-                      height={appStoreListing.height}
-                      alt="The Vygor AI Wellness Coach listing on the App Store: AI Dietitian, Macros and Trainer, free with in-app purchases."
-                      sizes="20rem"
-                      className="block h-auto w-full rounded-[0.85rem]"
-                    />
-                  </div>
                 </div>
               </div>
             </Reveal>
@@ -255,10 +238,16 @@ export default function CreatorsPage() {
                   key={tool.name}
                   className="overflow-hidden rounded-2xl bg-white ring-1 ring-line transition-shadow duration-200 hover:shadow-soft"
                 >
-                  <div className="relative h-44 overflow-hidden bg-[linear-gradient(160deg,var(--color-mist),var(--color-cyan-100))]">
+                  <div className="relative h-52 overflow-hidden bg-[linear-gradient(160deg,var(--color-mist),var(--color-cyan-100))]">
                     {/* Image sits outside the summary so its description is not
-                        read out as part of the button's name. */}
-                    <div className="absolute left-1/2 top-7 -translate-x-1/2">
+                        read out as part of the button's name. `frameTop` slides
+                        the screen so the window lands on the part that explains
+                        the tool — the contest card, the macro rings, the bar
+                        chart — rather than always on the app header. */}
+                    <div
+                      className="absolute left-1/2 -translate-x-1/2"
+                      style={{ top: "frameTop" in tool ? tool.frameTop : 28 }}
+                    >
                       <PhoneFrame id={tool.screen} width={148} proportional />
                     </div>
                   </div>
