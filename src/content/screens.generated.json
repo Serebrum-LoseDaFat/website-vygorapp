@@ -19,6 +19,16 @@
     "width": 243,
     "height": 93
   },
+  "creatorIllustration": {
+    "src": "/brand/creator-illustration.E5Gkcdnq.webp",
+    "width": 1200,
+    "height": 699
+  },
+  "appStoreListing": {
+    "src": "/brand/appstore-listing.O296Un6u.webp",
+    "width": 1000,
+    "height": 361
+  },
   "screens": {
     "home": {
       "src": "/app/home.nouNS8OR.webp",

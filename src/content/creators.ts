@@ -84,31 +84,49 @@ export const creatorProduct = {
   title: "Know what you are promoting.",
   lead:
     "Vygor is a weight management super app — six AI tools in one subscription, all working from the same plan. Free to download, with Premium at $79.99 a year. iPhone only today.",
+  /**
+   * `screen` is a slug from the generated asset manifest — each card previews
+   * the tool it describes rather than an icon. `tagline` is what shows closed;
+   * `body` only appears once the card is opened, so the grid stays scannable
+   * instead of presenting six paragraphs at once.
+   */
   tools: [
-    [
-      "AI Dietitian",
-      "Personalized meal plans for the member's goals, with calories and macros per meal. Adapts as weight and preferences change.",
-    ],
-    [
-      "AI Recipes",
-      "Recipes generated around their macros and taste, with ingredients, nutrition and a built-in video library.",
-    ],
-    [
-      "AI Macro Tracker",
-      "Log a meal from a photo, barcode or text. Vygor works out the calories, carbs, protein and fat.",
-    ],
-    [
-      "AI Trainer",
-      "Workouts built around fitness level and available equipment, progressing session to session.",
-    ],
-    [
-      "Contests",
-      "Weight or step competitions with friends, family or followers — a shared target and a countdown.",
-    ],
-    [
-      "Analytics",
-      "Weight, BMI and body-fat trends over days, weeks and months, with a weekly read-back of the numbers.",
-    ],
+    {
+      name: "AI Dietitian",
+      tagline: "Hyper-personalized meal plans",
+      screen: "meal-plan",
+      body: "Meal plans generated for the member's own goals, with calories and macros worked out per meal. They adapt as weight, activity and preferences change, so the plan is never the same one they started with.",
+    },
+    {
+      name: "AI Recipes",
+      tagline: "Built around their macros and taste",
+      screen: "recipes",
+      body: "Recipes generated to fit their targets and what they actually like to eat, each with ingredients, step-by-step instructions and a nutrition breakdown. There is a video library in the app for anyone who would rather watch.",
+    },
+    {
+      name: "AI Macro Tracker",
+      tagline: "Log a meal from a photo",
+      screen: "tracker",
+      body: "Photograph the plate, scan a barcode, pick from the gallery or type it. Vygor returns the calories, carbs, protein and fat and files it against the day. This is the feature that demos best on camera.",
+    },
+    {
+      name: "AI Trainer",
+      tagline: "Workouts that progress session to session",
+      screen: "exercise-plan",
+      body: "Routines built around fitness level and the equipment actually available, with a warm-up, a main set and a cool-down. The session changes as they get stronger rather than repeating the same block.",
+    },
+    {
+      name: "Contests",
+      tagline: "Challenges they can run with followers",
+      screen: "contests",
+      body: "Weight or step competitions with friends, family or an audience — a shared start, a target and a countdown. The most useful feature for a creator, because it turns a post into something their followers join.",
+    },
+    {
+      name: "Analytics",
+      tagline: "Trends they can actually read",
+      screen: "analytics",
+      body: "Weight, BMI and body-fat trends across days, weeks and months, with a weekly read-back of the numbers so a plateau is distinguishable from one bad week.",
+    },
   ],
 } as const;
 
@@ -397,8 +415,17 @@ export const creatorSegments = [
  * handles contact.
  */
 export const creatorContact = {
-  title: "Send a draft.",
+  kicker: "Contact",
+  title: "Talk to us.",
   lead:
-    "Share your draft caption, the video or script, and your promo code. You will hear back within two working days.",
-  socials: "We are @vygorapp on Instagram and TikTok.",
+    "One inbox for applications, drafts, questions about a claim, and anything the brief does not cover.",
+  /** What to put in a submission. Kept as a checklist — it is a task, not prose. */
+  submissionTitle: "Sending a draft for review",
+  submissionLead: "Include all three and the first reply can be an approval rather than a question.",
+  submission: [
+    "Your draft caption, and the video file or the script",
+    "The promo code and tracking link you were issued",
+    "Where and roughly when you plan to post",
+  ],
+  turnaround: "Expect a reply within two working days.",
 } as const;

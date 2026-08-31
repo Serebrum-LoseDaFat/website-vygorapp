@@ -106,3 +106,9 @@ export const leafMark = generated.leafMark;
 
 /** Apple's official App Store badge artwork, as supplied. */
 export const appStoreBadge = generated.appStoreBadge;
+
+/** Creator page hero artwork. */
+export const creatorIllustration = generated.creatorIllustration;
+
+/** A capture of the live App Store listing, used as a card on the creator page. */
+export const appStoreListing = generated.appStoreListing;

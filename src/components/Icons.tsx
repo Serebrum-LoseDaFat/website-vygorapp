@@ -164,3 +164,63 @@ export const Quote = (p: IconProps) => (
     <path d="M9.4 6C6.6 7.3 5 9.7 5 12.9V18h5.3v-5.2H7.8c0-2 .8-3.5 2.4-4.4L9.4 6Zm8.4 0c-2.8 1.3-4.4 3.7-4.4 6.9V18H19v-5.2h-2.6c0-2 .8-3.5 2.4-4.4L17.8 6Z" />
   </Svg>
 );
+
+/* -------------------------------------------------------------------------
+   Full-colour platform marks.
+   
+   Drawn rather than imported. The supplied logo files were a JPEG and a WebP
+   with no alpha channel — the transparent checkerboard from the source preview
+   was baked into the pixels, so both would have sat in a pale grey box on the
+   tinted hero. Vector also stays crisp at any size and adds no image request.
+   
+   Sized in ems so one `size` prop scales the whole mark.
+   ------------------------------------------------------------------------- */
+
+/** Instagram glyph on its brand gradient. */
+export const InstagramColor = ({ size = 24 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" role="img" aria-label="Instagram">
+    <defs>
+      <radialGradient id="ig-g" cx="0.3" cy="1.05" r="1.25">
+        <stop offset="0" stopColor="#FFD776" />
+        <stop offset="0.28" stopColor="#F3A145" />
+        <stop offset="0.52" stopColor="#EE5D4E" />
+        <stop offset="0.72" stopColor="#D6266E" />
+        <stop offset="1" stopColor="#7B3FE4" />
+      </radialGradient>
+    </defs>
+    <rect width="24" height="24" rx="7" fill="url(#ig-g)" />
+    <rect
+      x="5.1"
+      y="5.1"
+      width="13.8"
+      height="13.8"
+      rx="4.4"
+      fill="none"
+      stroke="#fff"
+      strokeWidth="1.7"
+    />
+    <circle cx="12" cy="12" r="3.5" fill="none" stroke="#fff" strokeWidth="1.7" />
+    <circle cx="16.6" cy="7.5" r="1.15" fill="#fff" />
+  </svg>
+);
+
+/** TikTok note, with the cyan and red offsets that make the mark recognisable. */
+export const TiktokColor = ({ size = 24 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" role="img" aria-label="TikTok">
+    <rect width="24" height="24" rx="7" fill="#010101" />
+    <g transform="translate(0.55 -0.35)">
+      <path
+        d="M16.1 5.6h-2.6v10.7a2 2 0 1 1-2-2c.22 0 .43.03.63.1v-2.7a4.7 4.7 0 1 0 4.05 4.65V9.9a5.7 5.7 0 0 0 3.35 1.08V8.3a3.35 3.35 0 0 1-3.35-3.35v.65Z"
+        fill="#25F4EE"
+      />
+      <path
+        d="M17.1 6.4h-2.6v10.7a2 2 0 1 1-2-2c.22 0 .43.03.63.1v-2.7a4.7 4.7 0 1 0 4.05 4.65V10.7a5.7 5.7 0 0 0 3.35 1.08V9.1a3.35 3.35 0 0 1-3.35-3.35v.65Z"
+        fill="#FE2C55"
+      />
+      <path
+        d="M16.6 6h-2.6v10.7a2 2 0 1 1-2-2c.22 0 .43.03.63.1v-2.7a4.7 4.7 0 1 0 4.05 4.65V10.3a5.7 5.7 0 0 0 3.35 1.08V8.7a3.35 3.35 0 0 1-3.35-3.35V6Z"
+        fill="#fff"
+      />
+    </g>
+  </svg>
+);

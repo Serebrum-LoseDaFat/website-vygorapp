@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { ButtonLink } from "@/components/Button";
-import { StoreBadges } from "@/components/StoreBadges";
 import { PhoneFrame } from "@/components/PhoneFrame";
-import { Check, Close, Plus, Sparkle, Instagram, Tiktok } from "@/components/Icons";
+import { Check, Close, Plus, Sparkle, InstagramColor, TiktokColor } from "@/components/Icons";
+import { creatorIllustration, appStoreListing } from "@/content/screens";
 import {
   creatorsIntro,
   creatorBenefits,
@@ -13,7 +14,7 @@ import {
   creatorSegments,
   creatorContact,
 } from "@/content/creators";
-import { partnersEmail, siteUrl } from "@/lib/config";
+import { partnersEmail, siteUrl, links } from "@/lib/config";
 
 /**
  * The creator program page.
@@ -23,10 +24,18 @@ import { partnersEmail, siteUrl } from "@/lib/config";
  * what they may say on camera. Two thousand words of compliance rules in the
  * middle of a conversion page would serve neither.
  *
- * Order is deliberate and is a compliance decision, not a design one: product,
- * then craft, then the rules, and only then the per-niche angles. A creator who
- * skims to their own segment and stops has still scrolled past the prohibited
- * list on the way.
+ * Order is deliberate and is a compliance decision, not a design one: offer,
+ * then product, then craft, then the rules, and only then the per-niche angles.
+ * A creator who skims to their own segment has still scrolled past the
+ * prohibited list on the way.
+ *
+ * DISCLOSURE PATTERN: the product and craft sections show a title and a single
+ * line, and hold their paragraph behind a native <details>. Sixteen paragraphs
+ * open at once was the single biggest reason the page read as a wall of text.
+ * <details>/<summary> is used rather than a click handler on a div because the
+ * accessibility guidance is explicit that a disclosure needs a real control
+ * with real expanded state — this gets that, plus keyboard operation, in-page
+ * find, and correct behaviour with JavaScript disabled, for free.
  */
 
 // The root layout applies a "%s — Vygor" template, so this must NOT carry its
@@ -39,12 +48,7 @@ export const metadata: Metadata = {
   title,
   description,
   alternates: { canonical: `${siteUrl}/creators` },
-  openGraph: {
-    title,
-    description,
-    url: `${siteUrl}/creators`,
-    type: "article",
-  },
+  openGraph: { title, description, url: `${siteUrl}/creators`, type: "article" },
 };
 
 function SectionKicker({ children }: { children: React.ReactNode }) {
@@ -56,15 +60,29 @@ function SectionKicker({ children }: { children: React.ReactNode }) {
 }
 
 /**
- * A platform pill that drifts beside the hero phone. Decoration, so it carries
- * no metrics — a follower count or an engagement figure here would be invented,
- * and the site does not publish numbers it cannot stand behind.
+ * A platform pill that drifts beside the hero artwork. Decoration, so it carries
+ * a handle and nothing else — a follower count or an engagement figure here
+ * would be invented, and the site does not publish numbers it cannot support.
  */
-function SocialChip({ icon, label }: { icon: React.ReactNode; label: string }) {
+function PlatformChip({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
-    <span className="flex items-center gap-2 rounded-full bg-white/95 px-3.5 py-2 text-[0.82rem] font-semibold text-ink shadow-[0_10px_30px_-12px_rgb(6_34_49/0.45)] ring-1 ring-line backdrop-blur-sm">
-      <span className="text-cyan-700">{icon}</span>
+    <span className="flex items-center gap-2.5 rounded-full bg-white/95 py-2 pl-2 pr-4 text-[0.82rem] font-semibold text-ink shadow-[0_12px_34px_-12px_rgb(6_34_49/0.5)] ring-1 ring-line backdrop-blur-sm">
+      {icon}
       {label}
+    </span>
+  );
+}
+
+/** The shared open/close affordance on every disclosure card. */
+function Chevron() {
+  return (
+    <span
+      aria-hidden="true"
+      className="inline-flex size-7 shrink-0 items-center justify-center rounded-full bg-mist text-cyan-700
+                 ring-1 ring-line transition-transform duration-300 ease-[var(--ease-out-soft)]
+                 group-open:rotate-45 motion-reduce:transition-none"
+    >
+      <Plus size={15} />
     </span>
   );
 }
@@ -78,14 +96,16 @@ export default function CreatorsPage() {
   return (
     <>
       {/* ---------------- hero ---------------- */}
-      <section className="relative overflow-hidden bg-tint pb-16 pt-28 sm:pb-20 sm:pt-32">
+      {/* Bottom padding is generous because the listing card hangs below the
+          artwork, and the section clips its own overflow. */}
+      <section className="relative overflow-hidden bg-tint pb-28 pt-28 sm:pb-32 sm:pt-32">
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute -right-32 -top-24 h-[30rem] w-[30rem] rounded-full bg-[radial-gradient(closest-side,rgb(0_156_228/0.16),transparent)]" />
           <div className="absolute -left-40 bottom-0 h-[26rem] w-[26rem] rounded-full bg-[radial-gradient(closest-side,rgb(132_192_84/0.12),transparent)]" />
         </div>
 
         <div className="shell">
-          <div className="grid items-center gap-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-12">
+          <div className="grid items-center gap-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-12">
             <Reveal>
               <div>
                 <SectionKicker>{creatorsIntro.kicker}</SectionKicker>
@@ -103,7 +123,7 @@ export default function CreatorsPage() {
                     Apply to the program
                   </ButtonLink>
                   {/* Out to the consumer site, not to "/" — a creator wants to
-                      see what their audience will land on. */}
+                      see what their own audience will land on. */}
                   <ButtonLink href={siteUrl} variant="secondary" size="lg" external withArrow>
                     Visit vygor.app
                   </ButtonLink>
@@ -111,44 +131,61 @@ export default function CreatorsPage() {
               </div>
             </Reveal>
 
-            {/* Phone with the contest screen — the one feature a creator can
-                point their own audience at — and two platform chips drifting
-                beside it.
+            {/* Artwork, two drifting platform chips, and the real App Store
+                listing hanging off the bottom corner.
 
-                Only the chips move. The screenshot never rotates, tilts or
-                drifts: product UI stays upright and unaltered, and the chips are
-                our own decoration rather than cropped app pixels floated back
-                over the screen they came from. Motion guidance says keep moving
-                elements to one or two per view, so it is two, both slow and
-                low-amplitude, and `float-slow` already switches itself off under
-                prefers-reduced-motion. */}
+                Only the chips move. The listing card stays still on purpose: the
+                motion guidance is to keep moving elements to one or two per
+                view, and a large card drifting under a static one reads as a
+                glitch rather than as depth. `float-slow` already disables itself
+                under prefers-reduced-motion. */}
             <Reveal delay={120} y={24}>
-              <div className="relative mx-auto w-fit lg:ml-auto lg:mr-0">
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 -z-10 m-auto h-[70%] w-[85%] rounded-[50%] bg-cyan-500/18 blur-3xl"
-                />
-
-                <PhoneFrame id="contests" width={286} proportional priority />
-
-                <div
-                  className="float-slow absolute -left-4 top-[16%] sm:-left-10"
-                  style={{ "--drift": "9px", "--float-duration": "8.5s" } as React.CSSProperties}
-                >
-                  <SocialChip icon={<Instagram size={16} />} label="@vygorapp" />
+              <div className="relative mx-auto w-full max-w-[34rem] lg:ml-auto lg:mr-0">
+                <div className="overflow-hidden rounded-[1.75rem] shadow-[0_34px_70px_-34px_rgb(6_34_49/0.45)] ring-1 ring-line">
+                  <Image
+                    src={creatorIllustration.src}
+                    width={creatorIllustration.width}
+                    height={creatorIllustration.height}
+                    alt="An illustration of a creator speaking through a megaphone from a phone screen, surrounded by likes, hearts and comments from an audience."
+                    priority
+                    sizes="(min-width: 1024px) 34rem, 100vw"
+                    className="block h-auto w-full"
+                  />
                 </div>
 
                 <div
-                  className="float-slow absolute -right-3 bottom-[18%] sm:-right-8"
+                  className="float-slow absolute -left-3 top-[13%] sm:-left-7"
+                  style={{ "--drift": "9px", "--float-duration": "8.5s" } as React.CSSProperties}
+                >
+                  <PlatformChip icon={<TiktokColor size={21} />} label="@vygorapp" />
+                </div>
+
+                <div
+                  className="float-slow absolute -left-1 top-[36%] sm:-left-4"
                   style={
                     {
                       "--drift": "7px",
                       "--float-duration": "11s",
-                      "--float-delay": "-3s",
+                      "--float-delay": "-3.5s",
                     } as React.CSSProperties
                   }
                 >
-                  <SocialChip icon={<Tiktok size={16} />} label="@vygorapp" />
+                  <PlatformChip icon={<InstagramColor size={21} />} label="@vygorapp" />
+                </div>
+
+                {/* The listing, framed in frosted glass so it reads as a card
+                    laid over the artwork rather than part of it. */}
+                <div className="absolute -bottom-10 -right-2 w-[78%] max-w-[20rem] sm:-right-6">
+                  <div className="rounded-[1.15rem] bg-white/70 p-1.5 shadow-[0_22px_50px_-20px_rgb(6_34_49/0.55)] ring-1 ring-white/70 backdrop-blur-md">
+                    <Image
+                      src={appStoreListing.src}
+                      width={appStoreListing.width}
+                      height={appStoreListing.height}
+                      alt="The Vygor AI Wellness Coach listing on the App Store: AI Dietitian, Macros and Trainer, free with in-app purchases."
+                      sizes="20rem"
+                      className="block h-auto w-full rounded-[0.85rem]"
+                    />
+                  </div>
                 </div>
               </div>
             </Reveal>
@@ -173,27 +210,28 @@ export default function CreatorsPage() {
 
           <Reveal delay={80}>
             <ul className="mt-12 grid gap-6 sm:grid-cols-2">
-              {[...creatorBenefits.items, ...(creatorBenefits.commercial ? [creatorBenefits.commercial] : [])].map(
-                (item) => (
-                  <li
-                    key={item.title}
-                    className="rounded-2xl bg-tint p-6 ring-1 ring-line transition-shadow duration-200 hover:shadow-sm"
-                  >
-                    <span className="inline-flex size-8 items-center justify-center rounded-full bg-white text-cyan-700 ring-1 ring-line">
-                      <Sparkle size={16} />
-                    </span>
-                    <h3 className="mt-4 font-semibold text-ink">{item.title}</h3>
-                    <p className="mt-2 text-[0.95rem] leading-relaxed text-ink-2">{item.body}</p>
-                  </li>
-                ),
-              )}
+              {[
+                ...creatorBenefits.items,
+                ...(creatorBenefits.commercial ? [creatorBenefits.commercial] : []),
+              ].map((item) => (
+                <li
+                  key={item.title}
+                  className="rounded-2xl bg-tint p-6 ring-1 ring-line transition-shadow duration-200 hover:shadow-sm"
+                >
+                  <span className="inline-flex size-8 items-center justify-center rounded-full bg-white text-cyan-700 ring-1 ring-line">
+                    <Sparkle size={16} />
+                  </span>
+                  <h3 className="mt-4 font-semibold text-ink">{item.title}</h3>
+                  <p className="mt-2 text-[0.95rem] leading-relaxed text-ink-2">{item.body}</p>
+                </li>
+              ))}
             </ul>
           </Reveal>
         </div>
       </section>
 
-      {/* ---------------- what you are promoting ---------------- */}
-      <section aria-labelledby="product-heading" className="bg-white py-20 sm:py-24">
+      {/* ---------------- the product ---------------- */}
+      <section aria-labelledby="product-heading" className="bg-tint py-20 sm:py-24">
         <div className="shell">
           <Reveal>
             <div className="max-w-2xl">
@@ -207,12 +245,42 @@ export default function CreatorsPage() {
             </div>
           </Reveal>
 
+          {/* Each card previews the tool it names. The phone is a complete
+              screen that bleeds off the bottom of its window — never a region
+              cut out of a screenshot and floated back over it. */}
           <Reveal delay={80}>
-            <ul className="mt-12 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
-              {creatorProduct.tools.map(([name, body]) => (
-                <li key={name} className="border-t border-line pt-5">
-                  <h3 className="font-semibold text-ink">{name}</h3>
-                  <p className="mt-2 text-[0.95rem] leading-relaxed text-ink-2">{body}</p>
+            <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {creatorProduct.tools.map((tool) => (
+                <li
+                  key={tool.name}
+                  className="overflow-hidden rounded-2xl bg-white ring-1 ring-line transition-shadow duration-200 hover:shadow-soft"
+                >
+                  <div className="relative h-44 overflow-hidden bg-[linear-gradient(160deg,var(--color-mist),var(--color-cyan-100))]">
+                    {/* Image sits outside the summary so its description is not
+                        read out as part of the button's name. */}
+                    <div className="absolute left-1/2 top-7 -translate-x-1/2">
+                      <PhoneFrame id={tool.screen} width={148} proportional />
+                    </div>
+                  </div>
+
+                  <details className="group faq-item">
+                    <summary
+                      className="flex cursor-pointer list-none items-start justify-between gap-4 p-5
+                                 text-left transition-colors duration-200 hover:text-cyan-700
+                                 [&::-webkit-details-marker]:hidden"
+                    >
+                      <span className="min-w-0">
+                        <span className="block font-semibold text-ink">{tool.name}</span>
+                        <span className="mt-1 block text-[0.9rem] leading-snug text-ink-2">
+                          {tool.tagline}
+                        </span>
+                      </span>
+                      <Chevron />
+                    </summary>
+                    <div className="px-5 pb-5">
+                      <p className="text-[0.92rem] leading-relaxed text-ink-2">{tool.body}</p>
+                    </div>
+                  </details>
                 </li>
               ))}
             </ul>
@@ -220,8 +288,8 @@ export default function CreatorsPage() {
         </div>
       </section>
 
-      {/* ---------------- best practices ---------------- */}
-      <section aria-labelledby="craft-heading" className="bg-tint py-20 sm:py-24">
+      {/* ---------------- best practice ---------------- */}
+      <section aria-labelledby="craft-heading" className="bg-white py-20 sm:py-24">
         <div className="shell">
           <Reveal>
             <div className="max-w-2xl">
@@ -229,28 +297,48 @@ export default function CreatorsPage() {
               <h2 id="craft-heading" className="mt-3 text-[length:var(--text-h2)] text-ink">
                 What makes a short-form video work.
               </h2>
+              <p className="mt-5 text-[length:var(--text-lead)] leading-relaxed text-ink-2">
+                Eight rules that hold whatever your niche is. Open any one for the reasoning.
+              </p>
             </div>
           </Reveal>
 
+          {/* Numbered rows rather than eight paragraph cards. Closed, the whole
+              section is scannable in a few seconds. */}
           <Reveal delay={80}>
-            <ul className="mt-12 grid gap-6 sm:grid-cols-2">
-              {creatorPractices.map((item) => (
-                <li
-                  key={item.title}
-                  className="rounded-2xl bg-white p-6 ring-1 ring-line transition-shadow duration-200 hover:shadow-sm"
-                >
-                  <h3 className="font-semibold text-ink">{item.title}</h3>
-                  <p className="mt-2 text-[0.95rem] leading-relaxed text-ink-2">{item.body}</p>
-                </li>
+            <div className="mt-12 grid gap-x-10 sm:grid-cols-2">
+              {creatorPractices.map((item, i) => (
+                <details key={item.title} className="group faq-item border-t border-line">
+                  <summary
+                    className="flex cursor-pointer list-none items-center justify-between gap-4 py-5
+                               text-left transition-colors duration-200 hover:text-cyan-700
+                               [&::-webkit-details-marker]:hidden"
+                  >
+                    <span className="flex min-w-0 items-baseline gap-4">
+                      <span
+                        aria-hidden="true"
+                        className="shrink-0 text-[0.8rem] font-semibold tabular-nums text-cyan-700/70"
+                      >
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="font-semibold text-ink">{item.title}</span>
+                    </span>
+                    <Chevron />
+                  </summary>
+                  <div className="pb-5 pl-10 pr-10">
+                    <p className="text-[0.92rem] leading-relaxed text-ink-2">{item.body}</p>
+                  </div>
+                </details>
               ))}
-            </ul>
+            </div>
           </Reveal>
         </div>
       </section>
 
       {/* ---------------- compliance ---------------- */}
       {/* On the deep bed so it reads as the serious part of the page rather than
-          one more card grid. This is the section with legal consequences. */}
+          one more card grid. This is the section with legal consequences, and it
+          is the one section that does NOT hide its content behind a click. */}
       <section
         id="compliance"
         aria-labelledby="compliance-heading"
@@ -326,10 +414,6 @@ export default function CreatorsPage() {
       </section>
 
       {/* ---------------- segments ---------------- */}
-      {/* Accordion rather than seven stacked blocks: laid flat this is far and
-          away the longest part of the page, and a creator only needs their own
-          niche. Native <details> keeps it findable by in-page search and
-          working without JavaScript. */}
       <section aria-labelledby="segments-heading" className="bg-white py-20 sm:py-24">
         <div className="shell">
           <Reveal>
@@ -443,31 +527,97 @@ export default function CreatorsPage() {
         </div>
       </section>
 
-      {/* ---------------- submit ---------------- */}
-      <section aria-labelledby="submit-heading" className="bg-tint py-20 sm:py-24">
+      {/* ---------------- contact ---------------- */}
+      {/* Contact first, submission checklist beside it. The old version led with
+          "Send a draft", which only speaks to creators already accepted and left
+          everyone else with no way to make contact. */}
+      <section aria-labelledby="contact-heading" className="bg-tint py-20 sm:py-24">
         <div className="shell">
           <Reveal>
-            <div className="mx-auto max-w-2xl text-center">
-              <SectionKicker>Submissions</SectionKicker>
-              <h2 id="submit-heading" className="mt-3 text-[length:var(--text-h2)] text-ink">
+            <div className="max-w-2xl">
+              <SectionKicker>{creatorContact.kicker}</SectionKicker>
+              <h2 id="contact-heading" className="mt-3 text-[length:var(--text-h2)] text-ink">
                 {creatorContact.title}
               </h2>
               <p className="mt-5 text-[length:var(--text-lead)] leading-relaxed text-ink-2">
                 {creatorContact.lead}
               </p>
-
-              <div className="mt-9 flex flex-col items-center gap-4">
-                <ButtonLink href={mailto} variant="primary" size="lg" withArrow>
-                  {partnersEmail}
-                </ButtonLink>
-                <p className="text-[0.9rem] text-ink-3">{creatorContact.socials}</p>
-              </div>
-
-              <div className="mt-10 flex justify-center">
-                <StoreBadges height={52} />
-              </div>
             </div>
           </Reveal>
+
+          <div className="mt-12 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+            <Reveal delay={60}>
+              <div className="h-full rounded-2xl bg-white p-7 ring-1 ring-line sm:p-8">
+                <p className="text-[0.8rem] font-semibold uppercase tracking-[0.12em] text-ink-3">
+                  Email
+                </p>
+                <a
+                  href={mailto}
+                  className="mt-2 block break-words text-[1.35rem] font-semibold text-cyan-700 underline decoration-cyan-700/30 underline-offset-[6px] transition-colors hover:decoration-cyan-700 sm:text-[1.5rem]"
+                >
+                  {partnersEmail}
+                </a>
+                <p className="mt-3 text-[0.92rem] leading-relaxed text-ink-2">
+                  {creatorContact.turnaround}
+                </p>
+
+                <p className="mt-8 text-[0.8rem] font-semibold uppercase tracking-[0.12em] text-ink-3">
+                  Follow
+                </p>
+                <ul className="mt-3 flex flex-wrap gap-3">
+                  {links.instagram ? (
+                    <li>
+                      <a
+                        href={links.instagram}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2.5 rounded-full bg-tint py-2 pl-2 pr-4 text-[0.88rem] font-semibold text-ink ring-1 ring-line transition-colors hover:bg-mist"
+                      >
+                        <InstagramColor size={20} />
+                        @vygorapp
+                      </a>
+                    </li>
+                  ) : null}
+                  {links.tiktok ? (
+                    <li>
+                      <a
+                        href={links.tiktok}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2.5 rounded-full bg-tint py-2 pl-2 pr-4 text-[0.88rem] font-semibold text-ink ring-1 ring-line transition-colors hover:bg-mist"
+                      >
+                        <TiktokColor size={20} />
+                        @vygorapp
+                      </a>
+                    </li>
+                  ) : null}
+                </ul>
+              </div>
+            </Reveal>
+
+            <Reveal delay={120}>
+              <div className="h-full rounded-2xl bg-white p-7 ring-1 ring-line sm:p-8">
+                <h3 className="font-semibold text-ink">{creatorContact.submissionTitle}</h3>
+                <p className="mt-2 text-[0.92rem] leading-relaxed text-ink-2">
+                  {creatorContact.submissionLead}
+                </p>
+                <ul className="mt-5 space-y-3">
+                  {creatorContact.submission.map((item) => (
+                    <li key={item} className="flex items-start gap-3">
+                      <span className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-leaf-500 text-deep">
+                        <Check size={12} />
+                      </span>
+                      <span className="text-[0.95rem] leading-relaxed text-ink-2">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <ButtonLink href={mailto} variant="primary" size="md" className="mt-7" withArrow>
+                  Send a draft
+                </ButtonLink>
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
     </>

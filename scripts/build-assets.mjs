@@ -304,6 +304,29 @@ const badgeAsset = await writeHashed(
 );
 console.log(`app store badge ${badgeAsset.width}x${badgeAsset.height}`);
 
+// Creator page only. The illustration is the hero visual and the listing card is
+// a capture of the real App Store page, shown at roughly a third of its captured
+// width so the text in it stays crisp on a retina screen.
+const illustrationAsset = await writeHashed(
+  sharp(path.join(BRAND, "creator-illustration.webp"))
+    .resize({ width: 1200, withoutEnlargement: true })
+    .webp({ quality: 88 }),
+  "creator-illustration",
+  OUT_BRAND,
+);
+
+const listingAsset = await writeHashed(
+  sharp(path.join(BRAND, "appstore-listing.png"))
+    .resize({ width: 1000, withoutEnlargement: true })
+    .webp({ quality: 92 }),
+  "appstore-listing",
+  OUT_BRAND,
+);
+console.log(
+  `creator art ${illustrationAsset.width}x${illustrationAsset.height}, ` +
+    `listing ${listingAsset.width}x${listingAsset.height}`,
+);
+
 await writeFile(
   path.join(process.cwd(), "src/content/screens.generated.json"),
   JSON.stringify(
@@ -312,6 +335,8 @@ await writeFile(
       icon: iconAsset,
       leafMark: markAsset,
       appStoreBadge: badgeAsset,
+      creatorIllustration: illustrationAsset,
+      appStoreListing: listingAsset,
       screens,
       composites,
     },

@@ -117,19 +117,19 @@ export function Nav() {
           <Wordmark className="h-8 w-auto sm:h-9" />
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-0.5 lg:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-0.5 xl:flex">
           {items.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-full px-3 py-2 text-[0.92rem] font-medium text-ink-2 transition-colors duration-200 hover:bg-mist hover:text-ink"
+              className="whitespace-nowrap rounded-full px-3 py-2 text-[0.92rem] font-medium text-ink-2 transition-colors duration-200 hover:bg-mist hover:text-ink"
             >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-4 lg:flex">
+        <div className="hidden items-center gap-4 xl:flex">
           {links.business ? (
             <a
               href={links.business}
@@ -153,7 +153,7 @@ export function Nav() {
           onClick={() => (open ? close() : setOpen(true))}
           aria-expanded={open}
           aria-controls="mobile-menu"
-          className="-mr-2 inline-flex size-11 cursor-pointer items-center justify-center rounded-xl text-ink transition-colors duration-200 hover:bg-mist lg:hidden"
+          className="-mr-2 inline-flex size-11 cursor-pointer items-center justify-center rounded-xl text-ink transition-colors duration-200 hover:bg-mist xl:hidden"
         >
           {open ? <Close size={24} /> : <Menu size={24} />}
           <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
@@ -166,7 +166,7 @@ export function Nav() {
         ref={panelRef}
         inert={!open}
         className={[
-          "overflow-hidden border-t border-line bg-white transition-[max-height,opacity] duration-300 ease-[var(--ease-out-soft)] lg:hidden",
+          "overflow-hidden border-t border-line bg-white transition-[max-height,opacity] duration-300 ease-[var(--ease-out-soft)] xl:hidden",
           open ? "max-h-[85vh] opacity-100" : "max-h-0 opacity-0",
         ].join(" ")}
       >
