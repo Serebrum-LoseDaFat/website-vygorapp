@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Reveal } from "@/components/Reveal";
 import { ButtonLink } from "@/components/Button";
 import { PhoneFrame } from "@/components/PhoneFrame";
+import { CreatorNav } from "@/components/CreatorNav";
 import { Check, Close, Plus, Sparkle, InstagramColor, TiktokColor } from "@/components/Icons";
 import {
   creatorsIntro,
@@ -93,8 +94,14 @@ export default function CreatorsPage() {
 
   return (
     <>
+      {/* The site header is fixed, so it takes up no space in the flow. This
+          spacer gives it some, which lets the section nav below sit under it
+          rather than behind it. */}
+      <div aria-hidden="true" className="h-18" />
+      <CreatorNav />
+
       {/* ---------------- hero ---------------- */}
-      <section className="relative overflow-hidden bg-tint pb-16 pt-28 sm:pb-20 sm:pt-32">
+      <section className="relative overflow-hidden bg-tint pb-16 pt-14 sm:pb-20 sm:pt-16">
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute -right-32 -top-24 h-[30rem] w-[30rem] rounded-full bg-[radial-gradient(closest-side,rgb(0_156_228/0.16),transparent)]" />
           <div className="absolute -left-40 bottom-0 h-[26rem] w-[26rem] rounded-full bg-[radial-gradient(closest-side,rgb(132_192_84/0.12),transparent)]" />
@@ -177,7 +184,7 @@ export default function CreatorsPage() {
       </section>
 
       {/* ---------------- what you get ---------------- */}
-      <section aria-labelledby="benefits-heading" className="bg-white py-20 sm:py-24">
+      <section id="what-you-get" aria-labelledby="benefits-heading" className="scroll-mt-[3rem] bg-white py-20 sm:py-24">
         <div className="shell">
           <Reveal>
             <div className="max-w-2xl">
@@ -214,7 +221,7 @@ export default function CreatorsPage() {
       </section>
 
       {/* ---------------- the product ---------------- */}
-      <section aria-labelledby="product-heading" className="bg-tint py-20 sm:py-24">
+      <section id="product" aria-labelledby="product-heading" className="scroll-mt-[3rem] bg-tint py-20 sm:py-24">
         <div className="shell">
           <Reveal>
             <div className="max-w-2xl">
@@ -278,7 +285,7 @@ export default function CreatorsPage() {
       </section>
 
       {/* ---------------- best practice ---------------- */}
-      <section aria-labelledby="craft-heading" className="bg-white py-20 sm:py-24">
+      <section id="best-practice" aria-labelledby="craft-heading" className="scroll-mt-[3rem] bg-white py-20 sm:py-24">
         <div className="shell">
           <Reveal>
             <div className="max-w-2xl">
@@ -331,7 +338,7 @@ export default function CreatorsPage() {
       <section
         id="compliance"
         aria-labelledby="compliance-heading"
-        className="grain scroll-mt-24 bg-deep py-20 text-white sm:py-24"
+        className="grain scroll-mt-[3rem] bg-deep py-20 text-white sm:py-24"
       >
         <div className="shell">
           <Reveal>
@@ -403,7 +410,7 @@ export default function CreatorsPage() {
       </section>
 
       {/* ---------------- segments ---------------- */}
-      <section aria-labelledby="segments-heading" className="bg-white py-20 sm:py-24">
+      <section id="segments" aria-labelledby="segments-heading" className="scroll-mt-[3rem] bg-white py-20 sm:py-24">
         <div className="shell">
           <Reveal>
             <div className="mx-auto max-w-2xl text-center">
@@ -520,7 +527,7 @@ export default function CreatorsPage() {
       {/* Contact first, submission checklist beside it. The old version led with
           "Send a draft", which only speaks to creators already accepted and left
           everyone else with no way to make contact. */}
-      <section aria-labelledby="contact-heading" className="bg-tint py-20 sm:py-24">
+      <section id="contact" aria-labelledby="contact-heading" className="scroll-mt-[3rem] bg-tint py-20 sm:py-24">
         <div className="shell">
           <Reveal>
             <div className="max-w-2xl">
