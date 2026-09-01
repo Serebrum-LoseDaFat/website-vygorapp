@@ -99,9 +99,18 @@ export default function CreatorsPage() {
       <div aria-hidden="true" className="h-18" />
 
       {/* Rail beside the content on large screens; below lg CreatorNav renders
-          a sticky trigger instead and this is a plain stack. min-w-0 stops the
-          content column from being widened by anything that overflows. */}
-      <div className="lg:flex lg:items-start">
+          a sticky trigger instead and this is a plain stack.
+
+          NO items-start here. That sizes the aside to its own content, and a
+          sticky child can only stick inside its parent's box — the rail scrolled
+          away for good about 500px down the page. Letting the aside stretch to
+          the row height is what keeps it pinned the whole way, and it also runs
+          the rail's background down the full left edge instead of stopping in
+          mid-air beside the navy section.
+
+          min-w-0 stops the content column being widened by anything inside it
+          that overflows. */}
+      <div className="lg:flex">
         <CreatorNav />
         <div className="min-w-0 flex-1">
 
