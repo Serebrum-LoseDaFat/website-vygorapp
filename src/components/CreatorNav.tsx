@@ -180,55 +180,64 @@ export function CreatorNav() {
   return (
     <>
       {/* ---------------- lg and up: the rail ---------------- */}
-      <aside className="hidden lg:block lg:w-64 lg:shrink-0 lg:border-r lg:border-line lg:bg-white">
-        {/* Sticks under the fixed site header and scrolls on its own if a short
-            viewport cannot hold the whole list plus the contact routes. */}
-        <nav
-          aria-label="On this page"
-          className="sticky top-18 max-h-[calc(100vh-4.5rem)] overflow-y-auto px-5 py-8"
-        >
-          <p className="px-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-ink-3">
-            On this page
-          </p>
+      {/* The column stays full height and keeps its own background: that is what
+          holds the rail pinned for the whole page, and it gives the left edge a
+          continuous surface instead of stopping in mid-air beside the navy
+          section. The nav itself is a card sitting in that gutter, because every
+          other block on this page is a rounded card with a ring — a flat rail
+          was the one element not speaking the page's own language. */}
+      <aside className="hidden lg:block lg:w-72 lg:shrink-0 lg:bg-tint">
+        <div className="sticky top-18 px-4 py-6">
+          <nav
+            aria-label="On this page"
+            className="max-h-[calc(100vh-7.5rem)] overflow-y-auto rounded-3xl bg-white p-4 shadow-soft ring-1 ring-line"
+          >
+            <p className="px-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-ink-3">
+              On this page
+            </p>
 
-          <ul className="mt-3">
-            {SECTIONS.map((section, i) => {
-              const isActive = active === section.id;
-              return (
-                <li key={section.id}>
-                  <a
-                    href={`#${section.id}`}
-                    aria-current={isActive ? "true" : undefined}
-                    className={[
-                      "group flex min-h-11 items-center gap-3 rounded-xl px-2.5",
-                      "transition-colors duration-200",
-                      isActive ? "bg-tint" : "hover:bg-mist",
-                    ].join(" ")}
-                  >
-                    <SectionNumber index={i} active={isActive} />
-                    <span
+            <ul className="mt-3">
+              {SECTIONS.map((section, i) => {
+                const isActive = active === section.id;
+                return (
+                  <li key={section.id}>
+                    <a
+                      href={`#${section.id}`}
+                      aria-current={isActive ? "true" : undefined}
                       className={[
-                        "flex-1 text-[0.95rem] font-semibold leading-snug",
-                        isActive ? "text-cyan-700" : "text-ink-2 group-hover:text-ink",
+                        "group flex min-h-11 items-center gap-3 rounded-2xl px-2.5",
+                        "transition-colors duration-200",
+                        isActive ? "bg-tint" : "hover:bg-mist",
                       ].join(" ")}
                     >
-                      {section.label}
-                    </span>
-                    {isActive ? (
-                      <span aria-hidden="true" className="text-cyan-700">
-                        <ArrowRight size={14} />
+                      <SectionNumber index={i} active={isActive} />
+                      <span
+                        className={[
+                          "flex-1 text-[0.95rem] font-semibold leading-snug",
+                          isActive ? "text-cyan-700" : "text-ink-2 group-hover:text-ink",
+                        ].join(" ")}
+                      >
+                        {section.label}
                       </span>
-                    ) : null}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
+                      {/* Arrow on the current row only. Six persistent chevrons
+                          would read as noise beside the content rather than as
+                          an indicator. */}
+                      {isActive ? (
+                        <span aria-hidden="true" className="text-cyan-700">
+                          <ArrowRight size={14} />
+                        </span>
+                      ) : null}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
 
-          <div className="mt-7 border-t border-line px-2.5 pt-6">
-            <ContactRoutes />
-          </div>
-        </nav>
+            <div className="mt-6 border-t border-line px-2.5 pt-5">
+              <ContactRoutes />
+            </div>
+          </nav>
+        </div>
       </aside>
 
       {/* ---------------- below lg: trigger + panel ---------------- */}
