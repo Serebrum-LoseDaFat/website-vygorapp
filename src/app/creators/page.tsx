@@ -95,10 +95,15 @@ export default function CreatorsPage() {
   return (
     <>
       {/* The site header is fixed, so it takes up no space in the flow. This
-          spacer gives it some, which lets the section nav below sit under it
-          rather than behind it. */}
+          spacer gives it some, so the rail below starts under it. */}
       <div aria-hidden="true" className="h-18" />
-      <CreatorNav />
+
+      {/* Rail beside the content on large screens; below lg CreatorNav renders
+          a sticky trigger instead and this is a plain stack. min-w-0 stops the
+          content column from being widened by anything that overflows. */}
+      <div className="lg:flex lg:items-start">
+        <CreatorNav />
+        <div className="min-w-0 flex-1">
 
       {/* ---------------- hero ---------------- */}
       <section className="relative overflow-hidden bg-tint pb-16 pt-14 sm:pb-20 sm:pt-16">
@@ -184,7 +189,7 @@ export default function CreatorsPage() {
       </section>
 
       {/* ---------------- what you get ---------------- */}
-      <section id="what-you-get" aria-labelledby="benefits-heading" className="scroll-mt-[3rem] bg-white py-20 sm:py-24">
+      <section id="what-you-get" aria-labelledby="benefits-heading" className="scroll-mt-[2.25rem] lg:scroll-mt-0 bg-white py-20 sm:py-24">
         <div className="shell">
           <Reveal>
             <div className="max-w-2xl">
@@ -221,7 +226,7 @@ export default function CreatorsPage() {
       </section>
 
       {/* ---------------- the product ---------------- */}
-      <section id="product" aria-labelledby="product-heading" className="scroll-mt-[3rem] bg-tint py-20 sm:py-24">
+      <section id="product" aria-labelledby="product-heading" className="scroll-mt-[2.25rem] lg:scroll-mt-0 bg-tint py-20 sm:py-24">
         <div className="shell">
           <Reveal>
             <div className="max-w-2xl">
@@ -285,7 +290,7 @@ export default function CreatorsPage() {
       </section>
 
       {/* ---------------- best practice ---------------- */}
-      <section id="best-practice" aria-labelledby="craft-heading" className="scroll-mt-[3rem] bg-white py-20 sm:py-24">
+      <section id="best-practice" aria-labelledby="craft-heading" className="scroll-mt-[2.25rem] lg:scroll-mt-0 bg-white py-20 sm:py-24">
         <div className="shell">
           <Reveal>
             <div className="max-w-2xl">
@@ -338,7 +343,7 @@ export default function CreatorsPage() {
       <section
         id="compliance"
         aria-labelledby="compliance-heading"
-        className="grain scroll-mt-[3rem] bg-deep py-20 text-white sm:py-24"
+        className="grain scroll-mt-[2.25rem] lg:scroll-mt-0 bg-deep py-20 text-white sm:py-24"
       >
         <div className="shell">
           <Reveal>
@@ -410,7 +415,7 @@ export default function CreatorsPage() {
       </section>
 
       {/* ---------------- segments ---------------- */}
-      <section id="segments" aria-labelledby="segments-heading" className="scroll-mt-[3rem] bg-white py-20 sm:py-24">
+      <section id="segments" aria-labelledby="segments-heading" className="scroll-mt-[2.25rem] lg:scroll-mt-0 bg-white py-20 sm:py-24">
         <div className="shell">
           <Reveal>
             <div className="mx-auto max-w-2xl text-center">
@@ -527,7 +532,7 @@ export default function CreatorsPage() {
       {/* Contact first, submission checklist beside it. The old version led with
           "Send a draft", which only speaks to creators already accepted and left
           everyone else with no way to make contact. */}
-      <section id="contact" aria-labelledby="contact-heading" className="scroll-mt-[3rem] bg-tint py-20 sm:py-24">
+      <section id="contact" aria-labelledby="contact-heading" className="scroll-mt-[2.25rem] lg:scroll-mt-0 bg-tint py-20 sm:py-24">
         <div className="shell">
           <Reveal>
             <div className="max-w-2xl">
@@ -616,6 +621,8 @@ export default function CreatorsPage() {
           </div>
         </div>
       </section>
+        </div>
+      </div>
     </>
   );
 }

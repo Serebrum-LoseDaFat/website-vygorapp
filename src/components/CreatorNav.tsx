@@ -11,32 +11,31 @@ import { links, partnersEmail } from "@/lib/config";
  * compliance, seven segment playbooks and contact — and a creator arriving from
  * a DM usually wants one of those rather than a scroll through all of them.
  *
- * TWO LAYOUTS, ONE COMPONENT
+ * WHY A LEFT RAIL AND NOT A BAR
  *
- * Above `md` the six sections are pills, all visible at once. That is the
- * stronger pattern where they fit: nothing is hidden behind a click, and the
- * current section is highlighted while you read rather than only while a menu
- * is open.
+ * This started as a horizontal bar pinned under the site header. It worked, but
+ * it read as a second header stacked under the first: two full-width rows of
+ * links in slightly different type, which looks like a mistake rather than a
+ * hierarchy. A rail moves the section list onto a different axis from the site
+ * nav, so the two stop competing, and it has room for the numbering and the
+ * contact routes that the bar had nowhere to put.
  *
- * Below `md` they do not fit. Measured at 390px the row was 630px wide inside a
- * 358px viewport, so Segments and Contact sat off-screen with nothing to
- * indicate they existed. There the same six become a panel: numbered, vertical,
- * all visible together, with the contact routes at the bottom.
+ * Below `lg` there is no room for a rail, so the same six become the trigger and
+ * panel: numbered, vertical, all visible together. Same content, same order,
+ * same numbering — only the container changes.
  *
- * The trigger is the word "Jump to" plus the current section rather than an
- * icon, deliberately. The site header collapses to a hamburger below `xl`, so
- * on a phone there are two menu controls side by side; a text label is what
- * keeps them from being mistaken for each other. It also preserves the "you are
- * here" signal that a menu would otherwise hide.
+ * The trigger is the words "Jump to" plus the current section, not an icon. The
+ * site header collapses to a hamburger below `xl`, so on a phone there are two
+ * menu controls near each other and a text label is what keeps them apart. It
+ * also preserves the "you are here" signal a bare menu would hide.
  *
  * The panel copies the header's focus handling rather than inventing a second
  * one: Escape closes, Tab cycles inside, background scroll locks, focus returns
  * to the trigger.
  *
  * Active section comes from an IntersectionObserver, not a scroll handler, so
- * there is no per-frame work. Links are plain anchors, so they work before
- * hydration and from the keyboard, and the global smooth scroll — already
- * disabled under prefers-reduced-motion — carries them.
+ * there is no per-frame work, and one piece of state drives the rail, the
+ * trigger label and the panel together.
  */
 
 const SECTIONS = [
@@ -48,10 +47,65 @@ const SECTIONS = [
   { id: "contact", label: "Contact" },
 ] as const;
 
+function SectionNumber({ index, active }: { index: number; active: boolean }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={[
+        "text-[0.72rem] font-semibold tabular-nums",
+        active ? "text-cyan-700" : "text-ink-3",
+      ].join(" ")}
+    >
+      {String(index + 1).padStart(2, "0")}
+    </span>
+  );
+}
+
+/** Instagram, TikTok and the partners address — shared by the rail and panel. */
+function ContactRoutes({ compact = false }: { compact?: boolean }) {
+  return (
+    <>
+      <div className="flex items-center gap-2.5">
+        {links.instagram ? (
+          <a
+            href={links.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex size-11 items-center justify-center rounded-full ring-1 ring-line transition-colors hover:bg-mist"
+          >
+            <InstagramColor size={20} />
+            <span className="sr-only">Vygor on Instagram</span>
+          </a>
+        ) : null}
+        {links.tiktok ? (
+          <a
+            href={links.tiktok}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex size-11 items-center justify-center rounded-full ring-1 ring-line transition-colors hover:bg-mist"
+          >
+            <TiktokColor size={20} />
+            <span className="sr-only">Vygor on TikTok</span>
+          </a>
+        ) : null}
+      </div>
+      <a
+        href={`mailto:${partnersEmail}`}
+        className={[
+          "mt-3 inline-flex min-h-11 items-center font-semibold text-cyan-700",
+          "underline decoration-cyan-700/30 underline-offset-4 transition-colors hover:decoration-cyan-700",
+          compact ? "text-[0.92rem]" : "break-all text-[0.85rem]",
+        ].join(" ")}
+      >
+        {partnersEmail}
+      </a>
+    </>
+  );
+}
+
 export function CreatorNav() {
   const [active, setActive] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
-  const listRef = useRef<HTMLUListElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
@@ -67,7 +121,7 @@ export function CreatorNav() {
         const current = SECTIONS.find((s) => visible.get(s.id));
         setActive(current ? current.id : null);
       },
-      { rootMargin: "-136px 0px -55% 0px" },
+      { rootMargin: "-120px 0px -55% 0px" },
     );
     for (const section of SECTIONS) {
       const el = document.getElementById(section.id);
@@ -75,15 +129,6 @@ export function CreatorNav() {
     }
     return () => observer.disconnect();
   }, []);
-
-  // The desktop row can still scroll sideways on a narrow tablet, so keep the
-  // active pill in view when it changes.
-  useEffect(() => {
-    if (!active || !listRef.current) return;
-    listRef.current
-      .querySelector<HTMLElement>(`[data-section="${active}"]`)
-      ?.scrollIntoView({ block: "nearest", inline: "center" });
-  }, [active]);
 
   const close = useCallback(() => {
     setOpen(false);
@@ -133,64 +178,90 @@ export function CreatorNav() {
   }, [open, close]);
 
   return (
-    <div className="sticky top-18 z-40 border-b border-line bg-white/85 backdrop-blur-md">
-      <nav aria-label="On this page" className="shell">
-        {/* ---- md and up: every section visible ---- */}
-        <ul
-          ref={listRef}
-          className="-mx-1 hidden items-center gap-1 overflow-x-auto py-2 md:flex
-                     [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+    <>
+      {/* ---------------- lg and up: the rail ---------------- */}
+      <aside className="hidden lg:block lg:w-64 lg:shrink-0 lg:border-r lg:border-line lg:bg-white">
+        {/* Sticks under the fixed site header and scrolls on its own if a short
+            viewport cannot hold the whole list plus the contact routes. */}
+        <nav
+          aria-label="On this page"
+          className="sticky top-18 max-h-[calc(100vh-4.5rem)] overflow-y-auto px-5 py-8"
         >
-          {SECTIONS.map((section) => {
-            const isActive = active === section.id;
-            return (
-              <li key={section.id} className="shrink-0">
-                <a
-                  href={`#${section.id}`}
-                  data-section={section.id}
-                  aria-current={isActive ? "true" : undefined}
-                  className={[
-                    "inline-flex min-h-11 items-center whitespace-nowrap rounded-full px-3.5",
-                    "text-[0.88rem] font-medium transition-colors duration-200",
-                    isActive ? "bg-cyan-700 text-white" : "text-ink-2 hover:bg-mist hover:text-ink",
-                  ].join(" ")}
-                >
-                  {section.label}
-                </a>
-              </li>
-            );
-          })}
-        </ul>
+          <p className="px-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-ink-3">
+            On this page
+          </p>
 
-        {/* ---- below md: a labelled trigger, because six pills do not fit ---- */}
-        <button
-          ref={triggerRef}
-          type="button"
-          onClick={() => (open ? close() : setOpen(true))}
-          aria-expanded={open}
-          aria-controls="creator-sections"
-          className="flex min-h-11 w-full items-center justify-between gap-3 py-2 text-left md:hidden"
-        >
-          <span className="flex min-w-0 items-baseline gap-2">
-            <span className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-ink-3">
-              Jump to
-            </span>
-            <span className="truncate text-[0.95rem] font-semibold text-ink">
-              {activeLabel ?? "Section"}
-            </span>
-          </span>
-          <span
-            aria-hidden="true"
-            className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-mist text-cyan-700 ring-1 ring-line"
+          <ul className="mt-3">
+            {SECTIONS.map((section, i) => {
+              const isActive = active === section.id;
+              return (
+                <li key={section.id}>
+                  <a
+                    href={`#${section.id}`}
+                    aria-current={isActive ? "true" : undefined}
+                    className={[
+                      "group flex min-h-11 items-center gap-3 rounded-xl px-2.5",
+                      "transition-colors duration-200",
+                      isActive ? "bg-tint" : "hover:bg-mist",
+                    ].join(" ")}
+                  >
+                    <SectionNumber index={i} active={isActive} />
+                    <span
+                      className={[
+                        "flex-1 text-[0.95rem] font-semibold leading-snug",
+                        isActive ? "text-cyan-700" : "text-ink-2 group-hover:text-ink",
+                      ].join(" ")}
+                    >
+                      {section.label}
+                    </span>
+                    {isActive ? (
+                      <span aria-hidden="true" className="text-cyan-700">
+                        <ArrowRight size={14} />
+                      </span>
+                    ) : null}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+
+          <div className="mt-7 border-t border-line px-2.5 pt-6">
+            <ContactRoutes />
+          </div>
+        </nav>
+      </aside>
+
+      {/* ---------------- below lg: trigger + panel ---------------- */}
+      <div className="sticky top-18 z-40 border-b border-line bg-white/85 backdrop-blur-md lg:hidden">
+        <div className="shell">
+          <button
+            ref={triggerRef}
+            type="button"
+            onClick={() => (open ? close() : setOpen(true))}
+            aria-expanded={open}
+            aria-controls="creator-sections"
+            className="flex min-h-11 w-full items-center justify-between gap-3 py-2 text-left"
           >
-            <ArrowDown size={16} />
-          </span>
-        </button>
-      </nav>
+            <span className="flex min-w-0 items-baseline gap-2">
+              <span className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-ink-3">
+                Jump to
+              </span>
+              <span className="truncate text-[0.95rem] font-semibold text-ink">
+                {activeLabel ?? "Section"}
+              </span>
+            </span>
+            <span
+              aria-hidden="true"
+              className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-mist text-cyan-700 ring-1 ring-line"
+            >
+              <ArrowDown size={16} />
+            </span>
+          </button>
+        </div>
+      </div>
 
-      {/* ---- the panel ---- */}
       {open ? (
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <button
             type="button"
             aria-label="Close section menu"
@@ -235,15 +306,7 @@ export function CreatorNav() {
                         isActive ? "bg-tint" : "hover:bg-mist",
                       ].join(" ")}
                     >
-                      <span
-                        aria-hidden="true"
-                        className={[
-                          "text-[0.72rem] font-semibold tabular-nums",
-                          isActive ? "text-cyan-700" : "text-ink-3",
-                        ].join(" ")}
-                      >
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
+                      <SectionNumber index={i} active={isActive} />
                       <span
                         className={[
                           "flex-1 text-[1.05rem] font-semibold",
@@ -267,43 +330,12 @@ export function CreatorNav() {
               })}
             </ul>
 
-            {/* Contact routes, so the panel can also end a visit rather than
-                only move it along. */}
             <div className="mt-2 border-t border-line px-2.5 pb-1 pt-4">
-              <div className="flex items-center gap-2.5">
-                {links.instagram ? (
-                  <a
-                    href={links.instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex size-11 items-center justify-center rounded-full ring-1 ring-line transition-colors hover:bg-mist"
-                  >
-                    <InstagramColor size={20} />
-                    <span className="sr-only">Vygor on Instagram</span>
-                  </a>
-                ) : null}
-                {links.tiktok ? (
-                  <a
-                    href={links.tiktok}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex size-11 items-center justify-center rounded-full ring-1 ring-line transition-colors hover:bg-mist"
-                  >
-                    <TiktokColor size={20} />
-                    <span className="sr-only">Vygor on TikTok</span>
-                  </a>
-                ) : null}
-              </div>
-              <a
-                href={`mailto:${partnersEmail}`}
-                className="mt-3 inline-flex min-h-11 items-center text-[0.92rem] font-semibold text-cyan-700 underline decoration-cyan-700/30 underline-offset-4"
-              >
-                {partnersEmail}
-              </a>
+              <ContactRoutes compact />
             </div>
           </div>
         </div>
       ) : null}
-    </div>
+    </>
   );
 }
