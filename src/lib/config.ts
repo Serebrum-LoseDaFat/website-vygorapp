@@ -38,7 +38,10 @@ const DEFAULTS = {
    * engine this page is a duplicate of it.
    */
   site: "https://www.vygor.app",
-  appStore: "https://apps.apple.com/us/app/vygor-ai-wellness-coach/id1565632505",
+  // Apple's campaign-tracking form of the listing URL: pt is the provider,
+  // ct the campaign token. Every store badge and primary CTA resolves through
+  // links.appStore, so this one value is what attributes the visit.
+  appStore: "https://apps.apple.com/app/apple-store/id1565632505?pt=128960465&ct=Vygor_App&mt=8",
   privacy: "https://www.vygor.health/privacy-policy",
   terms: "https://www.vygor.health/terms-of-service",
   business: "https://www.vygor.health/",
