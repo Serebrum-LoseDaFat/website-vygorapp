@@ -28,8 +28,27 @@ const guide = readFileSync(
   "utf8",
 );
 
+/**
+ * A way out.
+ *
+ * Appended rather than edited into the document: the guide is supplied artwork
+ * that gets replaced wholesale, and anything written into it would be lost on
+ * the next update. It carries inline styles for the same reason — the guide has
+ * its own stylesheet and no class of ours would survive a replacement either.
+ *
+ * Without this the only ways to end a session are waiting twelve hours or
+ * clearing cookies, which is a poor answer on a shared or borrowed screen.
+ */
+const SIGN_OUT_LINK = `
+<a href="/apple-ads/sign-out"
+   style="position:fixed;top:14px;right:14px;z-index:2147483647;display:inline-flex;
+          align-items:center;min-height:36px;padding:0 14px;border-radius:999px;
+          background:rgba(255,255,255,.92);color:#241F16;border:1px solid rgba(36,31,22,.18);
+          font:600 13px/1 system-ui,-apple-system,'Segoe UI',sans-serif;text-decoration:none;
+          box-shadow:0 6px 18px -8px rgba(36,31,22,.5);backdrop-filter:blur(6px)">Sign out</a>`;
+
 export function GET() {
-  return new Response(guide, {
+  return new Response(guide + SIGN_OUT_LINK, {
     headers: {
       "Content-Type": "text/html; charset=utf-8",
       // Belt and braces alongside robots.txt: a header travels with the

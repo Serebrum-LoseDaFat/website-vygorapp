@@ -35,11 +35,12 @@ export default async function SignInPage({
           <Wordmark className="h-9 w-auto" />
         </div>
 
+        {/* Heading and form only. The card used to explain that the page was
+            restricted and name the two people who could open it, which told an
+            unexpected visitor both that something worth seeing was here and
+            which usernames were worth trying. */}
         <div className="mt-8 rounded-3xl bg-white p-7 shadow-soft ring-1 ring-line sm:p-8">
-          <h1 className="text-[1.35rem] font-semibold text-ink">Apple Ads guide</h1>
-          <p className="mt-2 text-[0.92rem] leading-relaxed text-ink-2">
-            This page is restricted. Sign in to continue.
-          </p>
+          <h1 className="text-[1.35rem] font-semibold text-ink">Apple Ads</h1>
 
           {/* Deliberately vague: naming which field was wrong tells someone
               probing whether a username exists. */}
@@ -94,10 +95,6 @@ export default async function SignInPage({
             </button>
           </form>
         </div>
-
-        <p className="mt-6 text-center text-[0.85rem] text-ink-3">
-          Internal document. Ask Krishna or Hajira if you need access.
-        </p>
       </div>
     </main>
   );
