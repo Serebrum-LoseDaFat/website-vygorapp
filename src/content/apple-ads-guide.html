@@ -1,0 +1,938 @@
+<title>Vygor Apple Ads Master Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --bg:#F5F0E4;
+    --bg-warm:#EFE7D6;
+    --surface:#FFFFFF;
+    --surface-soft:#FBF8F1;
+    --ink:#241F16;
+    --ink-soft:#6B6355;
+    --ink-faint:#948C7A;
+    --line:#E3D9C3;
+    --line-strong:#D2C4A3;
+    --brand:#0B2C3D;
+    --brand-soft:#12435C;
+    --brand-tint:#E4EBEC;
+    --gold:#A9752E;
+    --gold-tint:#F3E7D2;
+    --good:#3F6B4C;
+    --good-tint:#E4EDE3;
+    --warn:#A3492B;
+    --warn-tint:#F5E4DA;
+    --radius:14px;
+    --serif:'Fraunces',Georgia,'Times New Roman',serif;
+    --sans:'Source Sans 3',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--gold-tint);color:var(--ink);}
+
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--brand);margin:0 0 .5em;text-wrap:balance;font-weight:600;}
+  p{margin:0 0 1em;color:var(--ink);}
+  a{color:var(--brand-soft);}
+  strong{color:var(--ink);font-weight:700;}
+  code, .mono{font-family:var(--mono);}
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:rgba(245,240,228,.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line-strong);
+  }
+  .topbar-inner{
+    max-width:1180px;margin:0 auto;padding:12px 24px;
+    display:flex;align-items:center;gap:22px;
+  }
+  .brandmark{display:flex;flex-direction:column;gap:0;flex:0 0 auto;cursor:pointer;background:none;border:none;text-align:left;padding:0;}
+  .brandmark .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;}
+  .brandmark .t{font-family:var(--serif);font-weight:600;font-size:16px;color:var(--brand);line-height:1.1;}
+  .navlinks{display:flex;gap:0;overflow-x:auto;flex:1;scrollbar-width:none;min-width:0;}
+  .navlinks::-webkit-scrollbar{display:none;}
+  .navlinks a{
+    white-space:nowrap;font-size:12.5px;font-weight:600;color:var(--ink-soft);
+    text-decoration:none;padding:8px 8px;border-radius:8px;transition:.15s;
+  }
+  .navlinks a:hover{background:var(--brand-tint);color:var(--brand);}
+  .navlinks a.num{color:var(--gold);font-family:var(--mono);margin-right:2px;}
+
+  /* ---------- Shell ---------- */
+  .shell{max-width:900px;margin:0 auto;padding:0 24px;}
+  .wide{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  /* ---------- Hero ---------- */
+  .hero{padding:56px 0 40px;border-bottom:1px solid var(--line);}
+  .hero .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+  .hero h1{font-size:40px;line-height:1.12;max-width:820px;}
+  .hero .sub{font-size:18px;color:var(--ink-soft);max-width:640px;margin-top:10px;}
+  .hero-meta{display:flex;gap:28px;margin-top:28px;flex-wrap:wrap;}
+  .hero-meta div{font-size:13px;color:var(--ink-faint);}
+  .hero-meta b{display:block;color:var(--brand);font-family:var(--serif);font-size:15px;font-weight:600;}
+
+  /* ---------- Part header ---------- */
+  .part{padding:64px 0 8px;}
+  .part-num{font-family:var(--mono);font-size:13px;color:var(--gold);letter-spacing:.08em;margin-bottom:6px;}
+  .part h2{font-size:30px;border-bottom:2px solid var(--line-strong);padding-bottom:18px;margin-bottom:26px;}
+  .part-intro{font-size:16px;color:var(--ink-soft);max-width:680px;margin-bottom:28px;}
+
+  h3.sec{font-size:21px;margin-top:38px;margin-bottom:12px;}
+  h4.sub{font-size:16px;color:var(--gold);font-family:var(--sans);font-weight:700;text-transform:uppercase;letter-spacing:.03em;font-size:12.5px;margin:22px 0 10px;}
+
+  /* ---------- Cards / callouts ---------- */
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin:18px 0;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+
+  .callout{border-radius:var(--radius);padding:18px 22px;margin:20px 0;border-left:4px solid;}
+  .callout.info{background:var(--brand-tint);border-color:var(--brand-soft);}
+  .callout.action{background:var(--gold-tint);border-color:var(--gold);}
+  .callout.good{background:var(--good-tint);border-color:var(--good);}
+  .callout.warn{background:var(--warn-tint);border-color:var(--warn);}
+  .callout .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-bottom:6px;}
+  .callout.info .lbl{color:var(--brand-soft);}
+  .callout.action .lbl{color:var(--gold);}
+  .callout.good .lbl{color:var(--good);}
+  .callout.warn .lbl{color:var(--warn);}
+  .callout p:last-child{margin-bottom:0;}
+  .callout p{font-size:15px;}
+
+  /* ---------- Glossary term ---------- */
+  .term{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:10px 0;}
+  .term .w{font-family:var(--serif);font-weight:600;color:var(--brand);font-size:15.5px;}
+  .term .ex{margin-top:6px;font-size:13.5px;color:var(--ink-soft);font-style:italic;}
+
+  /* ---------- Tables ---------- */
+  .table-wrap{overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:var(--radius);}
+  table{border-collapse:collapse;width:100%;min-width:560px;background:var(--surface);}
+  th{background:var(--brand);color:#fff;font-family:var(--sans);font-weight:600;font-size:12.5px;letter-spacing:.02em;text-align:left;padding:11px 14px;}
+  td{padding:11px 14px;font-size:14px;border-top:1px solid var(--line);vertical-align:top;}
+  tr:nth-child(even) td{background:var(--surface-soft);}
+  td.mono, th.mono{font-family:var(--mono);font-size:13px;}
+  .pill{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;letter-spacing:.03em;}
+  .pill.high{background:var(--warn-tint);color:var(--warn);}
+  .pill.med{background:var(--gold-tint);color:var(--gold);}
+  .pill.low{background:var(--brand-tint);color:var(--brand-soft);}
+  .pill.exact{background:var(--good-tint);color:var(--good);}
+  .pill.broad{background:var(--brand-tint);color:var(--brand-soft);}
+
+  /* ---------- Funnel bars ---------- */
+  .funnel{margin:22px 0;}
+  .frow{display:grid;grid-template-columns:190px 1fr 78px;gap:14px;align-items:center;padding:9px 0;}
+  .frow .flabel{font-size:13.5px;font-weight:600;color:var(--ink);}
+  .fbar-track{background:var(--bg-warm);border-radius:8px;height:26px;position:relative;overflow:hidden;}
+  .fbar-fill{background:linear-gradient(90deg,var(--brand-soft),var(--brand));height:100%;border-radius:8px;}
+  .frow .fval{font-family:var(--mono);font-size:13px;text-align:right;color:var(--ink-soft);}
+  .plain{font-size:13px;color:var(--ink-faint);margin-top:2px;}
+
+  /* ---------- Stat tiles ---------- */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 0;}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;}
+  .stat .n{font-family:var(--serif);font-size:26px;font-weight:600;color:var(--brand);font-variant-numeric:tabular-nums;}
+  .stat .l{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+
+  /* ---------- Checklist ---------- */
+  ul.check{list-style:none;padding:0;margin:14px 0;}
+  ul.check li{position:relative;padding:9px 0 9px 30px;border-bottom:1px dashed var(--line);font-size:14.5px;}
+  ul.check li:last-child{border-bottom:none;}
+  ul.check li::before{content:"";position:absolute;left:0;top:12px;width:16px;height:16px;border:2px solid var(--line-strong);border-radius:5px;background:var(--surface);}
+  .who{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:5px;margin-left:8px;position:relative;top:-1px;}
+  .who.you{background:var(--good-tint);color:var(--good);}
+  .who.dev{background:var(--warn-tint);color:var(--warn);}
+  .who.des{background:var(--gold-tint);color:var(--gold);}
+  .who.kri{background:var(--brand-tint);color:var(--brand-soft);}
+
+  tr.focus-row td{background:var(--gold-tint);}
+  tr.focus-row td:first-child{border-left:3px solid var(--gold);}
+  .pill.focus{background:var(--gold);color:#fff;}
+
+  ol.steps{margin:14px 0;padding-left:0;list-style:none;counter-reset:step;}
+  ol.steps li{counter-increment:step;position:relative;padding:12px 0 12px 44px;border-bottom:1px solid var(--line);font-size:14.5px;}
+  ol.steps li:last-child{border-bottom:none;}
+  ol.steps li::before{content:counter(step);counter-reset:step;font-family:var(--mono);font-weight:700;font-size:13px;color:#fff;background:var(--brand);width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:absolute;left:0;top:10px;}
+  ol.steps li b{color:var(--ink);}
+
+  ul.plain-list{margin:12px 0;padding-left:20px;}
+  ul.plain-list li{margin-bottom:8px;font-size:15px;}
+
+  /* ---------- Week cards ---------- */
+  .phase-head{display:flex;align-items:baseline;gap:14px;margin:44px 0 6px;}
+  .phase-head .pn{font-family:var(--mono);color:var(--gold);font-size:13px;}
+  .phase-head h3{margin:0;font-size:24px;border:none;padding:0;}
+  .phase-target{font-size:14px;color:var(--ink-soft);margin-bottom:20px;}
+  .weekcard{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--brand);border-radius:10px;padding:18px 22px;margin:14px 0;}
+  .weekcard.oct{border-left-color:var(--gold);}
+  .weekcard.nov{border-left-color:var(--good);}
+  .weekcard .wk-top{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:8px;}
+  .weekcard .wk-name{font-family:var(--serif);font-weight:600;font-size:17px;color:var(--brand);}
+  .weekcard .wk-dates{font-family:var(--mono);font-size:12px;color:var(--ink-faint);}
+  .weekcard .wk-goal{font-size:13.5px;color:var(--gold);font-weight:600;margin-bottom:10px;}
+  .weekcard ul{margin:6px 0 0;padding-left:20px;}
+  .weekcard li{font-size:14px;margin-bottom:6px;}
+
+  /* ---------- Cadence table ---------- */
+  .cadence{display:grid;grid-template-columns:110px 1fr;gap:0;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin:20px 0;}
+  .cadence > div{padding:14px 18px;border-bottom:1px solid var(--line);font-size:14px;}
+  .cadence > div:nth-child(4n+1),.cadence > div:nth-child(4n+2){background:var(--surface);}
+  .cadence > div:nth-child(4n+3),.cadence > div:nth-child(4n+4){background:var(--surface-soft);}
+  .cadence .day{font-family:var(--mono);font-weight:700;color:var(--brand);}
+
+  /* footer / sources */
+  .footer{padding:50px 0 80px;border-top:1px solid var(--line);margin-top:40px;}
+  .footer .src{font-size:13px;color:var(--ink-faint);margin-bottom:6px;}
+  .footer .src a{color:var(--ink-soft);}
+
+  .toc-mini{background:var(--surface-soft);border:1px solid var(--line);border-radius:var(--radius);padding:18px 22px;margin:22px 0;}
+  .toc-mini .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+  .toc-mini a{display:block;font-size:14px;color:var(--ink);text-decoration:none;padding:5px 0;}
+  .toc-mini a b{font-family:var(--mono);color:var(--gold);margin-right:8px;font-weight:600;}
+  .toc-mini a:hover{color:var(--brand-soft);}
+
+  @media (max-width:720px){
+    .hero h1{font-size:30px;}
+    .grid2,.grid3{grid-template-columns:1fr;}
+    .stats{grid-template-columns:repeat(2,1fr);}
+    .frow{grid-template-columns:120px 1fr 60px;}
+    .cadence{grid-template-columns:90px 1fr;}
+  }
+</style>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <button class="brandmark" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+      <span class="k">Vygor · App Store Growth</span>
+      <span class="t">Apple Ads Master Guide</span>
+    </button>
+    <nav class="navlinks">
+      <a href="#welcome">Welcome</a>
+      <a href="#part1">Ads&nbsp;101</a>
+      <a href="#part2">Numbers</a>
+      <a href="#part3">Proof</a>
+      <a href="#part4">Keywords</a>
+      <a href="#part5">Setup</a>
+      <a href="#part6">Roadmap</a>
+      <a href="#part7">Habit</a>
+      <a href="#part8">Decisions</a>
+    </nav>
+  </div>
+</div>
+
+<!-- ================= HERO / WELCOME ================= -->
+<div class="shell" id="welcome">
+  <div class="hero">
+    <div class="eyebrow">Prepared for Vygor · September 2, 2026</div>
+    <h1>Apple App Ads — the complete master guide</h1>
+    <div class="sub">Everything you need to run Apple Search Ads for Vygor from zero — explained step by step, for someone doing this for the very first time. No prior ads experience assumed.</div>
+
+    <div class="hero-meta">
+      <div><b>3 months</b>September, October, November 2026</div>
+      <div><b>1,000 visits</b>Goal for September 2026</div>
+      <div><b>~10,000 visits</b>Goal by end of November 2026</div>
+      <div><b>Companion docs</b>Apple Ads Strategy Report · Growth &amp; Monetization Master Guide · 90-Day Plan · App Metrics.xlsx</div>
+    </div>
+
+  </div>
+
+  <div class="toc-mini">
+    <div class="lbl">How this guide is built — read this first</div>
+    <a href="#part1"><b>Part 1</b>Apple Ads explained from scratch — every setting, every term, in plain language</a>
+    <a href="#part2"><b>Part 2</b>Vygor's real numbers, explained without scary math</a>
+    <a href="#part3"><b>Part 3</b>Three real Apple Ads success stories, and the 7 patterns they share</a>
+    <a href="#part4"><b>Part 4</b>Keyword research — how, where, and what to actually search for</a>
+    <a href="#part5"><b>Part 5</b>Setting up your first campaign, screen by screen</a>
+    <a href="#part6"><b>Part 6</b>The full 90-day roadmap — every week of Sep, Oct, Nov</a>
+    <a href="#part7"><b>Part 7</b>The weekly habit you repeat for as long as ads run</a>
+    <a href="#part8"><b>Part 8</b>Decisions only you can make, and honest risks</a>
+  </div>
+
+  <p style="font-size:14.5px;color:var(--ink-soft);margin-top:14px;">
+  You don't have to read this top to bottom in one sitting. Read Parts 1–2 this week before touching the Apple Ads dashboard, then skim Part 5's checklist right before you build your first campaign. After that, come back to Part 6 every Monday and just read that week's card.
+  </p>
+</div>
+
+<!-- ================= PART 1 ================= -->
+<div class="shell" id="part1">
+<div class="part">
+  <div class="part-num">PART 1 OF 8</div>
+  <h2>Apple Search Ads, explained from zero</h2>
+  <div class="part-intro">Before you touch a single setting, you need the mental model. Everything else in this guide — the roadmap, the budget, the keyword tables — assumes you understand what's in this Part. Read it once, slowly.</div>
+
+  <h3 class="sec">1.1 &nbsp;What Apple Ads actually is</h3>
+  <p>The App Store has a search bar, just like Google. When someone types "calorie tracker," Apple shows a results list. <b>Apple Ads is how Vygor pays to appear higher, or appear at all, in front of people already typing things related to what Vygor does.</b> It is not banner advertising or social media advertising — every person who sees a Vygor ad through Apple Ads is, at that exact moment, inside the App Store looking for an app.</p>
+  <div class="callout info">
+    <div class="lbl">The one-sentence version</div>
+    <p><b>ASO</b> (App Store Optimization) is earning visibility for free, by having the right name, keywords and screenshots. <b>Apple Ads</b> is paying for visibility on top of that, for search terms you choose. The two work best together: what you learn from paid search (which words people actually use) should improve your free/organic listing too. That link-back is Pattern #5 in Part 3.</p>
+  </div>
+
+  <h3 class="sec">1.2 &nbsp;The four places your ad can appear</h3>
+  <p>Apple calls these "placements." You are only using one of them at the start — the other three are things you add later, once the first one is proven. Here they are, in the order you'll actually use them:</p>
+  <div class="table-wrap"><table>
+    <tr><th style="width:16%">Placement</th><th style="width:34%">What the shopper is doing</th><th style="width:30%">What it's good for</th><th>When Vygor uses it</th></tr>
+    <tr><td><b>Search Results</b></td><td>They typed a specific word, like "weight loss app"</td><td>Capturing people who already want something like Vygor, right now</td><td><span class="pill exact">Start here</span> — all of September</td></tr>
+    <tr><td>Search Tab</td><td>They opened the Search tab but haven't typed anything yet</td><td>Getting noticed before they've searched</td><td>Added in Phase 3 (November)</td></tr>
+    <tr><td>Today Tab</td><td>They're browsing the App Store's front page</td><td>A big visibility spike, fast — good for a short push</td><td>Optional short burst, late September if needed; ongoing from November</td></tr>
+    <tr><td>Product Pages</td><td>They're looking at a similar or competing app's page</td><td>Catching people comparing you to a competitor</td><td>Added in Phase 3 (November)</td></tr>
+  </table></div>
+  <p class="plain">Why wait on the other three? Because until you know Search Results is actually working — which keywords convert, at what cost — you have no way to judge whether the other placements are working either. One variable at a time.</p>
+
+  <h3 class="sec">1.3 &nbsp;The building blocks: Campaign → Ad Group → Keyword</h3>
+  <p>Think of this exactly like folders on a computer:</p>
+  <div class="grid3">
+    <div class="card"><h4 class="sub" style="margin-top:0">Campaign = the folder</h4><p style="font-size:14px;margin:0">One budget, one goal, one theme. Example: <span class="mono">"Vygor — Weight Loss — Search Results"</span></p></div>
+    <div class="card"><h4 class="sub" style="margin-top:0">Ad Group = the sub-folder</h4><p style="font-size:14px;margin:0">A cluster of closely related keywords inside a campaign, sharing one bid strategy. Example: "Weight Tracker Terms"</p></div>
+    <div class="card"><h4 class="sub" style="margin-top:0">Keyword = the file</h4><p style="font-size:14px;margin:0">The actual word or phrase you're bidding on, e.g. <span class="mono">weight loss tracker</span></p></div>
+  </div>
+  <p>Vygor will run <b>6 campaigns</b> (Part 5.3 has the full list and budget split), each built around one theme — Weight Loss, Calories/Food, Meal Planning, Fitness, Competitors, Brand — so you can see clearly which theme is working and reallocate money toward it without guessing.</p>
+
+  <h3 class="sec">1.4 &nbsp;Match types: how tightly you control who sees your ad</h3>
+  <p>When you add a keyword, you choose how loosely Apple is allowed to interpret it. This is one of the most important settings in the entire account, so here it is with real Vygor examples:</p>
+
+  <div class="term">
+    <div class="w">Exact Match</div>
+    <p style="margin:6px 0 0;font-size:14.5px">Your ad shows only for that keyword and very close variants Apple recognizes automatically — misspellings, plurals, word order swaps. Nothing looser.</p>
+    <div class="ex">Example: you add <span class="mono">calorie tracker</span> as Exact Match. Your ad can show for "calorie tracker" and "calorie trackers," but not for "best calorie app" or "diet tracker."</div>
+  </div>
+  <div class="term">
+    <div class="w">Broad Match</div>
+    <p style="margin:6px 0 0;font-size:14.5px">Your ad can show for that keyword <i>and</i> related searches Apple thinks are relevant — synonyms, related phrases, sometimes surprising ones. Wider net, less control.</p>
+    <div class="ex">Example: <span class="mono">weight loss</span> as Broad Match might also show your ad for "diet plan" or "lose belly fat." Good for discovering language you hadn't thought of; risky if left unwatched, because you can pay for searches that aren't actually relevant.</div>
+  </div>
+  <div class="term">
+    <div class="w">Search Match</div>
+    <p style="margin:6px 0 0;font-size:14.5px">You don't type any keywords at all for this — it's a campaign-level setting. Apple reads your app's own listing (name, subtitle, description, category) and automatically shows your ad for anything it judges relevant. Fully automatic discovery.</p>
+    <div class="ex">Use this in the <b>Discovery campaign</b> (Part 5.3) specifically to find search terms you never would have guessed. Every week, you read the results (Search Terms report) and pull the good ones out into their own Exact Match keyword elsewhere.</div>
+  </div>
+
+  <div class="callout action">
+    <div class="lbl">The rule Vygor follows</div>
+    <p>Proven, high-value terms (from Part 4's starter list) → <b>Exact Match</b>, in their own themed ad group, so you control cost precisely. Everything unproven or exploratory → <b>Search Match</b> in the Discovery campaign only, with a capped budget, so surprises can't blow up your spend. Broad Match is used sparingly and only inside Discovery, never in the core theme campaigns.</p>
+  </div>
+
+  <div class="callout warn">
+    <div class="lbl">A debated practice — should Search Match just be turned off?</div>
+    <p>You'll hear both sides from experienced Apple Ads advertisers. Some turn Search Match off entirely, calling it a budget-waster that pulls in irrelevant searches with no way to see them coming. Others — including Calz, Pillow and Rocket Money (Part 3) — use it deliberately and make it pay off by keeping it tightly contained and watched every week. Vygor's approach splits the difference: Search Match lives <i>only</i> inside the Discovery campaign, capped at 15% of budget, reviewed every Tuesday (Part 7) — never inside the core theme campaigns. The rule: if two straight weeks of Discovery spend aren't producing efficient installs, turn it off and move that budget into your proven Exact Match campaigns. Either camp is defensible; the discipline of watching it weekly is what actually matters, not which default you start from.</p>
+  </div>
+
+  <h3 class="sec">1.5 &nbsp;Budget and bidding, without the jargon</h3>
+  <p>Two different numbers control your spending, and beginners often mix them up:</p>
+  <div class="grid2">
+    <div class="card">
+      <h4 class="sub" style="margin-top:0">Daily Budget</h4>
+      <p style="font-size:14.5px">The most a <i>campaign</i> can spend in one day, total, across all its keywords. This is your spending ceiling.</p>
+      <p style="font-size:14.5px;margin:0"><i>Example: if Weight Loss's daily budget is $30, Apple will never spend more than $30 on that campaign today, no matter how many people tap the ad.</i></p>
+    </div>
+    <div class="card">
+      <h4 class="sub" style="margin-top:0">Max CPT (Cost Per Tap)</h4>
+      <p style="font-size:14.5px">The most you're willing to pay for <i>one single tap</i> on your ad, per keyword. This is your per-click ceiling.</p>
+      <p style="font-size:14.5px;margin:0"><i>Example: if "weight loss tracker" has a Max CPT of $1.20, Apple will never charge you more than $1.20 for one tap on that keyword — often less, depending on the auction.</i></p>
+    </div>
+  </div>
+  <p>You set both, Apple's auction decides the rest. You are never charged for an impression (someone just seeing the ad) — only for a tap.</p>
+
+  <div class="callout info">
+    <div class="lbl">Recommended bids are a starting point, not an instruction</div>
+    <p>Apple's Recommendations panel (1.7) suggests a bid for each keyword. Treat it as a sensible place to start, not a rule to follow blindly — if you're confused about what number to pick, that's normal. The real test is what Apple's auction actually charges you (your real average CPT) and whether your impression share and installs look healthy at that level once the campaign is running. Start near the recommendation, then adjust from real results, not the estimate.</p>
+  </div>
+
+  <h4 class="sub">Manage Bids vs. Maximize Conversions</h4>
+  <div class="table-wrap"><table>
+    <tr><th style="width:22%">Strategy</th><th style="width:39%">What it means</th><th>When to use it</th></tr>
+    <tr><td><b>Manage Bids</b></td><td>You set the Max CPT yourself, for every keyword, by hand</td><td><span class="pill exact">Use this for all of September and October</span> — you don't have enough history yet for automation to work well</td></tr>
+    <tr><td>Maximize Conversions</td><td>You give Apple a target cost-per-install; its algorithm searches broadly — a bit like Search Match — for terms likely to convert, and sets bids automatically toward that target, without you picking individual keywords</td><td>Only turn this on in November, once you have real conversion data (Part 6, Phase 3)</td></tr>
+  </table></div>
+  <p class="plain">A rule some advertisers use for Maximize Conversions campaigns: set the daily budget to roughly <b>30× your target cost-per-install</b>, so Apple's algorithm has enough daily volume to actually find and learn from conversions rather than running out of budget before it learns anything. This is a practitioner's rule of thumb, not an official Apple figure — treat it as a starting point to test in November, not a guarantee.</p>
+
+  <h4 class="sub">How to move a bid, and how long to wait before judging it</h4>
+  <ul class="plain-list">
+    <li><b>Change one thing, then wait.</b> Apple's system needs time to react to any change — a new keyword, a new bid, a paused campaign. Give it at least <b>24 hours</b> before drawing any conclusion, and a fuller <b>3–7 days</b> before deciding a keyword is a genuine winner or loser. Judging results after a few hours is the single most common beginner mistake.</li>
+    <li><b>Raise bids in small, deliberate steps.</b> Move roughly 10–20% at a time — for a keyword bidding around $1–2, that's often in the neighborhood of $0.10–$0.50 per step — and watch impression share after each change, rather than jumping straight to a high ceiling.</li>
+    <li><b>Set a ceiling and mean it.</b> If a keyword's competitive bid keeps climbing — past roughly $3 in cost-per-tap is a reasonable line for Vygor's current budget, though the real ceiling should come from the affordability math in Part 5.4 — that's the signal to stop chasing it and move that budget to a different keyword, not to keep raising forever.</li>
+  </ul>
+
+  <h3 class="sec">1.6 &nbsp;The metrics glossary — every term you'll see, in plain English</h3>
+  <p>Apple's dashboard is full of abbreviations. Here is every one you'll encounter, explained the way you'd explain it to a friend, with a small made-up example so the number means something.</p>
+  <div class="table-wrap"><table>
+    <tr><th style="width:16%">Term</th><th style="width:38%">In plain English</th><th>Small example</th></tr>
+    <tr><td class="mono">Impressions</td><td>How many times your ad was shown on someone's screen</td><td>Your ad was shown 500 times today</td></tr>
+    <tr><td class="mono">Taps</td><td>How many of those people actually tapped your ad</td><td>Of those 500, 15 people tapped it</td></tr>
+    <tr><td class="mono">TTR</td><td>Tap-Through Rate: taps ÷ impressions. Tells you if the ad is appealing for that search</td><td>15 taps ÷ 500 impressions = <b>3% TTR</b> — 3 out of every 100 people who saw it, tapped it</td></tr>
+    <tr><td class="mono">Installs</td><td>How many people who tapped actually downloaded Vygor</td><td>Of those 15 taps, 4 people installed</td></tr>
+    <tr><td class="mono">Conversion Rate</td><td>Installs ÷ taps. Tells you if your App Store page convinces people once they arrive</td><td>4 installs ÷ 15 taps = <b>27% conversion</b> — roughly 1 in 4 people who visit, install</td></tr>
+    <tr><td class="mono">CPT</td><td>Cost Per Tap: what you actually paid, on average, per tap (usually less than your Max CPT)</td><td>You spent $12 total for 15 taps = <b>$0.80 average CPT</b></td></tr>
+    <tr><td class="mono">CPA / CPI</td><td>Cost Per Acquisition / Cost Per Install: what one install actually cost you</td><td>$12 spent ÷ 4 installs = <b>$3 per install</b></td></tr>
+    <tr><td class="mono">Spend</td><td>Total money spent, full stop</td><td>$12 today</td></tr>
+    <tr><td class="mono">View-Through Installs</td><td>Organic (free) installs that happened within 24 hours after someone <i>saw</i> your ad, even if they never tapped it. Apple counts these as a side-benefit of running ads at all</td><td>2 more people installed later that day without tapping — a "halo" effect</td></tr>
+    <tr><td class="mono">Impression Share</td><td>Out of every time your keyword could have shown an ad, what % of the time you actually did</td><td>60% impression share = you showed up 6 out of 10 eligible times; the other 4 went to a competitor or nobody</td></tr>
+    <tr><td class="mono">ROAS</td><td>Return On Ad Spend: revenue earned back ÷ money spent on ads</td><td>$50 in subscription revenue from $12 ad spend = <b>~4x ROAS</b></td></tr>
+  </table></div>
+  <div class="callout good">
+    <div class="lbl">If you remember only one thing from this section</div>
+    <p>Don't chase a "good-looking" percentage in isolation. A 3% TTR means nothing on its own — it only means something compared to <i>Vygor's own</i> average from last week. Apple's own guidance agrees: there's no universal "good" number, only "better or worse than our own trend." You'll do this comparison every Monday in Part 7.</p>
+  </div>
+
+  <h3 class="sec">1.7 &nbsp;Apple's Recommendations tool — use this before you set a single bid</h3>
+  <p>Inside Apple Ads, when you're building or reviewing a campaign, Apple shows you a <b>Recommendations</b> panel. Most beginners skip straight past it — don't. It's Apple showing you its own data about what a keyword is likely to do, before you spend a cent.</p>
+  <div class="table-wrap"><table>
+    <tr><th style="width:24%">What you'll see</th><th style="width:38%">What it means</th><th>What Vygor does with it</th></tr>
+    <tr><td>Estimated Installs, Spend &amp; CPA <span class="plain">(7-day forecast)</span></td><td>Apple's prediction of what adding this keyword, at this bid, would cost and produce over the next week</td><td>Before adding any keyword in Part 5's list, check its estimated CPA is below your target cost-per-install</td></tr>
+    <tr><td>Search Popularity <span class="plain">(1–5 scale)</span></td><td>How often people search this exact term on the App Store; 5 = very popular</td><td>Prioritize 4s and 5s for your core Exact Match keywords; save low-popularity long-tail terms for Discovery</td></tr>
+    <tr><td>Impression Share</td><td>% of the time your ad actually appeared, out of every time it was eligible to</td><td>Low share + strong Rank = you're under-serving a good keyword; raise its bid or its campaign's budget</td></tr>
+    <tr><td>Rank <span class="plain">(1–5)</span></td><td>How competitive Vygor's bid is against other apps chasing the same word; 1 = strongest</td><td>Read Rank next to Impression Share, always together (see box below)</td></tr>
+    <tr><td>Average CPT</td><td>What advertisers are actually paying, on average, for a tap on this specific word right now</td><td>Set your Max CPT close to this number — bidding far below it usually means you won't show up at all</td></tr>
+    <tr><td>TTR</td><td>How often people tap when they see this specific keyword's ad</td><td>A weak TTR on a popular term is a signal your <i>creative</i> needs work, not your bid</td></tr>
+  </table></div>
+  <div class="callout info">
+    <div class="lbl">How to read Rank + Impression Share together</div>
+    <p><b>Strong Rank (1–2) but low Impression Share</b> → you're winning the auction when you compete, but your budget or bid is too low to compete <i>often enough</i>. Fix: raise the budget or bid. <b>Weak Rank (4–5) and low Impression Share</b> → you're being consistently outbid. Fix: either raise the bid meaningfully or accept this keyword is too competitive for now and focus budget elsewhere.</p>
+  </div>
+  <p class="plain">Where to find it: inside the Apple Ads dashboard, open a campaign → Keywords tab → the Recommendations panel sits alongside your keyword list, and updates continuously as your campaign runs.</p>
+
+  <h3 class="sec">1.8 &nbsp;Reading a keyword: winner or loser?</h3>
+  <p>Every week (Part 7) you'll look at your keyword list and decide what to do with each one. Here's the decision table:</p>
+  <div class="table-wrap"><table>
+    <tr><th style="width:34%">What you see</th><th style="width:30%">What it means</th><th>What to do</th></tr>
+    <tr><td>Zero installs after a full week of real spend</td><td>Not converting at all</td><td><span class="pill high">Pause it</span></td></tr>
+    <tr><td>Consistently below your account's average conversion rate for 2+ weeks</td><td>Underperforming</td><td><span class="pill high">Cut the bid, or pause</span></td></tr>
+    <tr><td>Strong tap-through and conversion, impression share still has room to grow</td><td>A genuine winner, under-served</td><td><span class="pill exact">Raise the bid/budget — scale it</span></td></tr>
+    <tr><td>Impression share is already very high (you're winning nearly every eligible auction)</td><td>You are <b>not</b> being outbid — this keyword's ceiling is its own search volume, not your budget</td><td><span class="pill med">Don't keep raising — look for growth elsewhere</span></td></tr>
+  </table></div>
+  <div class="callout info">
+    <div class="lbl">A common mix-up worth clearing up</div>
+    <p>It's easy to assume a very high impression share (say, 90%+) means something's wrong or that you're being outbid — it's the opposite. <b>Low</b> impression share is the "being outbid or under-funded" signal (Part 1.7). A very high impression share means you're already capturing nearly everyone who searches that term; the only way to get more from it is if more people start searching it, not by raising your bid further.</p>
+  </div>
+  <div class="callout action">
+    <div class="lbl">Never duplicate a keyword</div>
+    <p>Don't add the same keyword, in the same match type, to two different ad groups or campaigns. They'll bid against each other in Apple's own auction, split your performance data in two, and waste spend for no benefit. Each keyword lives in exactly one place.</p>
+  </div>
+
+  <h3 class="sec">1.9 &nbsp;Apple Ads Basic vs. Advanced, and CPT vs. CPI — what Krishna's two parallel tests actually mean</h3>
+  <p>Since <b>September 3</b>, Krishna has been running two experimental campaigns side by side, both on the same Weight Loss / weight-management theme — one on <b>Apple Ads Advanced</b>, one on <b>Apple Ads Basic</b>. These are genuinely two different products Apple sells, not two settings inside the same one, and they optimize toward different numbers by design. Here's what each one actually is:</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h4 class="sub" style="margin-top:0">Apple Ads Basic → optimizes toward CPI</h4>
+      <p style="font-size:14.5px">You don't pick keywords, campaigns, or ad groups at all. You tell Apple two things — a monthly budget (capped at $10,000/app) and a <b>target cost-per-install</b> — and Apple's algorithm decides on its own which searches to show your ad for and what to bid, aimed at hitting that average install cost. It's built to be hands-off.</p>
+      <p style="font-size:14.5px;margin:0"><b>You pay per install</b>, effectively — Apple doesn't show you a per-tap price at all in Basic, only spend and installs. That's the "CPI" (Cost Per Install) framing.</p>
+    </div>
+    <div class="card">
+      <h4 class="sub" style="margin-top:0">Apple Ads Advanced → optimizes toward CPT</h4>
+      <p style="font-size:14.5px">This is everything Vygor's 6-campaign structure is built on (Parts 1.2–1.8): you choose campaigns, ad groups, individual keywords, match types, and a Max CPT per keyword. You see every metric — impressions, taps, TTR, Rank, Impression Share (Part 1.6) — not just a final install count.</p>
+      <p style="font-size:14.5px;margin:0"><b>You pay per tap</b> — that's the literal charge Apple makes. Your effective cost-per-install is something <i>you</i> calculate afterward (spend ÷ installs); Apple itself doesn't optimize toward it directly the way Basic does, unless you turn on Maximize Conversions (Part 1.5).</p>
+    </div>
+  </div>
+
+  <p>Side by side, here's the direct comparison:</p>
+  <div class="grid2">
+    <div class="table-wrap"><table>
+      <tr><th colspan="2" style="background:var(--gold);">Apple Ads Basic (CPI)</th></tr>
+      <tr><td><b>You control</b></td><td>Budget + target cost-per-install only</td></tr>
+      <tr><td><b>Placements</b></td><td>Search Results only</td></tr>
+      <tr><td><b>Keyword visibility</b></td><td>None — fully automated</td></tr>
+      <tr><td><b>Reporting</b></td><td>Spend, installs, average CPA — high level only</td></tr>
+      <tr><td><b>Effort needed</b></td><td>Very low — set it and check weekly</td></tr>
+      <tr><td><b>Budget ceiling</b></td><td>$10,000/month per app (Apple-set)</td></tr>
+    </table></div>
+    <div class="table-wrap"><table>
+      <tr><th colspan="2">Apple Ads Advanced (CPT)</th></tr>
+      <tr><td><b>You control</b></td><td>Campaigns, ad groups, keywords, match types, Max CPT per keyword</td></tr>
+      <tr><td><b>Placements</b></td><td>Search Results, Search Tab, Today Tab, Product Pages</td></tr>
+      <tr><td><b>Keyword visibility</b></td><td>Full — Search Terms report, Recommendations, Rank, Impression Share</td></tr>
+      <tr><td><b>Reporting</b></td><td>Full keyword-level detail (Part 1.6)</td></tr>
+      <tr><td><b>Effort needed</b></td><td>Higher — the weekly cadence in Part 7</td></tr>
+      <tr><td><b>Budget ceiling</b></td><td>No Apple-set cap</td></tr>
+    </table></div>
+  </div>
+
+  <div class="callout action">
+    <div class="lbl">What to actually watch while comparing the two live experiments</div>
+    <ul class="plain-list" style="margin:8px 0 0">
+      <li><b>Normalize to cost-per-install for the comparison.</b> Basic never reports CPT at all, so CPT isn't a fair scoreboard — convert Advanced's numbers to spend ÷ installs too, and compare that install cost between the two.</li>
+      <li><b>Split the budget evenly between them.</b> If one gets more of the $10 than the other, a lower CPI on that side doesn't prove it's the better channel — it may just have had more spend to find a lucky install.</li>
+      <li><b>Give both the same patience window</b> — at least a week, ideally two (Part 1.5's 24-hour/3–7-day rule applies here too) — before drawing any conclusion.</li>
+      <li><b>Remember what Basic can't tell you.</b> Even if Basic shows a lower CPI early on, it can't tell you <i>which keyword</i> is working — Advanced's keyword-level data (Part 1.7's Recommendations, the Search Terms report) is what actually improves the Weight Loss campaign over time. A cheaper install with zero insight is a weaker long-term result than a slightly costlier one you can learn from.</li>
+      <li><b>Treat this first month as directional, not conclusive.</b> At <b>$10 total for the entire month of September</b> — this is the real, currently-committed spend, separate from the $1,500–2,500 recommended figure in Part 5.3 — very few installs will happen on either side. That's fine for a first read of "does this even work," but it's not enough volume yet to make a permanent Basic-vs-Advanced call. Revisit this once a full month of real data exists (flagged in Part 8).</li>
+    </ul>
+  </div>
+</div>
+</div>
+
+<!-- ================= PART 2 ================= -->
+<div class="shell" id="part2">
+<div class="part">
+  <div class="part-num">PART 2 OF 8</div>
+  <h2>Vygor's starting line — the real numbers</h2>
+  <div class="part-intro">Every target in this guide is built from Vygor's actual App Store Connect data (App Metrics.xlsx), January–August 2026. No estimates, no industry averages standing in for your own history.</div>
+
+  <h3 class="sec">2.1 &nbsp;What's happened so far</h3>
+  <div class="table-wrap"><table>
+    <tr><th>Month</th><th>App Store page views</th><th>Installs</th><th>Subscribers</th></tr>
+    <tr><td>January</td><td>1</td><td>3</td><td>0</td></tr>
+    <tr><td>February</td><td>4</td><td>1</td><td>0</td></tr>
+    <tr><td>March</td><td>8</td><td>5</td><td>0</td></tr>
+    <tr><td>April</td><td>10</td><td>6</td><td>0</td></tr>
+    <tr><td>May</td><td>9</td><td>4</td><td>0</td></tr>
+    <tr><td>June</td><td>18</td><td>7</td><td>0</td></tr>
+    <tr><td>July</td><td>40</td><td>9</td><td>1</td></tr>
+    <tr><td>August</td><td>106</td><td>21</td><td>0</td></tr>
+    <tr><td><b>Jan–Aug total</b></td><td><b>196</b></td><td><b>56</b></td><td><b>1</b></td></tr>
+  </table></div>
+  <div class="stats">
+    <div class="stat"><div class="n">2.65×</div><div class="l">August vs. July page views — growth is already accelerating, with zero paid ads running</div></div>
+    <div class="stat"><div class="n">$0</div><div class="l">Apple Ads spend so far — everything above happened organically</div></div>
+    <div class="stat"><div class="n">1</div><div class="l">subscriber recorded, ever, against 56 installs — before any paid campaign existed</div></div>
+    <div class="stat"><div class="n">$79.99</div><div class="l">Vygor Premium — one plan, per year, after a 2-week free trial</div></div>
+  </div>
+  <div class="callout good">
+    <div class="lbl">Why this is good news, not a scary target</div>
+    <p>August's 106 views happened with <b>no ad campaigns at all</b>. Reaching 1,000 by the end of September isn't about finding some miracle — it's about finally turning paid Search Ads on for the first time, on top of organic growth that's already climbing on its own.</p>
+  </div>
+
+  <h3 class="sec">2.2 &nbsp;Your funnel, visualized</h3>
+  <p>A "funnel" just means: a big group of people gets a little smaller at each step, on the way from "saw your app" to "pays you." Vygor is free to download and use, with a set of features held back for Vygor Premium — one plan, <b>$79.99/year</b> — and everyone who wants Premium goes through a <b>2-week (14-day) free trial</b> first, starting the moment they download. So the real path has four steps: view the page, install for free, start the 2-week trial, then convert to a paid Premium subscription once the trial ends.</p>
+  <p>Here's what that looks like once Vygor reaches the 90-day goal of 10,000 monthly page views — read the bars left to right, each one a smaller slice of the one before it.</p>
+  <div class="funnel">
+    <div class="frow"><div class="flabel">Page views</div><div class="fbar-track"><div class="fbar-fill" style="width:100%"></div></div><div class="fval">10,000</div></div>
+    <div class="frow"><div class="flabel">Installs (free)</div><div class="fbar-track"><div class="fbar-fill" style="width:25%"></div></div><div class="fval">2,500</div></div>
+    <div class="frow"><div class="flabel">2-week trial starts</div><div class="fbar-track"><div class="fbar-fill" style="width:1.7%;min-width:10px"></div></div><div class="fval">~168</div></div>
+    <div class="frow"><div class="flabel">Vygor Premium</div><div class="fbar-track"><div class="fbar-fill" style="width:0.7%;min-width:8px"></div></div><div class="fval">~67</div></div>
+  </div>
+  <p class="plain">In plain words: for roughly every <b>4 people</b> who view Vygor's page, <b>1 installs</b> it — free, right away. Out of roughly every <b>15 people who install</b>, about <b>1 starts the 2-week trial</b>. And of the people who start a trial, about <b>2 in 5 (40%)</b> convert to paid Premium once it ends. That full chain, at 10,000 monthly views, is worth about <b>$5,359/month</b> in new Premium subscriptions.</p>
+  <div class="callout warn">
+    <div class="lbl">These trial numbers are the original goal-model placeholders, not measured Vygor data</div>
+    <p>The 6.7% install→trial and 40% trial→subscription rates above come from the original 90-day goal model — right now, Vygor isn't yet confirmed to be tracking trial starts at all (Part 2.4 covers the plan to fix that). Treat this funnel as the target shape, not a proven one, until real trial data starts coming in.</p>
+  </div>
+
+  <h3 class="sec">2.3 &nbsp;Vygor vs. Apple's own benchmarks — are we doing okay?</h3>
+  <div class="table-wrap"><table>
+    <tr><th style="width:20%">Step</th><th style="width:22%">Vygor, right now</th><th style="width:16%">Benchmark</th><th>In plain words</th></tr>
+    <tr><td>People who saw an ad → installed</td><td>4.1% (August)</td><td>3.8%</td><td><span class="pill exact">Beating it</span> — Vygor is already slightly better than the benchmark here, which is a good early sign</td></tr>
+    <tr><td>People who viewed the page → installed</td><td>19.8% (Aug) / 28.6% (year so far)</td><td>25%</td><td><span class="pill med">Roughly on track</span> — a bit below plan in August, but that's normal as volume grows faster than the page can convert everyone perfectly</td></tr>
+    <tr><td>People who installed → started the 2-week trial</td><td class="mono">Not currently tracked</td><td>~6.7%</td><td><span class="pill high">No data yet</span> — this is the exact gap the trial-tracking plan in Part 2.4 needs to close before this row means anything</td></tr>
+    <tr><td>People who started a trial → became Premium subscribers</td><td class="mono">1 subscriber recorded, ever — but not yet confirmed as trial-linked</td><td>~40%</td><td><span class="pill high">No data yet</span> — placeholder from the original goal model (2,500 installs → ~168 trials → 67 subscribers), waiting on real September/October numbers</td></tr>
+  </table></div>
+
+  <h3 class="sec">2.4 &nbsp;What your subscriber data can (and can't) show you yet</h3>
+  <div class="callout good">
+    <div class="lbl">Good news: subscription tracking already works</div>
+    <p>App Store Connect Analytics already shows Vygor's one recorded subscriber — that's genuinely where the "1" in the tables above comes from. Apple's native, whole-app subscription reporting is working correctly. Nothing needs to be fixed here before campaigns launch.</p>
+  </div>
+  <div class="callout warn">
+    <div class="lbl">Not yet confirmed: trial-start tracking</div>
+    <p>Unlike the subscriber count, it isn't yet confirmed how — or whether — the <b>2-week trial start</b> is being recorded anywhere. Krishna raised Branch.io as a possible option, but before picking a tool, one question settles almost everything: is the trial a <b>native App Store trial</b> (set up as an "introductory offer" on the subscription product) or a <b>custom, in-app-only trial</b> (the app itself unlocks Premium features for 14 days, with no App Store purchase transaction behind it)? The step-by-step plan below starts there.</p>
+  </div>
+
+  <h4 class="sub">A short plan to confirm and track the 2-week trial</h4>
+  <ol class="steps">
+    <li><b>Ask Krishna/dev team one question:</b> is the trial built as a native StoreKit "introductory offer" on the Premium subscription, or is it custom logic in Vygor's own backend/app that has nothing to do with an App Store purchase? This is a five-minute conversation that decides everything else.</li>
+    <li><b>If it's a native App Store trial</b> — you're mostly done already. App Store Connect's Subscriptions report already breaks out trial starts and trial-to-paid conversions natively, the same place the "1 subscriber" number in this guide comes from (Part 2.1). No new tool needed — just open that report tab weekly.</li>
+    <li><b>If it's a custom, in-app trial</b> — that event only exists in Vygor's own systems, not Apple's, so it can't automatically be linked back to which Apple Ads keyword caused the install. To close that gap, the app needs to report the "trial started" event to Apple using the free, built-in <b>Ads Attribution API</b> — the same mechanism that already links installs to keywords (Part 1.7). This is the leaner first step: no new vendor, no new contract.</li>
+    <li><b>Where Branch.io fits:</b> it's a legitimate, widely-used attribution tool, but it's built for a broader job — deep-linking across many channels (TikTok, Instagram, email, ads) into specific in-app screens, with attribution as one part of that. If Vygor's only goal right now is "which Apple Ads keyword led to a trial," Apple's own Ads Attribution API is the smaller, cheaper, purpose-built option. Branch.io (or AppsFlyer/Adjust) is worth revisiting later if Vygor wants unified cross-channel deep-linking beyond just this one measurement need.</li>
+    <li><b>Next action:</b> this is now a Week 1 checklist item (Part 5.1) — get Krishna's answer to Step 1 before Week 2's launch, so the right tracking approach is already in motion once paid installs start.</li>
+  </ol>
+
+  <p>Separately, what Apple Ads already does automatically: once September's campaigns are live, it will tell you which keyword drove each install — no setup needed there (Part 1.7). It's specifically the <i>install → trial → subscription</i> chain, broken down by keyword, that depends on the plan above.</p>
+  <div class="callout info">
+    <div class="lbl">The simple interim habit, either way</div>
+    <p>Until keyword-level trial/subscription attribution exists, the easiest way to keep an eye on the connection: each week, look at App Store Connect's whole-app trial-start and Premium-subscriber counts alongside Apple Ads' total installs for that week (Part 7's Friday scorecard). It won't tell you which keyword to credit, but it will tell you whether trials and Premium upgrades are moving at all once paid traffic starts flowing in.</p>
+  </div>
+</div>
+</div>
+
+<!-- ================= PART 3 ================= -->
+<div class="shell" id="part3">
+<div class="part">
+  <div class="part-num">PART 3 OF 8</div>
+  <h2>Proof it works: 3 real Apple Ads success stories</h2>
+  <div class="part-intro">These are Apple's own published case studies, chosen because they're the closest matches to Vygor: an AI health/nutrition app, a subscription health app, and a subscription consumer app. The percentages are the least useful part — the tactics underneath are what you're borrowing.</div>
+
+  <div class="card">
+    <h4 class="sub" style="margin-top:0">3.1 · Calz — Calorie Counter AI <span class="pill exact" style="margin-left:8px">Closest match to Vygor</span></h4>
+    <p style="font-size:14px;color:var(--ink-soft);margin-bottom:10px">AI-powered calorie, nutrition and activity tracker. Health &amp; Fitness category, launched December 2024.</p>
+    <ul class="plain-list" style="font-size:14px">
+      <li><b>15%</b> month-over-month install growth from Apple Ads; reached <b>#2 App Store ranking</b> in Europe within 5 months</li>
+      <li><b>147%</b> higher ROI than comparable ad platforms; <b>400%</b> increase in organic brand search volume across 15 countries</li>
+      <li><b>2 million</b> weekly impressions from Today Tab ads; <b>+30%</b> install volume globally after adding Custom Product Pages</li>
+    </ul>
+    <p style="font-size:13.5px;color:var(--ink-soft);margin:0"><b>What they actually did:</b> built separate Search Results campaigns by keyword theme, set explicit cost-per-acquisition targets with maximum cost-per-tap ceilings, used Search Match and broad match specifically for discovery, then built country- and culture-specific Custom Product Pages (lose weight, gain weight, fasting, water tracking, activity) — and only added Today Tab and product-page ads <i>after</i> the core campaign had proven itself.</p>
+  </div>
+
+  <div class="card">
+    <h4 class="sub" style="margin-top:0">3.2 · Pillow</h4>
+    <p style="font-size:14px;color:var(--ink-soft);margin-bottom:10px">Sleep tracking app helping users build better habits. Health &amp; Fitness, subscription-based.</p>
+    <ul class="plain-list" style="font-size:14px">
+      <li><b>+14%</b> downloads year-over-year; <b>+19%</b> increase in new subscription revenue</li>
+      <li><b>+52%</b> tap-through rate on Search Results campaigns; <b>+83%</b> installs from Apple Watch-focused Custom Product Pages</li>
+    </ul>
+    <p style="font-size:13.5px;color:var(--ink-soft);margin:0"><b>What they actually did:</b> ran Today Tab, Search Tab, and product-page ads together once the base was working (not one at a time); built feature-specific Custom Product Pages (Apple Watch vs. iPhone) with matching ad creative for each; kept discovering new keywords continuously and re-checked performance by season and by country.</p>
+  </div>
+
+  <div class="card">
+    <h4 class="sub" style="margin-top:0">3.3 · Rocket Money</h4>
+    <p style="font-size:14px;color:var(--ink-soft);margin-bottom:10px">Personal finance / subscription-cancellation app. Heavy subscription revenue model, similar economics to Vygor even though the category differs.</p>
+    <ul class="plain-list" style="font-size:14px">
+      <li><b>+17%</b> return on ad spend during a brand rebrand; <b>1.5×</b> premium (paying) user growth at a seasonal peak</li>
+      <li><b>5×</b> install growth from top category keywords during that same seasonal peak</li>
+    </ul>
+    <p style="font-size:13.5px;color:var(--ink-soft);margin:0"><b>What they actually did:</b> strictly separated brand keywords from non-brand/category keywords into different campaigns; used Search Match to discover finance search terms they hadn't predicted; built Custom Product Pages specifically to carry a messaging change; reserved Today Tab for a defined seasonal window rather than running it always-on.</p>
+  </div>
+
+  <h3 class="sec">3.4 &nbsp;The 7 patterns that repeat — explained, and applied to Vygor</h3>
+  <p>Line up all three stories and the same seven moves show up every time. Here's what each one actually means, and exactly where it shows up in Vygor's plan.</p>
+
+  <div class="term"><div class="w">1 · Keyword optimization never stops</div><p style="margin:6px 0 0;font-size:14.5px">All three companies kept adjusting keywords weekly, using real performance data — they didn't "set and forget" a keyword list. <b>For Vygor:</b> every Tuesday (Part 7), pull fresh Recommendations data before touching any bid, and promote winning Discovery terms into Exact Match.</p></div>
+  <div class="term"><div class="w">2 · Category/non-brand terms carry the volume, brand is just protection</div><p style="margin:6px 0 0;font-size:14.5px">Calz and Rocket Money both led with category search terms (what the app <i>does</i>), keeping brand-name keywords to a small, defensive slice of budget. <b>For Vygor:</b> Weight Loss + Calories/Food + Meal Planning get ~70% of budget; Brand gets only 5% (Part 5.3).</p></div>
+  <div class="term"><div class="w">3 · Custom Product Pages are the single biggest lever</div><p style="margin:6px 0 0;font-size:14.5px">This produced the single largest install gains in every story (+30% Calz, +83% Pillow). A Custom Product Page is a variant of your App Store listing — different screenshots and message — that you show only to people who came from a specific ad/keyword, so the message matches what they searched for. Apple allows up to 70 Custom Product Pages in total; Vygor only needs 5 to start. <b>For Vygor:</b> Phase 2 (October) ships all 5 planned Custom Product Pages — Weight Loss, AI Calorie Tracker, Meal Planning, Fitness/Steps, Challenges — each matched to its own ad group.</p></div>
+  <div class="term"><div class="w">4 · Creative must match the search, not just the brand</div><p style="margin:6px 0 0;font-size:14.5px">Calz localized screenshots by country/cuisine; Pillow matched screenshots to the exact device feature someone searched for. <b>For Vygor:</b> the Weight Loss ad group's screenshots lead with weight-loss messaging; the AI Calorie Tracker ad group leads with the AI Macro Tracker's photo/barcode logging — never one generic screenshot set for every keyword.</p></div>
+  <div class="term"><div class="w">5 · ASO and Apple Ads feed each other</div><p style="margin:6px 0 0;font-size:14.5px">Calz's paid keyword data drove a 400% lift in <i>organic</i> brand search — proof that paid learnings should flow back into your free listing, not stay siloed. <b>For Vygor:</b> every Wednesday (Part 7), winning Search Terms from paid campaigns get added into Vygor's App Store subtitle/keyword field, not just kept inside Apple Ads.</p></div>
+  <div class="term"><div class="w">6 · New placements are added only after the core campaign is proven</div><p style="margin:6px 0 0;font-size:14.5px">Every story sequenced Search Results first, then added Today Tab / Search Tab / product-page ads once they had real data. <b>For Vygor:</b> Today Tab and product-page ads wait until Phase 3 (November) — unless the September checkpoint shows you're behind pace, in which case a short, deliberate Today Tab burst is allowed (Part 6, Week 3).</p></div>
+  <div class="term"><div class="w">7 · The real payoff shows up downstream, not at install</div><p style="margin:6px 0 0;font-size:14.5px">Pillow's headline win was +19% <i>subscription revenue</i>, not installs; Rocket Money's was 1.5× <i>paying</i> users. Installs are a means, not the goal. <b>For Vygor:</b> installs are easy to count, but Premium upgrades are the real measure of whether ads are working — keep watching that number every week (Part 2.4, Part 7), not just installs.</p></div>
+</div>
+</div>
+
+<!-- ================= PART 4 ================= -->
+<div class="shell" id="part4">
+<div class="part">
+  <div class="part-num">PART 4 OF 8</div>
+  <h2>Keyword research: how, where, and what</h2>
+  <div class="part-intro">Keywords are everything in Apple Search Ads. Get them right and the rest of the account mostly takes care of itself; get them wrong and no amount of bid-tweaking fixes it. Here's exactly where good keywords come from and how to judge which ones deserve Vygor's budget.</div>
+
+  <h3 class="sec">4.1 &nbsp;Where keyword ideas actually come from</h3>
+  <ol class="steps">
+    <li><b>Apple Ads' own suggestion screen.</b> When you start building a campaign and type in a seed word (e.g. "calorie"), Apple shows you a list of related terms along with Search Popularity for each. This is the fastest starting point.</li>
+    <li><b>The Recommendations tab (Part 1.7).</b> Once any campaign is live, Apple continuously suggests more keywords based on your app and your current performance.</li>
+    <li><b>The App Store's own search bar, used like a real person.</b> Open the App Store and start typing "weight l..." — the autosuggest dropdown shows you the exact phrases real users search for. Do this for each of Vygor's six core features (AI Dietitian, AI Recipes, AI Macro Tracker, AI Trainer, Contests, Analytics) to surface language you wouldn't have guessed.</li>
+    <li><b>Comparable apps' listings.</b> Search your target terms and see which apps already rank there — read their subtitle and visible keywords for phrasing ideas (never copy their app name).</li>
+    <li><b>Vygor's own Search Terms report, once campaigns are running.</b> This becomes your single best source over time — it shows exactly what real searchers typed before installing. Every week's Search Terms review (Part 7) feeds new ideas back into this list.</li>
+  </ol>
+
+  <h3 class="sec">4.2 &nbsp;How to decide if a keyword is worth using</h3>
+  <p>Score each candidate keyword against three simple questions before adding it:</p>
+  <div class="grid3">
+    <div class="card"><h4 class="sub" style="margin-top:0">Is it popular?</h4><p style="font-size:14px;margin:0">Check Search Popularity (1–5) in Recommendations. Prioritize 4s and 5s for your core Exact Match list.</p></div>
+    <div class="card"><h4 class="sub" style="margin-top:0">Is it really Vygor?</h4><p style="font-size:14px;margin:0">Does it map to one of Vygor's six actual features? If a keyword doesn't match anything Vygor does, skip it — a tap that leads to disappointment costs you money and teaches Apple's algorithm the wrong thing about your app.</p></div>
+    <div class="card"><h4 class="sub" style="margin-top:0">Can you afford it?</h4><p style="font-size:14px;margin:0">Check the Estimated CPA in Recommendations against the affordability math in Part 5.4. If it's well above what a new subscriber is worth to Vygor, wait — don't bid on it yet.</p></div>
+  </div>
+
+  <div class="callout info">
+    <div class="lbl">A common mix-up worth clearing up — short-tail vs. long-tail</div>
+    <p><b>Short-tail</b> keywords are short, broad, one- or two-word terms (e.g. "fitness app"). They get searched a lot, which also means a lot of other advertisers are bidding on them — so they tend to be the <b>most</b> expensive and most competitive. <b>Long-tail</b> keywords are longer, more specific phrases (e.g. "ai weight loss meal planner"). Fewer people search them, but fewer advertisers bid on them too, so they're usually <b>cheaper</b> per tap — and the person searching is often further along in deciding what they want, which can mean better conversion. Vygor's plan reflects this: high-popularity short-tail terms anchor the core Exact Match campaigns (Part 4.3), while long-tail variations are exactly what the Discovery campaign's Search Match is for (Part 1.4) — and never add the same keyword to two ad groups at once (Part 1.8).</p>
+  </div>
+
+  <h3 class="sec">4.3 &nbsp;Vygor's starter keyword list, by priority — corrected against real dashboard data</h3>
+  <div class="callout warn">
+    <div class="lbl">Correction: real Apple Ads popularity is running 2–3, not 4–5</div>
+    <p>The first version of this list assumed weight-management-style terms would score 4–5 on Apple's Search Popularity scale. Your own live Apple Ads Recommendations panel shows otherwise: <span class="mono">macro tracker</span>, <span class="mono">macros</span>, <span class="mono">calorie counter</span>, and <span class="mono">weight loss</span> are actually sitting around <b>3/5</b>, and a term like <span class="mono">glp-1</span> is as low as <b>1/5</b> — while competitor brand names like <span class="mono">myfitnesspal</span> score higher, around <b>4/5</b>. Popularity for this category is genuinely more mid-range than top-tier, and that's fine — mid-popularity terms are often less contested and cheaper per tap (Part 4.2's short-tail vs. long-tail point). The table below replaces the earlier guesses with what's actually observed, and separates out competitor brand terms, which belong in their own Competitors campaign (Part 5.3), not mixed into the core theme clusters.</p>
+  </div>
+  <div class="table-wrap"><table>
+    <tr><th style="width:15%">Cluster</th><th style="width:14%">Matches Vygor feature</th><th style="width:27%">Starting keywords</th><th style="width:12%">Observed popularity</th><th style="width:10%">Priority</th><th>Match type</th></tr>
+    <tr><td><b>Weight Loss</b></td><td>Analytics + Contests</td><td class="mono">weight loss app · weight management app · weight loss tracker · weight tracker · lose weight</td><td class="mono">~3/5</td><td><span class="pill high">High</span></td><td><span class="pill exact">Exact</span></td></tr>
+    <tr><td><b>Calories / Food</b></td><td>AI Macro Tracker</td><td class="mono">calorie tracker · calorie counter · calorie tracking · food tracker · nutrition tracker</td><td class="mono">~3/5</td><td><span class="pill high">High</span></td><td><span class="pill exact">Exact</span></td></tr>
+    <tr><td><b>Macros</b></td><td>AI Macro Tracker</td><td class="mono">macro tracker · macro tracking · macro tracker app</td><td class="mono">~3/5</td><td><span class="pill high">High</span></td><td><span class="pill exact">Exact</span></td></tr>
+    <tr><td><b>Meal Planning</b></td><td>AI Dietitian + AI Recipes</td><td class="mono">meal planner · diet planner · healthy meal planner · AI meal planner</td><td class="mono">Not yet checked live</td><td><span class="pill high">High</span></td><td><span class="pill exact">Exact</span></td></tr>
+    <tr><td>Fitness</td><td>AI Trainer</td><td class="mono">workout planner · workout app · fitness app · exercise planner</td><td class="mono">Not yet checked live</td><td><span class="pill med">Medium</span></td><td><span class="pill exact">Exact</span></td></tr>
+    <tr><td>AI Wellness</td><td>All six features</td><td class="mono">AI fitness app · AI meal planner · AI diet app · AI workout app</td><td class="mono">Not yet checked live</td><td><span class="pill med">Medium</span></td><td><span class="pill broad">Broad (Discovery only)</span></td></tr>
+    <tr><td>Emerging / low-priority</td><td>—</td><td class="mono">glp-1</td><td class="mono">~1/5</td><td><span class="pill low">Low — watch, don't lead with it</span></td><td><span class="pill broad">Broad (Discovery only)</span></td></tr>
+    <tr><td>Competitors <span class="plain">(moved out of Weight Loss)</span></td><td>—</td><td class="mono">myfitnesspal · noom · calai</td><td class="mono">~3–4/5</td><td><span class="pill high">High — separate campaign</span></td><td><span class="pill exact">Exact, in the Competitors campaign only</span></td></tr>
+    <tr><td>Brand</td><td>—</td><td class="mono">vygor</td><td class="mono">—</td><td><span class="pill low">Low spend, high priority to protect</span></td><td><span class="pill exact">Exact</span></td></tr>
+  </table></div>
+  <p class="plain">This is a starting point corrected once against real data, not a finished list — check each remaining "not yet checked live" row in your own Recommendations panel before launch, and let Week 3's Search Terms report keep replacing guesses with proof.</p>
+
+  <h3 class="sec">4.4 &nbsp;A short plan for a full keyword research pass — start this now</h3>
+  <p>The correction above is exactly why a proper research pass is worth doing before Week 2's launch, not after. Keep it tight:</p>
+  <ol class="steps">
+    <li><b>Trust your own dashboard over any outside guess — including this guide's first draft.</b> For every candidate keyword, check Apple Ads' own Search Popularity and Estimated CPA (Part 1.7) before adding it. That's the correction you just caught.</li>
+    <li><b>Widen the seed list past the obvious words.</b> Type each of Vygor's six core features (AI Dietitian, AI Recipes, AI Macro Tracker, AI Trainer, Contests, Analytics) into both the App Store's own search bar and Apple Ads' keyword suggestion box, and write down every autosuggested phrase — not just the ones you expected to see (Part 4.1).</li>
+    <li><b>Cross-check with one dedicated ASO tool.</b> Pick one of AppTweak, Sensor Tower, Mobile Action, or data.ai (most offer a free trial) and run Vygor plus its 3 known competitors — MyFitnessPal, Noom, Cal AI — through it. Note keywords those apps rank for that Vygor doesn't even have on its radar yet.</li>
+    <li><b>Score every candidate on three things together</b>, not popularity alone: real observed popularity, Estimated CPA vs. the affordability math (Part 5.4), and how directly it maps to one of Vygor's six features (Part 4.2).</li>
+    <li><b>Re-run this weekly against the live Search Terms report</b> once campaigns launch (Part 7, Tuesday) — that report beats every outside tool, because it's Vygor's own real searchers, not an estimate.</li>
+  </ol>
+</div>
+</div>
+
+<!-- ================= PART 5 ================= -->
+<div class="shell" id="part5">
+<div class="part">
+  <div class="part-num">PART 5 OF 8</div>
+  <h2>Setting up your first campaign, exactly</h2>
+  <div class="part-intro">Everything to do before you press launch, then screen by screen through the actual setup, then what you can actually afford, then what to do once it's live.</div>
+
+  <h3 class="sec">5.1 &nbsp;Before you create anything — pre-launch checklist</h3>
+  <ul class="check">
+    <li>Confirmed you can see Vygor Premium subscriber counts in App Store Connect Analytics, so you have a before/after baseline once paid installs start (Part 2.4) <span class="who you">You</span></li>
+    <li>Not yet confirmed: how (or whether) the 2-week trial is being tracked — get Krishna/dev's answer on native vs. custom trial before Week 2's launch (Part 2.4 has the step-by-step plan) <span class="who kri">Krishna</span></li>
+    <li>Apple Ads Advanced account access confirmed — this is what Vygor's 6-campaign structure runs on; a parallel Apple Ads Basic experiment is also running since Sep 3 (Part 1.9 explains the difference) <span class="who you">You</span></li>
+    <li>Billing / payment method on the Apple Ads account — handled by Krishna, not tracked here <span class="who kri">Krishna</span></li>
+    <li>App Store Connect analytics access confirmed so you can check installs/page views independently <span class="who you">You</span></li>
+    <li>Starter keyword list finalized with real Search Popularity and Estimated CPA checked for each in the live dashboard (Part 4.3), and no keyword duplicated across two ad groups (Part 1.8) <span class="who you">You</span></li>
+    <li>September budget: still experimental — starting at the lowest workable amount to test with (currently $10 for the month, Part 1.9), not a fixed number yet; Part 5.3's $1,500–2,500 is the recommended range once ready to scale <span class="who you">You</span></li>
+    <li>Six campaign names decided in advance so structure is consistent from day one <span class="who you">You</span></li>
+    <li>Country confirmed: <b>USA</b> — that's where Vygor's audience is, and everything (screenshots, subtitle, keywords) stays localized to it <span class="who you">You</span></li>
+  </ul>
+
+  <h3 class="sec">5.2 &nbsp;Building the campaign — screen by screen</h3>
+  <ol class="steps">
+    <li><b>Create Campaign.</b> Choose <span class="mono">Search Results</span> as the placement (Part 1.2). Name it clearly, e.g. <span class="mono">Vygor | Weight Loss | Search Results</span> — you'll thank yourself later when you have six of these.</li>
+    <li><b>Choose your country/market.</b> Start with one priority market rather than spreading thin across several — pick wherever most of Vygor's existing installs already come from.</li>
+    <li><b>Set the Daily Budget</b> for this campaign (Part 5.3 has the exact number per campaign).</li>
+    <li><b>Choose a bid strategy: Manage Bids</b> (Part 1.5) — not Maximize Conversions, not yet.</li>
+    <li><b>Create an Ad Group</b> inside the campaign (Part 1.3) — e.g. "Weight Tracker Terms" — and set a default Max CPT for it, based on the Average CPT you saw in Recommendations (Part 1.7), treated as a starting point, not a rule.</li>
+    <li><b>Add your keywords</b> from Part 4.3, each tagged with the right match type (Exact for proven terms, Search Match/Broad only inside the separate Discovery campaign) — and check none of them already exists in another ad group.</li>
+    <li><b>Choose your ad's creative.</b> For the very first launch, use Vygor's default product page — there's no Custom Product Page yet (that's Phase 2). Don't delay launch waiting for creative that isn't due until October.</li>
+    <li><b>Review and submit.</b> Apple reviews new campaigns before they start delivering, which can take up to a day.</li>
+  </ol>
+
+  <h3 class="sec">5.3 &nbsp;Vygor's 6-campaign architecture and September budget</h3>
+  <p>Recommended September budget: <b>$1,500–$2,500 for the month</b> (roughly $50–85/day), front-loaded from day one rather than ramped slowly — there's real ground to cover to reach 1,000 views by month's end. This is the target range to scale toward, not what's currently committed — see the callout below on the real September starting budget.</p>
+  <div class="table-wrap"><table>
+    <tr><th style="width:22%">Campaign</th><th style="width:30%">Purpose</th><th style="width:14%">Budget share</th><th>Match type used</th></tr>
+    <tr class="focus-row"><td><b>Weight Loss</b> <span class="pill focus">Current focus</span></td><td>Highest-value, highest-volume category</td><td>30%</td><td><span class="pill exact">Exact</span></td></tr>
+    <tr class="focus-row"><td><b>Calories / Food</b> <span class="pill focus">Current focus</span></td><td>High-intent acquisition</td><td>25%</td><td><span class="pill exact">Exact</span></td></tr>
+    <tr class="focus-row"><td><b>Meal Planning</b> <span class="pill focus">Current focus</span></td><td>Secondary intent</td><td>15%</td><td><span class="pill exact">Exact</span></td></tr>
+    <tr><td><b>Discovery</b></td><td>Find new search terms you didn't predict</td><td>15%</td><td><span class="pill broad">Search Match + Broad</span></td></tr>
+    <tr><td><b>Competitors</b></td><td>Capture category-comparison searches</td><td>10%</td><td><span class="pill exact">Exact</span></td></tr>
+    <tr><td><b>Brand</b></td><td>Protect Vygor's own name in search</td><td>5%</td><td><span class="pill exact">Exact</span></td></tr>
+  </table></div>
+  <p class="plain">Highlighted rows — Weight Loss, Calories/Food, Meal Planning — are the three campaigns actually being worked on first. Discovery, Competitors and Brand follow once these three are proven out.</p>
+
+  <div class="callout warn">
+    <div class="lbl">Is $50–85/day enough for a category this competitive?</div>
+    <p>Some Apple Search Ads practitioners describe competitive-category daily budgets running roughly $200–500/day, and lower-competition categories $100–300/day — worth treating as a discussion starting point, not confirmed fact, since these figures couldn't be independently verified this session. What's more solid: <b>Apple Ads sets no official minimum budget at all</b> — a smaller budget will still run, it just tends to mean lower impression share in a contested category. And health, fitness and weight-management search terms are genuinely contested — think MyFitnessPal, Noom, WeightWatchers, Lose It and similar well-funded apps, all bidding on very similar terms to Vygor's. September's $50–85/day is a deliberately modest starting point built for learning, not for winning every auction — Part 8 flags revisiting this once real September CPT and impression-share data are in hand.</p>
+  </div>
+
+  <div class="callout action">
+    <div class="lbl">The real September starting number: $10 for the whole month</div>
+    <p>Budget is still experimental. As of now, Vygor is testing with just <b>$10 total for all of September</b> — split across Krishna's two parallel Weight Loss experiments on Apple Ads Basic and Advanced (Part 1.9) — deliberately the lowest workable amount, before committing to anything larger. The $1,500–2,500 range above stays the target to grow into once this initial test shows real signal, not a number to jump to immediately.</p>
+  </div>
+
+  <h3 class="sec">5.4 &nbsp;What can Vygor actually afford to pay for a tap or an install?</h3>
+  <p>This is genuinely something to work out together, not something this guide can hand you a final number for — but here's a simple way to think it through.</p>
+  <ol class="steps">
+    <li><b>Know your subscriber's value.</b> Vygor Premium is $79.99/year — one plan, no tiers.</li>
+    <li><b>Estimate what share of installs become subscribers.</b> Vygor doesn't have enough paid-install data yet to know this for certain (Part 2.4) — the original 90-day goal model assumes roughly 1 in 37 installs (about 2.7%), a reasonable placeholder until real September/October data replaces it.</li>
+    <li><b>Decide how much of that $79.99 you're willing to spend acquiring one subscriber</b>, and over what payback window. This is a real business decision for you and the team, not a math problem with one right answer.</li>
+    <li><b>Put it together:</b> <span class="mono">max affordable cost-per-install ≈ subscriber value × estimated install-to-subscriber rate × the share of that revenue you're willing to spend</span></li>
+  </ol>
+  <div class="callout action">
+    <div class="lbl">Worked example — illustrative numbers only, not a decision</div>
+    <p>If 2.7% of installs become subscribers, and the team is comfortable spending half of one year's subscription value to acquire a subscriber: $79.99 × 2.7% × 50% ≈ <b>$1.08 max affordable cost-per-install</b>. Compare that to what Recommendations (Part 1.7) shows as the Estimated CPA for a keyword — if the estimate sits well above this number, that keyword either needs a much better real conversion rate than assumed, or it's not one to chase yet. This exact calculation, with Vygor's real numbers filled in, belongs in Part 8's open decisions — flag it there and revisit once September's data is in.</p>
+  </div>
+
+  <h3 class="sec">5.5 &nbsp;After it's live — the do's and don'ts</h3>
+  <div class="grid2">
+    <div class="callout good"><div class="lbl">Do</div><p>Let it run for a full week before your first real read. Watch delivery daily just to confirm it's spending (not zero, not blowing past budget). Save every question you have for Tuesday's Search Terms review (Part 7).</p></div>
+    <div class="callout warn"><div class="lbl">Don't</div><p>Don't change bids or keywords every day — Apple's own auction needs at least 24 hours to react, and 3–7 days of consistent settings to produce results you can actually learn from (Part 1.5). Daily tinkering makes every number meaningless.</p></div>
+  </div>
+</div>
+</div>
+
+<!-- ================= PART 6 — ROADMAP ================= -->
+<div class="shell" id="part6">
+<div class="part">
+  <div class="part-num">PART 6 OF 8</div>
+  <h2>The full 90-day roadmap</h2>
+  <div class="part-intro">Three phases, one per month — September, October, November 2026 — broken into 13 weeks. Each week card tells you what to do, in what order, referencing the Parts above for the how.</div>
+
+  <!-- SEPTEMBER -->
+  <div class="phase-head"><span class="pn">PHASE 1</span><h3>September 2026 — Foundation &amp; Launch</h3></div>
+  <div class="phase-target">Target: <b>1,000 App Store page views by September 30</b> · Campaigns live · Keyword and budget foundations set</div>
+
+  <div class="weekcard">
+    <div class="wk-top"><div class="wk-name">Week 1 — Setup &amp; Research</div><div class="wk-dates">Sep 3–9</div></div>
+    <div class="wk-goal">No ad spend turned on yet — get the foundation right first</div>
+    <ul>
+      <li>Day 1–2: Confirm Apple Ads Advanced access and App Store Connect access <span class="who you">You</span>; confirm billing/payment is active on the account <span class="who kri">Krishna</span></li>
+      <li>Day 1–2: Confirm you can see Vygor Premium subscriber counts in App Store Connect Analytics, and note the pre-launch baseline (Part 2.4) <span class="who you">You</span></li>
+      <li>Day 3: Get Krishna's answer on whether the 2-week trial is a native App Store trial or custom-coded — this decides the trial-tracking approach (Part 2.4) <span class="who kri">Krishna</span></li>
+      <li>Day 3–4: Build the full starter keyword list, checked against real popularity in the live dashboard, not assumptions (Part 4.3–4.4) <span class="who you">You</span></li>
+      <li>Day 5: Work out the affordability math from Part 5.4 together as a team, so you have a real max cost-per-install before launch <span class="who you">You</span></li>
+      <li>Day 5–7: Set up the 6-campaign structure in the Apple Ads dashboard following Part 5.2 (don't submit live yet, or submit at the very end of the week)</li>
+    </ul>
+  </div>
+  <div class="weekcard">
+    <div class="wk-top"><div class="wk-name">Week 2 — Launch</div><div class="wk-dates">Sep 10–16</div></div>
+    <div class="wk-goal">All 6 campaigns go live with default creative</div>
+    <ul>
+      <li>Launch at the front-loaded budget from Part 5.3 ($50–85/day across the 6 campaigns)</li>
+      <li>Do not touch bids or keywords daily — let the auction run, give every change at least 24 hours (Part 5.5)</li>
+      <li>Start PPO Test #1: current screenshots vs. weight-loss-first screenshots (already flagged as a pending action item in App Metrics.xlsx)</li>
+      <li>Turn on review-prompt triggers tied to happiness moments (first milestone, 7-day logging streak)</li>
+    </ul>
+  </div>
+  <div class="weekcard">
+    <div class="wk-top"><div class="wk-name">Week 3 — First Optimization Cycle</div><div class="wk-dates">Sep 17–23</div></div>
+    <div class="wk-goal">Checkpoint pacing toward 1,000 views; make the first real adjustments</div>
+    <ul>
+      <li>Open the Search Terms report for each campaign (Apple Ads dashboard → campaign → Search Terms tab). Promote strong discovered terms to Exact Match; add irrelevant ones as negative keywords (Part 1.8)</li>
+      <li>Pull fresh Recommendations data (Part 1.7) before any bid change</li>
+      <li><b>Checkpoint:</b> if you're tracking meaningfully behind 1,000 for the month, this is the week to add a short 3–5 day Today Tab burst (Part 1.2) rather than waiting for November</li>
+      <li>Push Instagram/TikTok content harder in parallel</li>
+    </ul>
+  </div>
+  <div class="weekcard">
+    <div class="wk-top"><div class="wk-name">Week 4 — Close the Month</div><div class="wk-dates">Sep 24–30</div></div>
+    <div class="wk-goal">Reconcile against the 1,000 target; set up October</div>
+    <ul>
+      <li>Compare actual page views for the month against the 1,000 target</li>
+      <li>Reallocate remaining September budget toward whichever campaign/keywords produced the best cost-per-install</li>
+      <li>Check whether App Store Connect's Premium subscriber count has moved since paid campaigns launched, compared against the Week 1 baseline (Part 2.4)</li>
+      <li>Finalize the 5 Custom Product Page briefs (Weight Loss, AI Calorie Tracker, Meal Planning, Fitness/Steps, Challenges) ready for October production</li>
+    </ul>
+  </div>
+
+  <!-- OCTOBER -->
+  <div class="phase-head"><span class="pn">PHASE 2</span><h3>October 2026 — Scale &amp; Custom Product Pages</h3></div>
+  <div class="phase-target">Target: <b>2,500–5,000 monthly page views</b> · All 5 Custom Product Pages live · Real Install→Premium rate visible for the first time</div>
+
+  <div class="weekcard oct">
+    <div class="wk-top"><div class="wk-name">Week 5 — Production &amp; Feedback Loop</div><div class="wk-dates">Oct 1–7</div></div>
+    <div class="wk-goal">Start building the 5 CPPs; close the ASO feedback loop</div>
+    <ul>
+      <li>Begin CPP creative production: screenshots and copy for each of the 5 pages <span class="who des">Designer</span></li>
+      <li>Take September's proven Search Terms winners and add them into Vygor's App Store subtitle/keyword field (Pattern #5, Part 3.4)</li>
+      <li>Reallocate October budget toward September's best-performing keyword clusters</li>
+    </ul>
+  </div>
+  <div class="weekcard oct">
+    <div class="wk-top"><div class="wk-name">Week 6 — Discovery Layer</div><div class="wk-dates">Oct 8–14</div></div>
+    <div class="wk-goal">Widen keyword discovery while CPPs are still in production</div>
+    <ul>
+      <li>Confirm the Discovery campaign's Search Match settings are finding genuinely new, relevant terms — review and prune weekly</li>
+      <li>CPP build continues; review drafts against Part 3.4's Pattern #4 (creative must match the search)</li>
+      <li>Continue the weekly cadence from Part 7 without interruption</li>
+    </ul>
+  </div>
+  <div class="weekcard oct">
+    <div class="wk-top"><div class="wk-name">Week 7 — Custom Product Pages Go Live</div><div class="wk-dates">Oct 15–21</div></div>
+    <div class="wk-goal">Connect each CPP to its matching ad group</div>
+    <ul>
+      <li>Publish all 5 Custom Product Pages; map each to the ad group whose keywords match its message (e.g. Weight Loss CPP ↔ Weight Loss ad group)</li>
+      <li>Start PPO Test #2</li>
+      <li>Route TikTok/Instagram creator content to the CPP matching each creator's message</li>
+    </ul>
+  </div>
+  <div class="weekcard oct">
+    <div class="wk-top"><div class="wk-name">Week 8 — First Real Funnel Report</div><div class="wk-dates">Oct 22–28</div></div>
+    <div class="wk-goal">Report the real Install→Premium rate for the first time</div>
+    <ul>
+      <li>Compare the actual install→trial and trial→subscription rates against the ~6.7% / 40% benchmarks from Part 2.3, now that a full month of paid installs has had time to convert</li>
+      <li>Launch the Fall Steps Challenge in-app event as an incremental discovery/re-engagement hook</li>
+      <li>Reconcile October pacing against the 2,500–5,000 target</li>
+    </ul>
+  </div>
+
+  <!-- NOVEMBER -->
+  <div class="phase-head"><span class="pn">PHASE 3</span><h3>November 2026 — Multi-Placement &amp; Profitability</h3></div>
+  <div class="phase-target">Target: <b>7,500–10,000+ monthly page views</b> · ~2,500 installs/month · 60–70 subscribers/month</div>
+
+  <div class="weekcard nov">
+    <div class="wk-top"><div class="wk-name">Week 9 — Expand Placements</div><div class="wk-dates">Oct 29–Nov 4</div></div>
+    <div class="wk-goal">Add Today Tab and Product Page ads as an ongoing part of the mix</div>
+    <ul>
+      <li>Turn on Today Tab and Product Page placements (Part 1.2) — no longer a short burst, now a standing part of the campaign mix</li>
+      <li>Begin testing Maximize Conversions bidding (Part 1.5) now that real conversion history exists</li>
+    </ul>
+  </div>
+  <div class="weekcard nov">
+    <div class="wk-top"><div class="wk-name">Week 10 — Subscriber Economics Review</div><div class="wk-dates">Nov 5–11</div></div>
+    <div class="wk-goal">Scale spend only where it's actually profitable</div>
+    <ul>
+      <li>Calculate cost-per-subscriber (not just cost-per-install) for each keyword cluster</li>
+      <li>Cut or reduce spend on clusters with weak subscriber economics, even if their install numbers look fine</li>
+    </ul>
+  </div>
+  <div class="weekcard nov">
+    <div class="wk-top"><div class="wk-name">Week 11 — Third Test Cycle</div><div class="wk-dates">Nov 12–18</div></div>
+    <div class="wk-goal">Keep refining creative and scale proven winners</div>
+    <ul>
+      <li>Run PPO Test #3</li>
+      <li>Scale budget on keyword clusters with proven CAC well inside subscriber lifetime value</li>
+    </ul>
+  </div>
+  <div class="weekcard nov">
+    <div class="wk-top"><div class="wk-name">Week 12 — Holiday Bridge Planning</div><div class="wk-dates">Nov 19–25</div></div>
+    <div class="wk-goal">Look ahead to December's seasonal opportunity</div>
+    <ul>
+      <li>Prepare the Healthy Holidays Challenge (Nov–Dec) as a Month 4 hook — weight-management intent typically rises around this period</li>
+      <li>Draft the Month 4 budget proposal, backed by three months of real Vygor data instead of estimates</li>
+    </ul>
+  </div>
+  <div class="weekcard nov">
+    <div class="wk-top"><div class="wk-name">Week 13 — 90-Day Wrap-Up</div><div class="wk-dates">Nov 26–30</div></div>
+    <div class="wk-goal">Close out the 90 days with a full scorecard</div>
+    <ul>
+      <li>Publish a complete 90-day scorecard: views, installs, Premium subscribers, CAC, and what changed month to month</li>
+      <li>Decide Month 4 budget and priorities based on evidence, not the original plan's assumptions</li>
+    </ul>
+  </div>
+</div>
+</div>
+
+<!-- ================= PART 7 ================= -->
+<div class="shell" id="part7">
+<div class="part">
+  <div class="part-num">PART 7 OF 8</div>
+  <h2>The weekly habit — repeat this every week campaigns run</h2>
+  <div class="part-intro">Once Week 2 of September launches, this five-day rhythm repeats every single week through the rest of the 90 days (and beyond). It's the same discipline every one of Part 3's success stories followed: track daily, but only act on a weekly report.</div>
+  <div class="cadence">
+    <div class="day">Monday</div><div>Review spend, impressions, taps, TTR, installs and cost-per-install against last week — not against an outside "good" number, against Vygor's own trend (Part 1.6). Check view-through installs too, for the fuller picture.</div>
+    <div class="day">Tuesday</div><div>Open the Search Terms report. Promote winning discovered terms to Exact Match; add negatives for irrelevant ones. Pull fresh Recommendations data (estimated CPA, impression share, rank) before changing any bid. Apply the winner/loser table (Part 1.8) — pause anything consistently underperforming.</div>
+    <div class="day">Wednesday</div><div>Review organic ASO keyword performance. Feed confirmed paid winners into Vygor's App Store metadata/subtitle (Pattern #5, Part 3.4) — close the loop, don't let it run one-way.</div>
+    <div class="day">Thursday</div><div>Review Custom Product Page / PPO test performance once those are live (from Phase 2 onward). Plan next week's hypothesis.</div>
+    <div class="day">Friday</div><div>Publish a one-page scorecard: views, installs, Premium subscribers, spend, cost-per-install, what changed, what's next. This is the single artifact that keeps you — and anyone you report to — oriented.</div>
+  </div>
+</div>
+</div>
+
+<!-- ================= PART 8 ================= -->
+<div class="shell" id="part8">
+<div class="part">
+  <div class="part-num">PART 8 OF 8</div>
+  <h2>Decisions only you can make, and honest risks</h2>
+
+  <h3 class="sec">8.1 &nbsp;Decisions needed before Week 1 starts</h3>
+  <ul class="check">
+    <li>Confirm the September budget ceiling ($1,500–2,500) and who owns daily pacing checks</li>
+    <li>Work through the affordability worksheet in Part 5.4 together — what install-to-subscriber rate to assume, and what payback window is acceptable</li>
+    <li>Decide whether to research and confirm actual competitive Apple Search Ads budget benchmarks for the health &amp; fitness category before committing to Month 2/3 budget increases (Part 5.3)</li>
+    <li>Decide whether a Today Tab burst budget is pre-approved now, or only requested if the Week 3 checkpoint shows you behind pace</li>
+    <li>Confirm designer availability so the 5 Custom Product Pages are realistic by mid-October (Week 7)</li>
+    <li>Decide whether keyword-level Premium-subscription attribution (Part 2.4) is worth developer time in October, or later</li>
+    <li>Confirm with Krishna/dev team whether the 2-week trial is a native App Store trial or custom-coded, and pick the tracking approach — Apple's Ads Attribution API vs. Branch.io vs. another partner (Part 2.4)</li>
+    <li>Decide when/how to move from the real $10/month experimental spend up toward the $1,500–2,500 recommended range (Part 5.3, Part 1.9), and what the Basic-vs-Advanced test needs to show first</li>
+  </ul>
+
+  <h3 class="sec">8.2 &nbsp;Risks, stated honestly</h3>
+  <div class="callout warn">
+    <div class="lbl">Be aware of these</div>
+    <p style="margin-bottom:10px">1,000 views by September 30 assumes campaigns launch on schedule in Week 2 — any slip in Week 1's setup pushes the whole month's pacing back.</p>
+    <p style="margin-bottom:10px">New Apple Ads accounts sometimes have a short "ramp-up" period before delivery stabilizes — front-loading Week 1 bids near Apple's recommended range helps, but doesn't fully remove this.</p>
+    <p style="margin:0">Without keyword-level Premium-subscription attribution, Phase 2's "real funnel report" (Week 8) will still only show whole-app subscriber counts, not which keyword earned them — a real limitation worth working around consciously (Part 2.4), not a launch blocker.</p>
+  </div>
+</div>
+</div>
+
+<div class="footer">
+  <div class="shell">
+    <p style="font-size:14px;color:var(--ink-soft);margin-bottom:16px">This guide builds directly on three documents already in the Vygor project — the Apple Ads Strategy Report, the App Store Growth &amp; Monetization Master Guide, and the earlier 90-Day Plan — plus Vygor's own App Metrics.xlsx and vygor.app.</p>
+    <div class="src">Apple Ads success story — Calz: Calorie Counter AI — <a href="https://ads.apple.com/app-store/success-stories/calz-calorie-counter-ai">ads.apple.com/app-store/success-stories/calz-calorie-counter-ai</a></div>
+    <div class="src">Apple Ads success story — Pillow — <a href="https://ads.apple.com/app-store/success-stories/pillow">ads.apple.com/app-store/success-stories/pillow</a></div>
+    <div class="src">Apple Ads success story — Rocket Money — <a href="https://ads.apple.com/app-store/success-stories/rocket-money">ads.apple.com/app-store/success-stories/rocket-money</a></div>
+    <div class="src">Apple Ads Help — Tips for evaluating performance — <a href="https://ads.apple.com/app-store/help/reporting/0092-tips-for-evaluating-performance">ads.apple.com/app-store/help/reporting/0092-tips-for-evaluating-performance</a></div>
+    <div class="src">Apple Ads Help — Review recommendations — <a href="https://ads.apple.com/app-store/help/recommendations/0055-review-recommendations">ads.apple.com/app-store/help/recommendations/0055-review-recommendations</a></div>
+    <div class="src">Apple Ads Help — Search Results placement — <a href="https://ads.apple.com/app-store/help/ad-placements/0082-search-results">ads.apple.com/app-store/help/ad-placements/0082-search-results</a></div>
+    <div class="src">Apple Ads Help — Understand keyword match types — <a href="https://ads.apple.com/app-store/help/keywords/0059-understand-keyword-match-types">ads.apple.com/app-store/help/keywords/0059-understand-keyword-match-types</a></div>
+    <div class="src">Vygor — <a href="https://www.vygor.app/">vygor.app</a></div>
+  </div>
+</div>

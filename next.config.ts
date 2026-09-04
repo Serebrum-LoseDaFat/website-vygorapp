@@ -2,6 +2,12 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // The Apple Ads guide is read from disk at request time by /apple-ads. It is
+  // not imported by any module, so tracing cannot infer it and the file would be
+  // missing from the deployed function.
+  outputFileTracingIncludes: {
+    "/apple-ads": ["./src/content/apple-ads-guide.html"],
+  },
   poweredByHeader: false,
   images: {
     formats: ["image/webp"],
