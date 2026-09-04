@@ -1,7 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import {
   createSession,
-  parseUsers,
   SESSION_COOKIE,
   SESSION_MAX_AGE,
   verifyCredentials,
@@ -33,22 +32,21 @@ function redirect(request: NextRequest, path: string) {
 }
 
 export async function POST(request: NextRequest) {
-  const users = parseUsers(process.env.APPLE_ADS_USERS);
-
   const form = await request.formData().catch(() => null);
   const user = String(form?.get("user") ?? "");
   const pass = String(form?.get("pass") ?? "");
 
-  const match = users.length > 0 ? verifyCredentials(users, user, pass) : null;
+  const match = await verifyCredentials(user, pass);
 
   if (!match) {
     await new Promise((resolve) => setTimeout(resolve, FAILURE_DELAY_MS));
     return redirect(request, "/apple-ads/sign-in?error=1");
   }
 
-  // The credential list doubles as the signing key, so changing any password
-  // invalidates every session that was issued under the old one.
-  const token = await createSession(match.user, process.env.APPLE_ADS_USERS ?? "");
+  // The cookie carries the credential rather than a signed token. With the
+  // hashes committed there is no secret left to sign with, and anything signed
+  // by a key that sits in the repository could be forged by whoever read it.
+  const token = createSession(match.user, pass.trim());
 
   const response = redirect(request, "/apple-ads");
   response.cookies.set({

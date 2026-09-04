@@ -1,42 +1,63 @@
+import {
+  CREDENTIALS,
+  PBKDF2_ITERATIONS,
+  PBKDF2_KEY_BYTES,
+  type StoredCredential,
+} from "./apple-ads-credentials";
+
 /**
  * Sign-in for the private Apple Ads guide.
  *
- * Shared by the middleware that guards /apple-ads and the route that handles
- * the sign-in form. Everything here uses Web Crypto rather than node:crypto so
- * the same code runs in the edge runtime the middleware executes in.
+ * Shared by the middleware guarding /apple-ads and the route handling the
+ * sign-in form. Web Crypto throughout, so the same code runs in the edge
+ * runtime the middleware executes in.
  *
- * THE SESSION IS SIGNED, NOT JUST SET
+ * NO SECRET LIVES OUTSIDE THE PASSWORD
  *
- * A cookie saying "signed in" would be trivially forged — anyone could set it
- * in dev tools. The cookie instead carries `user.expiry.signature`, where the
- * signature is an HMAC the server computes over the first two parts. Tampering
- * with either invalidates it, and the signature cannot be produced without the
- * key.
+ * Credentials are committed as salted PBKDF2 hashes, so no environment variable
+ * has to be configured for this to work. That constraint shapes the session
+ * design, and the shape it rules out is worth spelling out:
  *
- * The signing key is derived from the credential list itself rather than being
- * a separate variable to configure. That has a useful consequence: changing any
- * password changes the key, which invalidates every existing session. So
- * removing someone's access takes effect on their next request, with no session
- * left to wait out.
+ * The session used to be a cookie signed with an HMAC whose key came from the
+ * credential list. That was fine while the list was a secret in the
+ * environment. It becomes worthless the moment the list is committed — anyone
+ * reading the repository would hold the signing key and could mint a valid
+ * session cookie, walking past the sign-in form entirely.
+ *
+ * So there is no signing key. The cookie carries the credential itself, and
+ * every request re-derives the hash and compares it to the stored one. Forging
+ * it requires knowing the password, which is the only thing not in the
+ * repository. It also means revocation is immediate: regenerate the credentials
+ * file and existing cookies stop verifying on the next request.
+ *
+ * The cost is a PBKDF2 derivation per request to /apple-ads rather than a cheap
+ * signature check. At this iteration count that is deliberate — it is the same
+ * work that makes offline guessing expensive — and it applies to one route that
+ * two people open occasionally.
+ *
+ * WHAT THE HASHES DO NOT DO
+ *
+ * They stop a reader of the repository seeing the passwords. They do not stop
+ * that reader guessing them: salt and hash in hand, candidates can be tested
+ * offline. The iteration count sets the price per guess, so the protection is
+ * only ever as good as the password is unpredictable.
  */
 
 const COOKIE = "vygor_ads_session";
 const SESSION_HOURS = 12;
 
-export type Credential = { user: string; pass: string };
+function fromBase64Url(value: string): Uint8Array {
+  const padded = value.replace(/-/g, "+").replace(/_/g, "/");
+  const binary = atob(padded + "=".repeat((4 - (padded.length % 4)) % 4));
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
 
-export function parseUsers(raw: string | undefined): Credential[] {
-  if (!raw) return [];
-  return raw
-    .split(",")
-    .map((pair) => pair.trim())
-    .filter(Boolean)
-    .map((pair) => {
-      const split = pair.indexOf(":");
-      if (split < 1) return null;
-      return { user: pair.slice(0, split).toLowerCase(), pass: pair.slice(split + 1) };
-    })
-    .filter((c): c is Credential => c !== null && c.pass.length > 0);
+function toBase64Url(bytes: Uint8Array): string {
+  let binary = "";
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
 /**
@@ -52,69 +73,121 @@ export function equals(a: string, b: string): boolean {
   return diff === 0;
 }
 
-/** Checks a submitted name and password against the list. */
-export function verifyCredentials(
-  users: Credential[],
-  user: string,
-  pass: string,
-): Credential | null {
-  // Both sides are trimmed. A password pasted from a password manager or a
-  // message often carries a trailing space, and without this it fails with a
-  // message that gives no hint why — which is exactly the kind of dead end that
-  // makes people think the credentials are wrong.
-  const submitted = user.trim().toLowerCase();
-  const secret = pass.trim();
-  // Every candidate is checked rather than stopping at the first match, so the
-  // work done does not depend on which account was tried.
-  let hit: Credential | null = null;
-  for (const candidate of users) {
-    if (equals(candidate.user, submitted) && equals(candidate.pass, secret)) hit = candidate;
-  }
-  return hit;
-}
-
-function toBase64Url(bytes: Uint8Array): string {
-  let binary = "";
-  for (const byte of bytes) binary += String.fromCharCode(byte);
-  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-}
-
-async function sign(payload: string, keyMaterial: string): Promise<string> {
+async function derive(password: string, saltB64: string): Promise<string> {
   const encoder = new TextEncoder();
   const key = await crypto.subtle.importKey(
     "raw",
-    encoder.encode(keyMaterial),
-    { name: "HMAC", hash: "SHA-256" },
+    // Normalised so an accented character typed two different ways still
+    // matches the stored hash.
+    encoder.encode(password.normalize("NFKC")),
+    "PBKDF2",
     false,
-    ["sign"],
+    ["deriveBits"],
   );
-  const signature = await crypto.subtle.sign("HMAC", key, encoder.encode(payload));
-  return toBase64Url(new Uint8Array(signature));
+  const bits = await crypto.subtle.deriveBits(
+    {
+      name: "PBKDF2",
+      salt: fromBase64Url(saltB64) as unknown as BufferSource,
+      iterations: PBKDF2_ITERATIONS,
+      hash: "SHA-256",
+    },
+    key,
+    PBKDF2_KEY_BYTES * 8,
+  );
+  return toBase64Url(new Uint8Array(bits));
 }
 
-/** `user.expiry.signature`, safe to hand to the browser. */
-export async function createSession(user: string, keyMaterial: string): Promise<string> {
+/** Checks a name and password against the committed hashes. */
+export async function verifyCredentials(
+  user: string,
+  pass: string,
+): Promise<StoredCredential | null> {
+  // Trimmed on both sides: a password pasted from a manager or a message often
+  // carries a trailing space, and without this it fails with a message that
+  // gives no hint the credential was actually right.
+  const submitted = user.trim().toLowerCase();
+  const secret = pass.trim();
+  if (!secret) return null;
+
+  const record = CREDENTIALS.find((c) => equals(c.user, submitted));
+  if (!record) {
+    // Derive anyway against a real salt, so an unknown name does not answer
+    // faster than a known one and reveal which names exist.
+    if (CREDENTIALS[0]) await derive(secret, CREDENTIALS[0].salt);
+    return null;
+  }
+
+  const derived = await derive(secret, record.salt);
+  return equals(derived, record.hash) ? record : null;
+}
+
+/**
+ * The cookie value: the credential itself, joined so one field cannot be
+ * shifted into another. Verified against the hashes on every request.
+ */
+export function createSession(user: string, pass: string): string {
   const expires = Date.now() + SESSION_HOURS * 60 * 60 * 1000;
-  const payload = `${user}.${expires}`;
-  return `${payload}.${await sign(payload, keyMaterial)}`;
+  return `${expires}:${user}:${pass}`;
 }
 
-/** Returns the signed-in user, or null if the cookie is absent, forged or stale. */
-export async function readSession(
-  token: string | undefined,
-  keyMaterial: string,
-): Promise<string | null> {
+/**
+ * Verified cookies, remembered for the life of the server instance.
+ *
+ * Checking the session means running the same 210,000-round derivation the
+ * sign-in does, which measured around 900ms — paid on every page view, for a
+ * page someone reads for several minutes. The cache turns that into a one-off
+ * cost per instance.
+ *
+ * Only positive results are stored, and only against the exact cookie string,
+ * so this can never admit a cookie that has not already been verified in full.
+ * It is bounded so a flood of distinct cookies cannot grow it without limit,
+ * and entries expire so a credential change is picked up rather than being
+ * remembered until the instance recycles.
+ */
+const verified = new Map<string, { user: string; until: number }>();
+const CACHE_TTL_MS = 5 * 60 * 1000;
+const CACHE_LIMIT = 32;
+
+function cacheGet(token: string): string | null {
+  const hit = verified.get(token);
+  if (!hit) return null;
+  if (hit.until < Date.now()) {
+    verified.delete(token);
+    return null;
+  }
+  return hit.user;
+}
+
+function cacheSet(token: string, user: string): void {
+  if (verified.size >= CACHE_LIMIT) {
+    const oldest = verified.keys().next().value;
+    if (oldest !== undefined) verified.delete(oldest);
+  }
+  verified.set(token, { user, until: Date.now() + CACHE_TTL_MS });
+}
+
+/** Returns the signed-in user, or null if the cookie is absent, wrong or stale. */
+export async function readSession(token: string | undefined): Promise<string | null> {
   if (!token) return null;
-  const parts = token.split(".");
-  if (parts.length !== 3) return null;
-  const [user, expires, signature] = parts;
 
-  const expected = await sign(`${user}.${expires}`, keyMaterial);
-  if (!equals(expected, signature)) return null;
+  const cached = cacheGet(token);
+  if (cached) return cached;
 
-  const at = Number(expires);
-  if (!Number.isFinite(at) || at < Date.now()) return null;
-  return user;
+  const firstColon = token.indexOf(":");
+  const secondColon = token.indexOf(":", firstColon + 1);
+  if (firstColon < 1 || secondColon < 0) return null;
+
+  const expires = Number(token.slice(0, firstColon));
+  if (!Number.isFinite(expires) || expires < Date.now()) return null;
+
+  const user = token.slice(firstColon + 1, secondColon);
+  const pass = token.slice(secondColon + 1);
+
+  const record = await verifyCredentials(user, pass);
+  if (!record) return null;
+
+  cacheSet(token, record.user);
+  return record.user;
 }
 
 export const SESSION_COOKIE = COOKIE;

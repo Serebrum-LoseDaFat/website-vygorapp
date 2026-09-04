@@ -1,12 +1,18 @@
 # Apple Ads guide — restricted view
 
 The Apple Ads master guide is published on the site but is not part of it. It is
-reachable only by signing in, and only for people on the credential list.
+reachable only by signing in at `vygor.app/apple-ads`.
 
-**No password appears in this file, or anywhere else in this repository.** They
-live in one environment variable in Vercel. Writing them here would mean anyone
-who can read the repo — today, or after any future access change — can read the
-guide, which would undo the point of gating it.
+**No password is stored anywhere in this repository.** Credentials are committed
+as salted PBKDF2 hashes, which is why there is no environment variable to set in
+Vercel — the site works as soon as it deploys.
+
+> **Read this before relying on it.** Hashes stop someone who reads the
+> repository from *seeing* the passwords. They do not stop that person
+> *guessing* them: with the salt and hash in hand, candidates can be tested
+> offline. The iteration count sets the price per guess. A password anyone could
+> derive from the company name falls on the first attempt no matter how it is
+> hashed — see [Choosing a password](#choosing-a-password).
 
 ---
 
@@ -16,105 +22,108 @@ guide, which would undo the point of gating it.
 | --- | --- |
 | URL | `https://www.vygor.app/apple-ads` |
 | Who has access | Krishna and Hajira, one login each |
-| Guide content | [`src/content/apple-ads-guide.html`](../src/content/apple-ads-guide.html) |
+| Credentials | [`src/lib/apple-ads-credentials.ts`](../src/lib/apple-ads-credentials.ts) — generated, hashes only |
+| Generator | [`scripts/hash-credentials.mjs`](../scripts/hash-credentials.mjs) |
+| Auth logic | [`src/lib/apple-ads-auth.ts`](../src/lib/apple-ads-auth.ts) |
 | The gate | [`src/middleware.ts`](../src/middleware.ts) |
 | Sign-in page | [`src/app/apple-ads/sign-in/page.tsx`](../src/app/apple-ads/sign-in/page.tsx) |
 | Form handler | [`src/app/apple-ads/sign-in/submit/route.ts`](../src/app/apple-ads/sign-in/submit/route.ts) |
-| Session logic | [`src/lib/apple-ads-auth.ts`](../src/lib/apple-ads-auth.ts) |
-| The guide route | [`src/app/apple-ads/route.ts`](../src/app/apple-ads/route.ts) |
+| The guide | [`src/content/apple-ads-guide.html`](../src/content/apple-ads-guide.html) |
 
-It is deliberately invisible: nothing on the site links to it, it is absent from
-`sitemap.xml`, and the response carries `X-Robots-Tag: noindex`. It is also
-deliberately **absent from `robots.txt`** — naming the path in a public file
-would only advertise that it exists.
+Nothing on the site links to it, it is absent from `sitemap.xml`, and the
+response carries `X-Robots-Tag: noindex`. It is deliberately **absent from
+`robots.txt`** too — naming the path in a public file would only advertise it.
 
 ---
 
 ## How signing in works
 
-Go to `vygor.app/apple-ads`. Without a session you get a Vygor-styled card
-asking for a name and password. Sign in once and that browser stays signed in
-for twelve hours.
+Without a session, `/apple-ads` is rewritten to a sign-in card asking for a name
+and password. Sign in once and that browser stays signed in for twelve hours.
 
 The sign-in page and the guide are **separate routes**. An unauthenticated
-request is rewritten to the sign-in page, so the guide route never executes and
-no part of the document is in the response. That distinction is the whole point:
-a single page that loaded the guide and hid it behind a form would already have
-sent it, and anyone could read it from view-source or the network tab without
-typing anything.
+request never reaches the guide route, so no part of the document is in the
+response. A single page that loaded the guide and hid it behind a form would
+already have sent it, and anyone could read it from view-source.
 
-The session cookie is **signed**, not merely set. It carries
-`user.expiry.signature`, where the signature is an HMAC computed on the server.
-A cookie that only said "signed in" could be typed into dev tools by anyone;
-this one cannot be produced without the key. Verified — a forged cookie is
-rejected and returns the form.
+### Why the cookie holds the credential
+
+The session used to be a cookie signed with an HMAC keyed on the credential
+list. That was sound while the list was a secret in the environment. It became
+worthless once the list was committed: anyone reading the repository would hold
+the signing key and could mint a valid cookie, walking straight past the form.
+
+So there is no signing key. The cookie carries the credential, and every request
+re-derives the hash and compares it. Forging it needs the password — the one
+thing not in the repository. Revocation is immediate: regenerate the credentials
+file and existing cookies stop verifying.
+
+Verifying costs a full PBKDF2 derivation, measured at roughly 900ms. Repeat
+verifications are cached in memory per server instance for five minutes, which
+takes page views down to about 30ms; only positive results are cached, keyed on
+the exact cookie, so it can never admit something not already verified in full.
 
 The cookie is `HttpOnly`, `SameSite=Lax`, scoped to `/apple-ads`, and `Secure`
-over HTTPS, so page scripts cannot read it and it is not sent anywhere else.
+over HTTPS.
 
-The form never says whether the name or the password was wrong, because that
-tells someone probing which names exist. There is a short delay on every
-failure: with no datastore there is no attempt counter to keep, and a delay
-costs an automated run far more than it costs someone who mistypes.
+Failures never say whether the name or the password was wrong, because that
+reveals which names exist, and carry a fixed delay — with no datastore there is
+no attempt counter, and a delay costs an automated run far more than someone
+who mistypes.
 
 ---
 
 ## Adding, changing or removing someone
 
-Credentials live in `APPLE_ADS_USERS` as comma-separated `name:password` pairs.
-Names are case-insensitive.
+Run the generator with every person who should have access, then commit:
 
+```bash
+node scripts/hash-credentials.mjs krishna:PASSWORD hajira:PASSWORD
 ```
-APPLE_ADS_USERS=krishna:SOME-PASSWORD,hajira:ANOTHER-PASSWORD
-```
 
-- **Add** someone: append `,name:password`, redeploy, tell them privately.
-- **Remove** someone: delete their pair, redeploy.
-- **Change** a password: edit the text after that person's colon, redeploy.
+It rewrites `src/lib/apple-ads-credentials.ts` with a fresh random salt and hash
+per person. Anyone left out of the command loses access; anyone added gains it.
+Deploy and it takes effect — no Vercel variable, no dashboard step.
 
-All of these need a **redeploy** — environment variables are read at build time.
-
-One deliberate side effect: this variable also derives the session signing key,
-so any edit signs **everyone** out. That is what makes removing access take
-effect immediately rather than leaving a live session behind.
-
-Two constraints: avoid commas and colons inside a password, because those are
-the separators; and never rename the variable to anything starting
-`NEXT_PUBLIC_`, because that prefix inlines the value into the JavaScript sent
-to every visitor.
-
-### If the variable is missing
-
-The guard still rewrites to the sign-in page and the form rejects every attempt,
-so a forgotten variable locks the guide rather than opening it. Earlier in this
-project an unset variable silently removed every App Store badge from
-production; the same class of mistake here would leak the guide, so the safe
-direction is to refuse.
+The passwords appear in your shell history. Clear it afterwards, or run the
+command with a leading space if your shell is configured to skip those lines.
 
 ---
 
-## What this is, and what it is not
+## Choosing a password
 
-A password is a shared secret: whoever has it has access, and it is only as
-strong as the words chosen. There is no second factor and no account lockout, so
-the password itself is doing all the work — a long passphrase is worth much more
-here than a short one with a number on the end.
+This matters more here than in a normal system, because the hash is public.
 
-The upgrade, when the setup cost is worth paying, is **Google sign-in with an
-email allowlist**: no password to choose or leak, access tied to accounts that
-already carry their own two-factor protection, and adding someone becomes adding
-an email. It needs a one-time Google OAuth app, which is the only reason it was
-not done first.
+An attacker with the repository can test guesses offline at whatever rate their
+hardware allows. PBKDF2 at 210,000 rounds makes each guess cost real time, which
+is what makes a long unpredictable password impractical to attack. It does
+nothing for a predictable one: `name@company.domain` is among the first things
+any human or wordlist would try.
+
+If the guide's contents matter, use something that could not be derived from
+the company, the product or the person. A few unrelated words joined together is
+both stronger and easier to type than a short string with substitutions.
+
+---
+
+## The repository must be private
+
+At the time of writing the repository was **public**, which means
+`src/content/apple-ads-guide.html` was downloadable by anyone with no sign-in at
+all — the login guards the route, not the file sitting beside it in Git.
+
+Check under **Settings → General → Change visibility**. If the guide's contents
+are sensitive, the sign-in form is not doing the job it looks like it is doing
+while the repository is open.
 
 ---
 
 ## Updating the guide
 
 Replace [`src/content/apple-ads-guide.html`](../src/content/apple-ads-guide.html)
-and deploy. It is a complete standalone HTML document — its own styles, its own
-fonts, no scripts — served as-is rather than rendered inside the site layout, so
-it does not need to match the rest of the site.
+and deploy. It is a complete standalone HTML document — its own styles and
+fonts, no scripts — served as-is rather than rendered inside the site layout.
 
 Keep it in `src/content/`. Anything in `public/` is served straight from the CDN
 at its own URL, which would hand the guide out to anyone who guessed the
-filename regardless of the gate.
+filename regardless of the sign-in.

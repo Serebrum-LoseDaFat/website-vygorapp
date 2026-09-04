@@ -17,14 +17,12 @@ import { readSession, SESSION_COOKIE } from "@/lib/apple-ads-auth";
  * handler live underneath it and must stay reachable, or there would be no way
  * in.
  *
- * With no credentials configured the guard rewrites to sign-in as usual and the
- * form rejects every attempt, so a forgotten environment variable cannot open
- * the guide.
+ * Credentials are compiled in as salted hashes, so there is no environment
+ * variable to forget and nothing to configure per deployment.
  */
 
 export async function middleware(request: NextRequest) {
-  const users = process.env.APPLE_ADS_USERS;
-  const session = await readSession(request.cookies.get(SESSION_COOKIE)?.value, users ?? "");
+  const session = await readSession(request.cookies.get(SESSION_COOKIE)?.value);
 
   if (session) return NextResponse.next();
 
