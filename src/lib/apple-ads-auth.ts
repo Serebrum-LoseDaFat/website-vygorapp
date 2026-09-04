@@ -58,12 +58,17 @@ export function verifyCredentials(
   user: string,
   pass: string,
 ): Credential | null {
+  // Both sides are trimmed. A password pasted from a password manager or a
+  // message often carries a trailing space, and without this it fails with a
+  // message that gives no hint why — which is exactly the kind of dead end that
+  // makes people think the credentials are wrong.
   const submitted = user.trim().toLowerCase();
+  const secret = pass.trim();
   // Every candidate is checked rather than stopping at the first match, so the
   // work done does not depend on which account was tried.
   let hit: Credential | null = null;
   for (const candidate of users) {
-    if (equals(candidate.user, submitted) && equals(candidate.pass, pass)) hit = candidate;
+    if (equals(candidate.user, submitted) && equals(candidate.pass, secret)) hit = candidate;
   }
   return hit;
 }
