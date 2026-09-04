@@ -1,12 +1,12 @@
 # Apple Ads guide — restricted view
 
 The Apple Ads master guide is published on the site but is not part of it. It is
-reachable only by typing the URL, and only after signing in.
+reachable only by a personal link, and only for people whose key is on the list.
 
-**No password appears in this file, or anywhere else in this repository.** They
-live in one environment variable in Vercel. Writing them here would mean anyone
-who can read the repo — today, or after any future access change — can read the
-guide, which would undo the whole point of putting a login in front of it.
+**No key appears in this file, or anywhere else in this repository.** They live
+in one environment variable in Vercel. Writing them here would mean anyone who
+can read the repo — today, or after any future access change — can read the
+guide, which would undo the point of gating it.
 
 ---
 
@@ -14,90 +14,97 @@ guide, which would undo the whole point of putting a login in front of it.
 
 | | |
 | --- | --- |
-| URL | `https://www.vygor.app/apple-ads` |
-| Who has access | Krishna and Hajira, one login each |
+| URL | `https://www.vygor.app/apple-ads?k=<your key>` |
+| Who has access | Krishna and Hajira, one key each |
 | Guide content | [`src/content/apple-ads-guide.html`](../src/content/apple-ads-guide.html) |
 | The gate | [`src/middleware.ts`](../src/middleware.ts) |
 | The route | [`src/app/apple-ads/route.ts`](../src/app/apple-ads/route.ts) |
 
 It is deliberately invisible: nothing on the site links to it, it is absent from
 `sitemap.xml`, and the response carries `X-Robots-Tag: noindex`. It is also
-deliberately **absent from `robots.txt`** — an unauthenticated request already
-gets `401` so it cannot be indexed, and naming the path in a public file would
-only advertise that it exists.
+deliberately **absent from `robots.txt`** — naming the path in a public file
+would only advertise that it exists.
 
 ---
 
-## How the login works
+## How access works
 
-Access is checked in middleware, which runs on the server **before** the page is
-produced. An unauthenticated request never receives the document.
+Open your link once. The middleware checks the key, sets an httpOnly cookie, and
+redirects you to the clean `/apple-ads`. From then on that browser is admitted
+without the key, for thirty days.
 
-This matters more than it sounds. A password form built into the page would be
-decorative: the guide would already be inside the response by the time the form
-appeared on screen, so anyone could read it from view-source or the browser's
-network tab without typing anything. The check has to happen before the content
-is sent, which is why it is middleware and not a component.
+The redirect is the point. After the first visit the key is out of the address
+bar, so it does not turn up in a screenshot, in anything pasted from the address
+bar, or in the `Referer` header sent to the Google Fonts request the guide makes.
+The cookie is `HttpOnly`, `SameSite=Lax`, scoped to `/apple-ads`, and `Secure`
+over HTTPS — so page scripts cannot read it and it is not sent anywhere else.
 
-What you see is the browser's own sign-in dialog rather than a Vygor-styled
-page. That is the trade for it being genuinely secure with very little code. It
-has no "sign out" button — closing the browser clears it.
+Bookmark the **full link with the key**, not the clean URL. When the cookie
+expires the clean URL alone will return 404.
+
+### Everything invalid returns 404
+
+No key, a wrong key, a revoked key, or no keys configured at all — all return an
+ordinary 404, the same as any other unknown URL. There is no login screen to
+show, so there is nothing to gain by confirming the page exists. Someone probing
+for it learns nothing.
+
+The trade: a misconfiguration also looks like a 404. **If a correct bookmark
+returns 404, check `APPLE_ADS_KEYS` in Vercel before suspecting the key.**
 
 ---
 
-## Setting or changing a password
+## Adding, changing or removing someone
 
-Credentials come from a single environment variable, `APPLE_ADS_USERS`, holding
-comma-separated `user:password` pairs:
+Keys live in `APPLE_ADS_KEYS` as comma-separated `name:key` pairs. The name is
+only so a key can be matched to a person when revoking; nobody ever types it.
 
 ```
-APPLE_ADS_USERS=krishna:SOME-PASSWORD,hajira:ANOTHER-PASSWORD
+APPLE_ADS_KEYS=krishna:<key>,hajira:<key>
 ```
 
-To change one:
+Generate a key:
 
-1. Vercel → the `website-vygorapp` project → **Settings → Environment Variables**
-2. Edit `APPLE_ADS_USERS`, changing only the password after that person's colon
-3. Save, then **Redeploy** — environment variables are read at build time, so the
-   change does not take effect until the next deployment
-4. Delete the old value from wherever it was shared
+```bash
+node -e "console.log(require('crypto').randomBytes(24).toString('base64url'))"
+```
 
-Two constraints on the passwords themselves: avoid commas and colons, because
-those are the separators; and do not rename the variable to anything beginning
-`NEXT_PUBLIC_`, because that prefix inlines the value into the JavaScript sent
-to every visitor.
+That is 192 bits of randomness — not guessable, and not worth trying to brute
+force.
 
-### Why there is no "change your own password" screen
+To **add** someone: generate a key, append `,name:key` to the variable, redeploy,
+send them their link privately.
 
-Letting someone set their own password requires somewhere to keep the new one.
-This site is a static Next.js build on Vercel: there is no database, and the
-filesystem a deployed function sees is read-only and thrown away after each
-request. There is nowhere for a new password to be written.
+To **remove** someone: delete their pair, redeploy. Their cookie stops working on
+the next request — the cookie is re-checked against the list every time rather
+than being independently valid, so there is nothing to wait out.
 
-A change-password form could be built, but it needs a datastore behind it —
-Vercel KV or Postgres — plus password hashing, a real session cookie, and a
-login screen to replace the browser dialog. That is a reasonable thing to build
-if this grows into a proper internal area for a team. For two people reading one
-document, editing one environment variable is less to maintain and less to get
-wrong.
+To **rotate** a key: replace that person's value and send the new link. Only
+that person is affected, which is the main advantage over a shared password.
 
-What must **not** be built is a form that keeps the new password in the browser
-— in `localStorage`, or a cookie the page sets itself. That would only apply to
-one browser, would not stop anyone else, and would leave everyone believing the
-password had changed when it had not.
+All of these need a **redeploy** — environment variables are read at build time.
+
+Two constraints: avoid commas and colons inside a key, because those are the
+separators; and never rename the variable to anything starting `NEXT_PUBLIC_`,
+because that prefix inlines the value into the JavaScript sent to every visitor.
 
 ---
 
-## If the variable is missing
+## What this is, and what it is not
 
-The route **fails closed**: with `APPLE_ADS_USERS` unset or empty, `/apple-ads`
-returns `503` and serves nothing. It does not fall back to open access.
+Possession of the link is access. There is no second factor, so anyone who
+receives a key can read the guide — send them privately, and not in a group
+chat that other people can scroll back through.
 
-This is deliberate. Earlier in this project an unset environment variable made
-every App Store badge, the "For Business" link and both social icons disappear
-from production silently — no error, no failed build. The same class of mistake
-here would leak the guide instead of hiding a button, so the safe direction is to
-break rather than open.
+Compared with the short shared password this replaced, it is stronger in the
+ways that matter here: the keys cannot be guessed, and each person can be
+revoked without disturbing anyone else.
+
+It is weaker than a real sign-in. The upgrade, when the setup cost is worth
+paying, is **Google sign-in with an email allowlist**: no key to leak at all,
+access tied to accounts that already have their own two-factor protection, and
+adding someone becomes adding an email rather than issuing a secret. That needs
+a one-time Google OAuth app, which is the only reason it was not done first.
 
 ---
 
@@ -105,9 +112,9 @@ break rather than open.
 
 Replace [`src/content/apple-ads-guide.html`](../src/content/apple-ads-guide.html)
 and deploy. It is a complete standalone HTML document — its own styles, its own
-fonts, no scripts — and it is served as-is rather than rendered inside the site
-layout, so it does not need to match the rest of the site.
+fonts, no scripts — served as-is rather than rendered inside the site layout, so
+it does not need to match the rest of the site.
 
-Keep it in `src/content/`. Anything placed in `public/` is served straight from
-the CDN at its own URL, which would hand the guide out to anyone who guessed the
-filename regardless of the login.
+Keep it in `src/content/`. Anything in `public/` is served straight from the CDN
+at its own URL, which would hand the guide out to anyone who guessed the
+filename regardless of the gate.
