@@ -94,6 +94,14 @@ export default async function SignInPage({
               Sign in
             </button>
           </form>
+
+          {/* Below the form, not above it. It explains where you are without
+              being the first thing read, and it names no one — the earlier
+              version listed who had access, which told an unexpected visitor
+              which usernames were worth trying. */}
+          <p className="mt-6 border-t border-line pt-5 text-[0.85rem] leading-relaxed text-ink-3">
+            This page is restricted. Sign in to continue.
+          </p>
         </div>
       </div>
     </main>

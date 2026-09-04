@@ -44,7 +44,16 @@ import {
  */
 
 const COOKIE = "vygor_ads_session";
-const SESSION_HOURS = 12;
+
+/**
+ * How long a browser stays signed in. Four hours rather than a working day:
+ * the guide is read in one sitting, so a short window costs one extra sign-in
+ * and closes the gap where a laptop left open still has the session live.
+ *
+ * This drives both the cookie's lifetime and the expiry inside it, so a cookie
+ * kept past its date is rejected even if the browser hands it back.
+ */
+const SESSION_HOURS = 4;
 
 function fromBase64Url(value: string): Uint8Array {
   const padded = value.replace(/-/g, "+").replace(/_/g, "/");
