@@ -28,8 +28,10 @@ export const nav = [
   { label: "Pricing", href: "/#pricing" },
   { label: "FAQ", href: "/#faq" },
   { label: "Support", href: "/#contact" },
-  // A real route, not an anchor — the creator brief is its own page. Placed
-  // last so the consumer path through the nav stays intact.
+  // Real routes, not anchors — the free tools directory and the creator brief
+  // are their own pages. Placed last so the consumer path through the nav
+  // stays intact.
+  { label: "Tools", href: "/tools" },
   { label: "Creators", href: "/creators" },
 ] as const;
 

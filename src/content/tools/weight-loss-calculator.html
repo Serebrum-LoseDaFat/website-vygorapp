@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weight Loss Calculator — BMR, TDEE & Calorie Target | Vygor</title>
+<meta name="description" content="Free weight loss calculator: find your BMR, TDEE, and daily calorie target with a realistic timeline to reach your goal weight — powered by Vygor.">
+<link rel="canonical" href="https://vygor.app/tools/weight-loss-calculator/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Vygor">
+<meta property="og:title" content="Weight Loss Calculator — BMR, TDEE & Calorie Target">
+<meta property="og:description" content="Find your BMR, TDEE, and daily calorie target with a realistic, science-based timeline to reach your goal weight.">
+<meta property="og:url" content="https://vygor.app/tools/weight-loss-calculator/">
+<meta property="og:image" content="https://vygor.app/tools/weight-loss-calculator/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Weight Loss Calculator — BMR, TDEE & Calorie Target">
+<meta name="twitter:description" content="Find your BMR, TDEE, and daily calorie target with a realistic, science-based timeline to reach your goal weight.">
+<meta name="twitter:image" content="https://vygor.app/tools/weight-loss-calculator/og-image.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Vygor Weight Loss Calculator",
+  "description": "Free weight loss calculator that estimates BMR, TDEE, and a daily calorie target using the Mifflin-St Jeor equation, plus a dynamic-model timeline to reach a goal weight.",
+  "url": "https://vygor.app/tools/weight-loss-calculator/",
+  "applicationCategory": "HealthApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Vygor",
+    "url": "https://vygor.app"
+  }
+}
+</script>
+
+<style>
+  #wlc-widget, #wlc-widget * { box-sizing: border-box; }
+  #wlc-widget [hidden] { display: none !important; }
+  #wlc-widget .wlc-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  #wlc-widget {
+    --wlc-bg: #ffffff;
+    --wlc-surface: #f7f8fa;
+    --wlc-surface-2: #eef0f3;
+    --wlc-border: #dde1e6;
+    --wlc-text: #1a1d21;
+    --wlc-text-muted: #5b6270;
+    --wlc-primary: #1f7a5c;
+    --wlc-primary-hover: #175f47;
+    --wlc-focus: #0b63ce;
+    --wlc-bar-bmr: #8b93a1;
+    --wlc-bar-tdee: #4d82d1;
+    --wlc-bar-target: #1f7a5c;
+    --wlc-warn-bg: #fff6e5;
+    --wlc-warn-border: #e8b93b;
+    --wlc-warn-text: #6b4e05;
+    --wlc-error-bg: #fdecec;
+    --wlc-error-border: #d9534f;
+    --wlc-error-text: #7a1f1c;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--wlc-text);
+    background: var(--wlc-bg);
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 24px;
+    border: 1px solid var(--wlc-border);
+    border-radius: 14px;
+    line-height: 1.4;
+  }
+  #wlc-widget h1 {
+    margin: 0 0 4px;
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+  #wlc-widget .wlc-subtitle {
+    margin: 0;
+    color: var(--wlc-text-muted);
+    font-size: 0.92rem;
+  }
+  #wlc-widget .wlc-hero-banner {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 20px;
+  }
+  #wlc-widget .wlc-hero-banner-content {
+    flex: 1;
+    min-width: 0;
+  }
+  #wlc-widget .wlc-hero-banner-screenshot {
+    width: 130px;
+    height: 92px;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 12px;
+    border: 1px solid var(--wlc-border);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.14);
+    flex-shrink: 0;
+  }
+  #wlc-widget .wlc-icon {
+    width: 18px;
+    height: 18px;
+    vertical-align: -4px;
+    margin-right: 6px;
+    color: var(--wlc-primary);
+  }
+  #wlc-widget .wlc-vygor-topbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--wlc-text);
+    background: var(--wlc-surface);
+    border: 1px solid var(--wlc-border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    font-size: 0.84rem;
+  }
+  #wlc-widget .wlc-vygor-topbar:hover {
+    border-color: var(--wlc-primary);
+  }
+  #wlc-widget .wlc-vygor-logo {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    object-fit: contain;
+  }
+  #wlc-widget .wlc-vygor-topbar span {
+    flex: 1;
+    color: var(--wlc-text-muted);
+  }
+  #wlc-widget .wlc-vygor-topbar strong {
+    color: var(--wlc-text);
+  }
+  #wlc-widget .wlc-vygor-arrow {
+    width: 16px;
+    height: 16px;
+    margin-right: 0;
+    flex-shrink: 0;
+  }
+  #wlc-widget fieldset {
+    border: 1px solid var(--wlc-border);
+    border-radius: 12px;
+    padding: 18px 16px 16px;
+    margin: 0 0 16px;
+    background: var(--wlc-surface);
+  }
+  #wlc-widget legend {
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 0 8px;
+    margin-left: -4px;
+    background: var(--wlc-bg);
+    border: 1px solid var(--wlc-border);
+    border-radius: 999px;
+  }
+  #wlc-widget .wlc-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  #wlc-widget .wlc-row:last-child { margin-bottom: 0; }
+  #wlc-widget .wlc-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  #wlc-widget .wlc-field.wlc-full {
+    grid-column: 1 / -1;
+  }
+  #wlc-widget label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--wlc-text);
+  }
+  #wlc-widget .wlc-hint {
+    font-size: 0.78rem;
+    color: var(--wlc-text-muted);
+    font-weight: 400;
+  }
+  #wlc-widget input[type="number"] {
+    font-size: 1rem;
+    padding: 10px 11px;
+    border: 1px solid var(--wlc-border);
+    border-radius: 8px;
+    background: var(--wlc-bg);
+    color: var(--wlc-text);
+    width: 100%;
+    transition: border-color 0.15s ease;
+  }
+  #wlc-widget input[type="number"]::placeholder { color: var(--wlc-text-muted); opacity: 0.7; }
+  #wlc-widget input.wlc-input-invalid {
+    border-color: var(--wlc-error-border);
+  }
+  #wlc-widget .wlc-field-error {
+    font-size: 0.78rem;
+    color: var(--wlc-error-text);
+    margin-top: 2px;
+  }
+  #wlc-widget input[type="number"]:focus,
+  #wlc-widget button:focus-visible {
+    outline: 3px solid var(--wlc-focus);
+    outline-offset: 1px;
+  }
+  #wlc-widget .wlc-unit-toggle {
+    display: inline-flex;
+    border: 1px solid var(--wlc-border);
+    border-radius: 999px;
+    padding: 3px;
+    background: var(--wlc-surface);
+    margin-bottom: 18px;
+  }
+  #wlc-widget .wlc-unit-toggle button {
+    border: none;
+    background: transparent;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--wlc-text-muted);
+    cursor: pointer;
+  }
+  #wlc-widget .wlc-unit-toggle button[aria-pressed="true"] {
+    background: var(--wlc-primary);
+    color: #fff;
+  }
+  #wlc-widget .wlc-sex-toggle {
+    display: flex;
+    gap: 8px;
+  }
+  #wlc-widget .wlc-sex-toggle button {
+    flex: 1;
+    padding: 10px 10px;
+    border: 1px solid var(--wlc-border);
+    border-radius: 8px;
+    background: var(--wlc-bg);
+    color: var(--wlc-text);
+    font-size: 0.92rem;
+    cursor: pointer;
+  }
+  #wlc-widget .wlc-sex-toggle button[aria-pressed="true"] {
+    background: var(--wlc-primary);
+    border-color: var(--wlc-primary);
+    color: #fff;
+    font-weight: 600;
+  }
+  #wlc-widget .wlc-height-imperial {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  #wlc-widget .wlc-activity-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  #wlc-widget .wlc-activity-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+    padding: 10px 12px;
+    border: 1px solid var(--wlc-border);
+    border-radius: 8px;
+    background: var(--wlc-bg);
+    color: var(--wlc-text);
+    cursor: pointer;
+  }
+  #wlc-widget .wlc-activity-option[aria-pressed="true"] {
+    background: var(--wlc-primary);
+    border-color: var(--wlc-primary);
+    color: #fff;
+  }
+  #wlc-widget .wlc-activity-name {
+    font-weight: 700;
+    font-size: 0.88rem;
+  }
+  #wlc-widget .wlc-activity-desc {
+    font-size: 0.78rem;
+    color: var(--wlc-text-muted);
+  }
+  #wlc-widget .wlc-activity-option[aria-pressed="true"] .wlc-activity-desc {
+    color: rgba(255, 255, 255, 0.85);
+  }
+  #wlc-widget button.wlc-submit {
+    width: 100%;
+    padding: 13px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--wlc-primary);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+  #wlc-widget button.wlc-submit:hover { background: var(--wlc-primary-hover); }
+  #wlc-widget .wlc-error {
+    background: var(--wlc-error-bg);
+    border: 1px solid var(--wlc-error-border);
+    color: var(--wlc-error-text);
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    margin-bottom: 14px;
+  }
+  #wlc-widget .wlc-results {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--wlc-border);
+  }
+  #wlc-widget .wlc-hero {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  #wlc-widget .wlc-hero-label {
+    font-size: 0.85rem;
+    color: var(--wlc-text-muted);
+    font-weight: 600;
+  }
+  #wlc-widget .wlc-hero-value {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--wlc-primary);
+    line-height: 1.15;
+  }
+  #wlc-widget .wlc-hero-sub {
+    font-size: 0.85rem;
+    color: var(--wlc-text-muted);
+  }
+  #wlc-widget .wlc-target-date-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: var(--wlc-surface);
+    border: 1px solid var(--wlc-border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  #wlc-widget .wlc-target-date-banner .wlc-icon {
+    margin-right: 0;
+  }
+  #wlc-widget .wlc-target-date-label {
+    font-size: 0.85rem;
+    color: var(--wlc-text-muted);
+  }
+  #wlc-widget .wlc-target-date-value {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--wlc-primary);
+  }
+  #wlc-widget .wlc-target-date-banner.wlc-target-date-banner--warning {
+    background: var(--wlc-warn-bg);
+    border-color: var(--wlc-warn-border);
+  }
+  #wlc-widget .wlc-target-date-banner--warning .wlc-target-date-value,
+  #wlc-widget .wlc-target-date-banner--warning .wlc-icon {
+    color: var(--wlc-warn-text);
+  }
+  #wlc-widget .wlc-chart {
+    margin-bottom: 20px;
+  }
+  #wlc-widget .wlc-bar-row {
+    display: grid;
+    grid-template-columns: 96px 1fr 72px;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  #wlc-widget .wlc-bar-label {
+    font-size: 0.78rem;
+    color: var(--wlc-text-muted);
+    text-align: right;
+    line-height: 1.2;
+  }
+  #wlc-widget .wlc-bar-track {
+    height: 22px;
+    background: var(--wlc-surface-2);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  #wlc-widget .wlc-bar-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 6px;
+    transition: width 0.7s ease;
+  }
+  #wlc-widget .wlc-bar-fill.wlc-bar-bmr { background: var(--wlc-bar-bmr); }
+  #wlc-widget .wlc-bar-fill.wlc-bar-tdee { background: var(--wlc-bar-tdee); }
+  #wlc-widget .wlc-bar-fill.wlc-bar-target { background: var(--wlc-bar-target); }
+  #wlc-widget .wlc-bar-value {
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+  #wlc-widget .wlc-chart-legend {
+    font-size: 0.76rem;
+    color: var(--wlc-text-muted);
+    background: var(--wlc-surface);
+    border: 1px solid var(--wlc-border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin: 0 0 14px;
+  }
+  #wlc-widget .wlc-chart-legend strong { color: var(--wlc-text); }
+  #wlc-widget .wlc-deficit-note {
+    font-size: 0.78rem;
+    color: var(--wlc-text-muted);
+    text-align: center;
+    margin: -2px 0 16px;
+  }
+  #wlc-widget .wlc-deficit-note strong { color: var(--wlc-primary); }
+  #wlc-widget .wlc-weight-chart {
+    position: relative;
+    margin: 4px 0 6px;
+  }
+  #wlc-widget .wlc-weight-chart-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 600 / 220;
+  }
+  #wlc-widget .wlc-weight-area {
+    fill: var(--wlc-primary);
+    opacity: 0.12;
+  }
+  #wlc-widget .wlc-weight-line {
+    stroke: var(--wlc-primary);
+    stroke-width: 3;
+    fill: none;
+    stroke-linecap: round;
+  }
+  #wlc-widget .wlc-weight-dot {
+    fill: var(--wlc-bar-bmr);
+    stroke: var(--wlc-bg);
+    stroke-width: 3;
+  }
+  #wlc-widget .wlc-weight-dot-end {
+    fill: var(--wlc-primary);
+  }
+  #wlc-widget .wlc-weight-goal-line {
+    stroke: var(--wlc-warn-border);
+    stroke-width: 2;
+    stroke-dasharray: 7 6;
+  }
+  #wlc-widget .wlc-weight-chart-labels {
+    position: absolute;
+    inset: 0;
+  }
+  #wlc-widget .wlc-weight-chart-point {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-width: 45%;
+  }
+  #wlc-widget .wlc-weight-chart-point-start {
+    left: 10%;
+    top: 0;
+    text-align: left;
+  }
+  #wlc-widget .wlc-weight-chart-point-end {
+    right: 6.7%;
+    bottom: 24%;
+    text-align: right;
+    align-items: flex-end;
+  }
+  #wlc-widget .wlc-weight-chart-value {
+    font-size: 0.92rem;
+    font-weight: 700;
+  }
+  #wlc-widget .wlc-weight-chart-label {
+    font-size: 0.76rem;
+    color: var(--wlc-text-muted);
+    white-space: nowrap;
+  }
+  #wlc-widget .wlc-weight-chart-date {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--wlc-primary);
+    white-space: nowrap;
+  }
+  #wlc-widget .wlc-weight-chart-mid {
+    position: absolute;
+    left: 51.7%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--wlc-bg);
+    border: 1px solid var(--wlc-border);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--wlc-primary);
+    white-space: nowrap;
+  }
+  #wlc-widget .wlc-weight-chart-caption {
+    font-size: 0.76rem;
+    color: var(--wlc-text-muted);
+    text-align: center;
+    margin: 0 0 20px;
+  }
+  #wlc-widget .wlc-warning {
+    background: var(--wlc-warn-bg);
+    border: 1px solid var(--wlc-warn-border);
+    color: var(--wlc-warn-text);
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+  }
+  #wlc-widget .wlc-vygor-cta {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    text-align: left;
+    background: var(--wlc-surface);
+    border: 1px solid var(--wlc-border);
+    border-radius: 14px;
+    padding: 20px;
+    margin: 4px 0 18px;
+  }
+  #wlc-widget .wlc-vygor-cta-screenshot {
+    width: 108px;
+    height: auto;
+    border-radius: 12px;
+    border: 1px solid var(--wlc-border);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    flex-shrink: 0;
+  }
+  #wlc-widget .wlc-vygor-cta-content {
+    flex: 1;
+    min-width: 0;
+  }
+  #wlc-widget .wlc-vygor-cta-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    object-fit: contain;
+    margin-bottom: 8px;
+  }
+  #wlc-widget .wlc-vygor-cta-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  #wlc-widget .wlc-vygor-cta-desc {
+    font-size: 0.85rem;
+    color: var(--wlc-text-muted);
+    margin: 0 0 14px;
+  }
+  #wlc-widget .wlc-vygor-cta-badge-link {
+    display: inline-block;
+    line-height: 0;
+  }
+  #wlc-widget .wlc-vygor-cta-badge {
+    height: 44px;
+    width: auto;
+  }
+  #wlc-widget .wlc-disclaimer {
+    font-size: 0.76rem;
+    color: var(--wlc-text-muted);
+    margin-top: 4px;
+  }
+  @media (max-width: 460px) {
+    #wlc-widget .wlc-row { grid-template-columns: 1fr; }
+    #wlc-widget .wlc-bar-row { grid-template-columns: 74px 1fr 60px; gap: 6px; }
+    #wlc-widget .wlc-hero-value { font-size: 2rem; }
+    #wlc-widget .wlc-weight-chart-point { max-width: 40%; }
+    #wlc-widget .wlc-weight-chart-value { font-size: 0.82rem; }
+    #wlc-widget .wlc-weight-chart-label { font-size: 0.7rem; }
+    #wlc-widget .wlc-weight-chart-date { font-size: 0.88rem; }
+    #wlc-widget .wlc-weight-chart-mid { font-size: 0.7rem; padding: 3px 9px; }
+    #wlc-widget .wlc-vygor-cta { flex-direction: column; text-align: center; }
+    #wlc-widget .wlc-vygor-cta-screenshot { width: 120px; }
+    #wlc-widget .wlc-hero-banner-screenshot { width: 92px; height: 68px; }
+  }
+  @media (prefers-color-scheme: dark) {
+    #wlc-widget {
+      --wlc-bg: #1b1d20;
+      --wlc-surface: #24272b;
+      --wlc-surface-2: #2d3136;
+      --wlc-border: #3a3e44;
+      --wlc-text: #eef0f2;
+      --wlc-text-muted: #a3a9b3;
+      --wlc-primary: #35a67e;
+      --wlc-primary-hover: #2e9070;
+      --wlc-focus: #6ea8fe;
+      --wlc-bar-bmr: #7f8891;
+      --wlc-bar-tdee: #5b9bef;
+      --wlc-bar-target: #35a67e;
+      --wlc-warn-bg: #3a2f0f;
+      --wlc-warn-border: #8a6d1d;
+      --wlc-warn-text: #f2d78b;
+      --wlc-error-bg: #3a1f1e;
+      --wlc-error-border: #a5433f;
+      --wlc-error-text: #f5b6b3;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="wlc-widget">
+  <div class="wlc-hero-banner">
+    <div class="wlc-hero-banner-content">
+      <h1>Weight Loss Calculator</h1>
+      <p class="wlc-subtitle">Estimate your BMR, daily calorie needs, and a target date based on a safe, standard rate of loss.</p>
+    </div>
+    <img src="https://www.vygor.app/_next/image?url=%2Fapp%2Fhome.nouNS8OR.webp&w=384&q=75" alt="Vygor app home screen showing weight, goal, BMI and step tracking" class="wlc-hero-banner-screenshot">
+  </div>
+
+  <a class="wlc-vygor-topbar" href="https://apps.apple.com/app/apple-store/id1565632505?pt=128960465&ct=Vygor_App&mt=8" target="_blank" rel="noopener noreferrer">
+    <img src="https://www.vygor.app/_next/image?url=%2Fbrand%2Fvygor-logo.Iw62sJJl.png&w=192&q=75" alt="" class="wlc-vygor-logo">
+    <span>Powered by <strong>Vygor</strong> &mdash; get the free app for full meal plans &amp; tracking</span>
+    <svg class="wlc-icon wlc-vygor-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg>
+  </a>
+
+  <div class="wlc-unit-toggle" role="group" aria-label="Units">
+    <button type="button" id="wlc-unit-imperial" aria-pressed="true">Imperial (lb / ft-in)</button>
+    <button type="button" id="wlc-unit-metric" aria-pressed="false">Metric (kg / cm)</button>
+  </div>
+
+  <form id="wlc-form" novalidate>
+    <fieldset>
+      <legend>
+        <svg class="wlc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8"></path></svg>
+        About you
+      </legend>
+      <div class="wlc-row">
+        <div class="wlc-field wlc-full">
+          <label id="wlc-sex-label">Sex (for BMR formula)</label>
+          <div class="wlc-sex-toggle" role="group" aria-labelledby="wlc-sex-label">
+            <button type="button" id="wlc-sex-female" aria-pressed="true">Female</button>
+            <button type="button" id="wlc-sex-male" aria-pressed="false">Male</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="wlc-row">
+        <div class="wlc-field">
+          <label for="wlc-age">Age <span class="wlc-hint">(years)</span></label>
+          <input type="number" id="wlc-age" min="15" max="90" step="1" inputmode="numeric" value="40" aria-describedby="wlc-age-error" required>
+          <span class="wlc-field-error" id="wlc-age-error" hidden></span>
+        </div>
+        <div class="wlc-field" id="wlc-height-metric-field" hidden>
+          <label for="wlc-height-cm">Height <span class="wlc-hint">(cm)</span></label>
+          <input type="number" id="wlc-height-cm" min="120" max="230" step="1" inputmode="numeric" placeholder="e.g. 170" aria-describedby="wlc-height-error-metric" required>
+          <span class="wlc-field-error" id="wlc-height-error-metric" hidden></span>
+        </div>
+        <div class="wlc-field" id="wlc-height-imperial-field">
+          <label id="wlc-height-imperial-label">Height</label>
+          <div class="wlc-height-imperial" role="group" aria-labelledby="wlc-height-imperial-label">
+            <input type="number" id="wlc-height-ft" placeholder="ft" min="4" max="7" step="1" inputmode="numeric" aria-label="Height, feet" aria-describedby="wlc-height-error">
+            <input type="number" id="wlc-height-in" placeholder="in" min="0" max="11" step="1" inputmode="numeric" aria-label="Height, inches" aria-describedby="wlc-height-error">
+          </div>
+          <span class="wlc-field-error" id="wlc-height-error" hidden></span>
+        </div>
+      </div>
+
+    </fieldset>
+
+    <fieldset>
+      <legend>
+        <svg class="wlc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v2"></path><path d="M5 21h14"></path><path d="M6 5h12l3 8a7 7 0 0 1-7 8h-4a7 7 0 0 1-7-8Z"></path></svg>
+        Your weight goal
+      </legend>
+      <div class="wlc-row">
+        <div class="wlc-field">
+          <label for="wlc-weight-current" id="wlc-weight-current-label">Current weight <span class="wlc-hint wlc-unit-suffix">(lb)</span></label>
+          <input type="number" id="wlc-weight-current" min="1" step="0.1" inputmode="decimal" aria-describedby="wlc-weight-current-error" required>
+          <span class="wlc-field-error" id="wlc-weight-current-error" hidden></span>
+        </div>
+        <div class="wlc-field">
+          <label for="wlc-weight-target" id="wlc-weight-target-label">Target weight <span class="wlc-hint wlc-unit-suffix">(lb)</span></label>
+          <input type="number" id="wlc-weight-target" min="1" step="0.1" inputmode="decimal" aria-describedby="wlc-weight-target-error" required>
+          <span class="wlc-field-error" id="wlc-weight-target-error" hidden></span>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>
+        <svg class="wlc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 3v7h7"></path><path d="M4 4v6h6"></path><path d="M4 10a9 9 0 0 1 15.5-4.5L20 10"></path><path d="M20 20v-6h-6"></path><path d="M20 14a9 9 0 0 1-15.5 4.5L4 14"></path></svg>
+        Activity level
+      </legend>
+      <div class="wlc-row">
+        <div class="wlc-field wlc-full">
+          <label id="wlc-activity-label" class="wlc-visually-hidden">Activity level</label>
+          <div class="wlc-activity-group" role="group" aria-labelledby="wlc-activity-label">
+            <button type="button" class="wlc-activity-option" data-value="1.2" aria-pressed="false">
+              <span><span class="wlc-activity-name">Sedentary</span><br><span class="wlc-activity-desc">Little or no exercise</span></span>
+            </button>
+            <button type="button" class="wlc-activity-option" data-value="1.375" aria-pressed="true">
+              <span><span class="wlc-activity-name">Light</span><br><span class="wlc-activity-desc">Exercise 1&ndash;3 days/week</span></span>
+            </button>
+            <button type="button" class="wlc-activity-option" data-value="1.55" aria-pressed="false">
+              <span><span class="wlc-activity-name">Moderate</span><br><span class="wlc-activity-desc">Exercise 3&ndash;5 days/week</span></span>
+            </button>
+            <button type="button" class="wlc-activity-option" data-value="1.725" aria-pressed="false">
+              <span><span class="wlc-activity-name">Active</span><br><span class="wlc-activity-desc">Exercise 6&ndash;7 days/week</span></span>
+            </button>
+            <button type="button" class="wlc-activity-option" data-value="1.9" aria-pressed="false">
+              <span><span class="wlc-activity-name">Very active</span><br><span class="wlc-activity-desc">Hard exercise + physical job</span></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <div id="wlc-error" class="wlc-error" role="alert" hidden></div>
+
+    <button type="submit" class="wlc-submit">Calculate</button>
+  </form>
+
+  <div id="wlc-results" class="wlc-results" hidden aria-live="polite">
+    <div id="wlc-plan-warning" class="wlc-warning" hidden></div>
+
+    <div class="wlc-hero">
+      <div class="wlc-hero-label">Your daily calorie target</div>
+      <div class="wlc-hero-value" id="wlc-target-cal">&ndash;</div>
+      <div class="wlc-hero-sub" id="wlc-pace">&ndash;</div>
+    </div>
+
+    <div class="wlc-target-date-banner">
+      <svg class="wlc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path></svg>
+      <span class="wlc-target-date-label" id="wlc-hero-date-label">You'll reach your goal weight by</span>
+      <span class="wlc-target-date-value" id="wlc-hero-date">&ndash;</span>
+    </div>
+
+    <div class="wlc-chart">
+      <div class="wlc-bar-row">
+        <span class="wlc-bar-label">BMR</span>
+        <div class="wlc-bar-track"><div class="wlc-bar-fill wlc-bar-bmr" id="wlc-bar-bmr"></div></div>
+        <span class="wlc-bar-value" id="wlc-bmr">&ndash;</span>
+      </div>
+      <div class="wlc-bar-row">
+        <span class="wlc-bar-label">Maintain (TDEE)</span>
+        <div class="wlc-bar-track"><div class="wlc-bar-fill wlc-bar-tdee" id="wlc-bar-tdee"></div></div>
+        <span class="wlc-bar-value" id="wlc-tdee">&ndash;</span>
+      </div>
+      <div class="wlc-bar-row">
+        <span class="wlc-bar-label">Your target</span>
+        <div class="wlc-bar-track"><div class="wlc-bar-fill wlc-bar-target" id="wlc-bar-target"></div></div>
+        <span class="wlc-bar-value" id="wlc-target-cal-2">&ndash;</span>
+      </div>
+    </div>
+    <p class="wlc-chart-legend">
+      <strong>BMR</strong> (Basal Metabolic Rate) is the calories your body burns at rest, just to keep you alive.
+      <strong>TDEE</strong> (Total Daily Energy Expenditure) adds your activity level on top of that &mdash; it's your maintenance calorie level.
+    </p>
+    <p class="wlc-deficit-note" id="wlc-deficit-note"></p>
+
+    <div class="wlc-weight-chart">
+      <svg class="wlc-weight-chart-svg" viewBox="0 0 600 220" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path class="wlc-weight-area" id="wlc-weight-area-path" d="M60,50 L560,170 L560,210 L60,210 Z"></path>
+        <path class="wlc-weight-line" id="wlc-weight-line-path" d="M60,50 L560,170"></path>
+        <line class="wlc-weight-goal-line" id="wlc-weight-goal-line" x1="60" y1="170" x2="560" y2="170" hidden></line>
+        <circle class="wlc-weight-dot wlc-weight-dot-start" cx="60" cy="50" r="7"></circle>
+        <circle class="wlc-weight-dot wlc-weight-dot-end" id="wlc-weight-dot-end" cx="560" cy="170" r="7"></circle>
+      </svg>
+      <div class="wlc-weight-chart-labels">
+        <div class="wlc-weight-chart-point wlc-weight-chart-point-start">
+          <div class="wlc-weight-chart-value" id="wlc-journey-current">&ndash;</div>
+          <div class="wlc-weight-chart-label">Today</div>
+        </div>
+        <div class="wlc-weight-chart-mid" id="wlc-journey-duration">&ndash;</div>
+        <div class="wlc-weight-chart-point wlc-weight-chart-point-end" id="wlc-weight-chart-point-end">
+          <div class="wlc-weight-chart-date" id="wlc-journey-date-label">Target date</div>
+          <div class="wlc-weight-chart-label" id="wlc-journey-target">&ndash;</div>
+        </div>
+      </div>
+    </div>
+    <p class="wlc-weight-chart-caption" id="wlc-weight-chart-caption">Your weight, projected with a dynamic model &mdash; not a straight line, since your calorie needs drop as you lose weight.</p>
+    <div id="wlc-plateau-warning" class="wlc-warning" hidden></div>
+
+    <div class="wlc-vygor-cta">
+      <img src="https://www.vygor.app/_next/image?url=%2Fapp%2Fhome.nouNS8OR.webp&w=384&q=75" alt="Vygor app home screen showing weight, goal, BMI and step tracking" class="wlc-vygor-cta-screenshot">
+      <div class="wlc-vygor-cta-content">
+        <img src="https://www.vygor.app/_next/image?url=%2Fbrand%2Fvygor-logo.Iw62sJJl.png&w=192&q=75" alt="Vygor" class="wlc-vygor-cta-logo">
+        <div class="wlc-vygor-cta-title">Want a full plan built around these numbers?</div>
+        <p class="wlc-vygor-cta-desc">Vygor turns your calorie target into daily meal plans, recipes, workouts and progress tracking &mdash; free to download.</p>
+        <a href="https://apps.apple.com/app/apple-store/id1565632505?pt=128960465&ct=Vygor_App&mt=8" target="_blank" rel="noopener noreferrer" class="wlc-vygor-cta-badge-link">
+          <img src="https://www.vygor.app/_next/image?url=%2Fbrand%2Fapp-store-badge.4pLAJf7_.png&w=192&q=75" alt="Download on the App Store" class="wlc-vygor-cta-badge">
+        </a>
+      </div>
+    </div>
+
+    <p class="wlc-chart-legend">
+      The timeline chart uses a simplified dynamic energy-balance model, similar in spirit to the NIH Body Weight Planner: as you lose weight your BMR and TDEE drop too, so a <em>fixed</em> calorie target produces a shrinking deficit over time, which is why loss decelerates instead of following a straight line. It doesn't capture everything &mdash; metabolic adaptation beyond body-weight change, water-weight swings, or shifts in muscle vs. fat &mdash; so treat the curve and date as a rough guide, not a guarantee. Recalculating your target every 10&ndash;15 lb (5&ndash;7 kg) lost will keep the plan accurate as your body changes.
+    </p>
+
+    <p class="wlc-disclaimer">
+      Estimates only, based on the Mifflin-St Jeor equation and a standard energy-balance model (~3,500 kcal per lb / ~7,700 kcal per kg of body fat).
+      Actual results vary by individual. This is not medical advice &mdash; consult a healthcare provider before starting any weight-loss plan,
+      especially if your calculated calorie target is at or near the safety floor shown above.
+    </p>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var LB_PER_KG = 2.20462262;
+  var CM_PER_IN = 2.54;
+  var KCAL_PER_KG_FAT = 7700;
+  var DAILY_DEFICIT = 500; // ~1 lb (0.45 kg) per week, the standard safe recommendation
+  var MIN_SAFE_CALORIES = { female: 1200, male: 1500 };
+  var DEFAULT_WEIGHT_LB = { female: 170, male: 200 }; // US adult average, used as a starting-point default only
+  var DEFAULT_HEIGHT_IN = { female: 64, male: 69 }; // 5'4" / 5'9", used as a starting-point default only
+
+  var root = document.getElementById("wlc-widget");
+  var unit = "imperial";
+  var sex = "female";
+  var activityMultiplier = 1.375;
+  var weightCurrentEdited = false;
+  var heightEdited = false;
+
+  var els = {
+    unitMetricBtn: root.querySelector("#wlc-unit-metric"),
+    unitImperialBtn: root.querySelector("#wlc-unit-imperial"),
+    sexFemaleBtn: root.querySelector("#wlc-sex-female"),
+    sexMaleBtn: root.querySelector("#wlc-sex-male"),
+    activityOptions: root.querySelectorAll(".wlc-activity-option"),
+    age: root.querySelector("#wlc-age"),
+    ageError: root.querySelector("#wlc-age-error"),
+    heightMetricField: root.querySelector("#wlc-height-metric-field"),
+    heightImperialField: root.querySelector("#wlc-height-imperial-field"),
+    heightCm: root.querySelector("#wlc-height-cm"),
+    heightFt: root.querySelector("#wlc-height-ft"),
+    heightIn: root.querySelector("#wlc-height-in"),
+    heightError: root.querySelector("#wlc-height-error"),
+    heightErrorMetric: root.querySelector("#wlc-height-error-metric"),
+    weightCurrent: root.querySelector("#wlc-weight-current"),
+    weightTarget: root.querySelector("#wlc-weight-target"),
+    weightCurrentError: root.querySelector("#wlc-weight-current-error"),
+    weightTargetError: root.querySelector("#wlc-weight-target-error"),
+    weightCurrentLabel: root.querySelector("#wlc-weight-current-label .wlc-unit-suffix"),
+    weightTargetLabel: root.querySelector("#wlc-weight-target-label .wlc-unit-suffix"),
+    form: root.querySelector("#wlc-form"),
+    error: root.querySelector("#wlc-error"),
+    results: root.querySelector("#wlc-results"),
+    planWarning: root.querySelector("#wlc-plan-warning"),
+    bmr: root.querySelector("#wlc-bmr"),
+    tdee: root.querySelector("#wlc-tdee"),
+    targetCal: root.querySelector("#wlc-target-cal"),
+    targetCal2: root.querySelector("#wlc-target-cal-2"),
+    pace: root.querySelector("#wlc-pace"),
+    barBmr: root.querySelector("#wlc-bar-bmr"),
+    barTdee: root.querySelector("#wlc-bar-tdee"),
+    barTarget: root.querySelector("#wlc-bar-target"),
+    deficitNote: root.querySelector("#wlc-deficit-note"),
+    journeyCurrent: root.querySelector("#wlc-journey-current"),
+    journeyTarget: root.querySelector("#wlc-journey-target"),
+    journeyDateLabel: root.querySelector("#wlc-journey-date-label"),
+    heroDate: root.querySelector("#wlc-hero-date"),
+    heroDateLabel: root.querySelector("#wlc-hero-date-label"),
+    journeyDuration: root.querySelector("#wlc-journey-duration"),
+    weightAreaPath: root.querySelector("#wlc-weight-area-path"),
+    weightLinePath: root.querySelector("#wlc-weight-line-path"),
+    weightGoalLine: root.querySelector("#wlc-weight-goal-line"),
+    weightDotEnd: root.querySelector("#wlc-weight-dot-end"),
+    weightChartPointEnd: root.querySelector("#wlc-weight-chart-point-end"),
+    weightChartCaption: root.querySelector("#wlc-weight-chart-caption"),
+    plateauWarning: root.querySelector("#wlc-plateau-warning")
+  };
+
+  function setFieldError(inputs, errorEl, message) {
+    if (message) {
+      errorEl.textContent = message;
+      errorEl.hidden = false;
+      inputs.forEach(function (el) { el.classList.add("wlc-input-invalid"); el.setAttribute("aria-invalid", "true"); });
+    } else {
+      errorEl.hidden = true;
+      errorEl.textContent = "";
+      inputs.forEach(function (el) { el.classList.remove("wlc-input-invalid"); el.removeAttribute("aria-invalid"); });
+    }
+  }
+
+  function applyDefaultCurrentWeight() {
+    if (weightCurrentEdited) return;
+    var lb = DEFAULT_WEIGHT_LB[sex];
+    var value = unit === "metric" ? lb / LB_PER_KG : lb;
+    els.weightCurrent.value = Math.round(value);
+  }
+
+  function applyDefaultHeight() {
+    if (heightEdited) return;
+    var totalIn = DEFAULT_HEIGHT_IN[sex];
+    if (unit === "metric") {
+      els.heightCm.value = Math.round(totalIn * CM_PER_IN);
+    } else {
+      els.heightFt.value = Math.floor(totalIn / 12);
+      els.heightIn.value = totalIn % 12;
+    }
+  }
+
+  function updateTargetWeightPlaceholder() {
+    var isMetric = unit === "metric";
+    var current = parseFloat(els.weightCurrent.value);
+    var defaultLoss = isMetric ? 9 : 20;
+    var fallback = isMetric ? 68 : 150;
+    var suggested = current > 0 ? Math.round(current - defaultLoss) : fallback;
+    els.weightTarget.placeholder = "e.g. " + (suggested > 0 ? suggested : fallback);
+  }
+
+  function setUnit(next) {
+    unit = next;
+    var isMetric = unit === "metric";
+    els.unitMetricBtn.setAttribute("aria-pressed", String(isMetric));
+    els.unitImperialBtn.setAttribute("aria-pressed", String(!isMetric));
+    els.heightMetricField.hidden = !isMetric;
+    els.heightImperialField.hidden = isMetric;
+    els.weightCurrentLabel.textContent = isMetric ? "(kg)" : "(lb)";
+    els.weightTargetLabel.textContent = isMetric ? "(kg)" : "(lb)";
+    els.results.hidden = true;
+    setFieldError([els.heightCm], els.heightErrorMetric, "");
+    setFieldError([els.heightFt, els.heightIn], els.heightError, "");
+    applyDefaultCurrentWeight();
+    applyDefaultHeight();
+    updateTargetWeightPlaceholder();
+  }
+
+  function setSex(next) {
+    sex = next;
+    els.sexFemaleBtn.setAttribute("aria-pressed", String(sex === "female"));
+    els.sexMaleBtn.setAttribute("aria-pressed", String(sex === "male"));
+    applyDefaultCurrentWeight();
+    applyDefaultHeight();
+    updateTargetWeightPlaceholder();
+  }
+
+  function setActivity(value, button) {
+    activityMultiplier = value;
+    els.activityOptions.forEach(function (btn) {
+      btn.setAttribute("aria-pressed", String(btn === button));
+    });
+  }
+
+  els.unitMetricBtn.addEventListener("click", function () { setUnit("metric"); });
+  els.unitImperialBtn.addEventListener("click", function () { setUnit("imperial"); });
+  els.sexFemaleBtn.addEventListener("click", function () { setSex("female"); });
+  els.sexMaleBtn.addEventListener("click", function () { setSex("male"); });
+  els.weightCurrent.addEventListener("input", function () { weightCurrentEdited = true; updateTargetWeightPlaceholder(); });
+  els.heightCm.addEventListener("input", function () { heightEdited = true; });
+  els.heightFt.addEventListener("input", function () { heightEdited = true; });
+  els.heightIn.addEventListener("input", function () { heightEdited = true; });
+  els.activityOptions.forEach(function (btn) {
+    btn.addEventListener("click", function () { setActivity(parseFloat(btn.dataset.value), btn); });
+  });
+
+  function showPlanError(msg) {
+    els.error.textContent = msg;
+    els.error.hidden = false;
+    els.results.hidden = true;
+  }
+
+  function clearPlanError() {
+    els.error.hidden = true;
+    els.error.textContent = "";
+  }
+
+  function getHeightCm() {
+    if (unit === "metric") {
+      return parseFloat(els.heightCm.value);
+    }
+    var ft = parseFloat(els.heightFt.value) || 0;
+    var inch = parseFloat(els.heightIn.value) || 0;
+    return (ft * 12 + inch) * CM_PER_IN;
+  }
+
+  function getWeightKg(inputEl) {
+    var v = parseFloat(inputEl.value);
+    if (isNaN(v)) return NaN;
+    return unit === "metric" ? v : v / LB_PER_KG;
+  }
+
+  function fmtWeight(kg) {
+    if (unit === "metric") return kg.toFixed(1) + " kg";
+    return (kg * LB_PER_KG).toFixed(1) + " lb";
+  }
+
+  function fmtWeightRate(kgPerWeek) {
+    if (unit === "metric") return kgPerWeek.toFixed(2) + " kg/week";
+    return (kgPerWeek * LB_PER_KG).toFixed(2) + " lb/week";
+  }
+
+  function formatDate(d) {
+    return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+  }
+
+  function validateAge() {
+    var age = parseFloat(els.age.value);
+    var valid = age && age >= 15 && age <= 90;
+    setFieldError([els.age], els.ageError, valid ? "" : "Enter an age between 15 and 90.");
+    return valid;
+  }
+
+  function validateHeight() {
+    var cm = getHeightCm();
+    var valid = cm && cm >= 120 && cm <= 230;
+    var inputs = unit === "metric" ? [els.heightCm] : [els.heightFt, els.heightIn];
+    var errorEl = unit === "metric" ? els.heightErrorMetric : els.heightError;
+    setFieldError(inputs, errorEl, valid ? "" : "Enter a valid height.");
+    return valid;
+  }
+
+  function validateWeightCurrent() {
+    var kg = getWeightKg(els.weightCurrent);
+    var valid = kg > 0;
+    setFieldError([els.weightCurrent], els.weightCurrentError, valid ? "" : "Enter a valid current weight.");
+    return valid;
+  }
+
+  function validateWeightTarget() {
+    var targetKg = getWeightKg(els.weightTarget);
+    if (!(targetKg > 0)) {
+      setFieldError([els.weightTarget], els.weightTargetError, "Enter a valid target weight.");
+      return false;
+    }
+    var currentKg = getWeightKg(els.weightCurrent);
+    if (currentKg > 0 && targetKg >= currentKg) {
+      setFieldError([els.weightTarget], els.weightTargetError, "Target weight must be lower than current weight.");
+      return false;
+    }
+    setFieldError([els.weightTarget], els.weightTargetError, "");
+    return true;
+  }
+
+  els.age.addEventListener("blur", validateAge);
+  els.heightCm.addEventListener("blur", validateHeight);
+  els.heightFt.addEventListener("blur", validateHeight);
+  els.heightIn.addEventListener("blur", validateHeight);
+  els.weightCurrent.addEventListener("blur", validateWeightCurrent);
+  els.weightTarget.addEventListener("blur", validateWeightTarget);
+
+  function animateBar(el, percent) {
+    el.style.width = "0%";
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        el.style.width = percent + "%";
+      });
+    });
+  }
+
+  // Simplified dynamic energy-balance model: since Mifflin-St Jeor's BMR is
+  // linear in body weight, holding calorie intake fixed while weight (and so
+  // BMR/TDEE) declines gives an exponential decay toward an equilibrium
+  // weight, rather than a straight line. See NIH Body Weight Planner / Hall
+  // et al., Lancet 2011 for the fuller (non-simplified) version of this idea.
+  var CHART_X0 = 60, CHART_X1 = 560, CHART_Y0 = 50, CHART_Y1 = 170, CHART_BASE = 210;
+  var CURVE_SAMPLES = 48;
+  var MAX_HORIZON_DAYS = 1095; // 3 years — practical display cap for a plateau case
+
+  function buildWeightCurve(currentKg, targetKg, heightCm, age, sexVal, activity, targetCalories) {
+    var constTerm = 6.25 * heightCm - 5 * age + (sexVal === "male" ? 5 : -161);
+    var k = (10 * activity) / KCAL_PER_KG_FAT; // per-day decay rate
+    var wEq = (targetCalories / activity - constTerm) / 10; // plateau weight at this fixed intake
+    var canConverge = targetKg > wEq + 0.01;
+    var exactDays = canConverge ? Math.ceil(-Math.log((targetKg - wEq) / (currentKg - wEq)) / k) : Infinity;
+    // Treat "reachable but only after decades" the same as "never reachable" —
+    // both mean this fixed calorie target isn't a practical path to the goal.
+    var reachable = canConverge && exactDays <= MAX_HORIZON_DAYS;
+    var horizonDays, endWeightKg;
+    if (reachable) {
+      horizonDays = Math.max(1, exactDays);
+      endWeightKg = targetKg;
+    } else {
+      horizonDays = MAX_HORIZON_DAYS;
+      endWeightKg = wEq + (currentKg - wEq) * Math.exp(-k * horizonDays);
+    }
+    var samples = [];
+    for (var i = 0; i <= CURVE_SAMPLES; i++) {
+      var t = (horizonDays * i) / CURVE_SAMPLES;
+      samples.push(wEq + (currentKg - wEq) * Math.exp(-k * t));
+    }
+    return { reachable: reachable, horizonDays: horizonDays, endWeightKg: endWeightKg, wEq: wEq, samples: samples };
+  }
+
+  function renderWeightChart(curve, currentKg, targetKg) {
+    var points = curve.samples.map(function (w, i) {
+      var x = CHART_X0 + (CHART_X1 - CHART_X0) * (i / CURVE_SAMPLES);
+      var frac = (currentKg - w) / (currentKg - curve.endWeightKg);
+      var y = CHART_Y0 + (CHART_Y1 - CHART_Y0) * frac;
+      return { x: x, y: y };
+    });
+    var d = "M" + points[0].x.toFixed(1) + "," + points[0].y.toFixed(1);
+    for (var i = 1; i < points.length; i++) {
+      d += " L" + points[i].x.toFixed(1) + "," + points[i].y.toFixed(1);
+    }
+    els.weightLinePath.setAttribute("d", d);
+    els.weightAreaPath.setAttribute("d", d + " L" + CHART_X1 + "," + CHART_BASE + " L" + CHART_X0 + "," + CHART_BASE + " Z");
+
+    var mid = points[Math.round(CURVE_SAMPLES / 2)];
+    els.journeyDuration.style.left = (mid.x / 600 * 100) + "%";
+    els.journeyDuration.style.top = (mid.y / 220 * 100) + "%";
+
+    if (curve.reachable) {
+      els.weightGoalLine.setAttribute("hidden", "");
+    } else {
+      var yTarget = Math.min(CHART_Y0 + (CHART_Y1 - CHART_Y0) * ((currentKg - targetKg) / (currentKg - curve.endWeightKg)), 218);
+      els.weightGoalLine.setAttribute("y1", yTarget.toFixed(1));
+      els.weightGoalLine.setAttribute("y2", yTarget.toFixed(1));
+      els.weightGoalLine.removeAttribute("hidden");
+    }
+  }
+
+  els.form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    clearPlanError();
+
+    var ageValid = validateAge();
+    var heightValid = validateHeight();
+    var currentValid = validateWeightCurrent();
+    var targetValid = validateWeightTarget();
+
+    if (!ageValid) { els.age.focus(); return; }
+    if (!heightValid) { (unit === "metric" ? els.heightCm : els.heightFt).focus(); return; }
+    if (!currentValid) { els.weightCurrent.focus(); return; }
+    if (!targetValid) { els.weightTarget.focus(); return; }
+
+    var age = parseFloat(els.age.value);
+    var heightCm = getHeightCm();
+    var currentKg = getWeightKg(els.weightCurrent);
+    var targetKg = getWeightKg(els.weightTarget);
+
+    var bmr = sex === "male"
+      ? 10 * currentKg + 6.25 * heightCm - 5 * age + 5
+      : 10 * currentKg + 6.25 * heightCm - 5 * age - 161;
+
+    var tdee = bmr * activityMultiplier;
+    var floor = MIN_SAFE_CALORIES[sex];
+
+    var rawTarget = tdee - DAILY_DEFICIT;
+    var targetCalories = Math.max(rawTarget, floor);
+    var actualDeficit = tdee - targetCalories;
+
+    els.planWarning.hidden = true;
+    if (rawTarget < floor) {
+      if (actualDeficit <= 0) {
+        showPlanError("Your maintenance calories are already close to the recommended safe minimum (" + floor + " kcal/day) for a " + sex + " adult. A standard calorie-deficit plan isn't appropriate here — please consult a healthcare provider or registered dietitian for a safe, personalized plan.");
+        return;
+      }
+      els.planWarning.hidden = false;
+      els.planWarning.textContent = "Your calorie target was capped at the recommended safe minimum of " + floor + " kcal/day for a " + sex + " adult, so your actual deficit is " + Math.round(actualDeficit) + " kcal/day (less than the standard 500). Your pace and date below reflect this safer, slower rate. Consult a healthcare provider before going lower.";
+    }
+
+    var weeklyLossKg = (actualDeficit * 7) / KCAL_PER_KG_FAT;
+    var curve = buildWeightCurve(currentKg, targetKg, heightCm, age, sex, activityMultiplier, targetCalories);
+
+    var horizonDate = new Date();
+    horizonDate.setDate(horizonDate.getDate() + curve.horizonDays);
+
+    els.bmr.textContent = Math.round(bmr) + " kcal";
+    els.tdee.textContent = Math.round(tdee) + " kcal";
+    els.targetCal.textContent = Math.round(targetCalories) + " kcal/day";
+    els.targetCal2.textContent = Math.round(targetCalories) + " kcal";
+    els.pace.textContent = "Starting pace: about " + fmtWeightRate(weeklyLossKg) + " (slows over time)";
+    els.deficitNote.innerHTML = "That's a <strong>" + Math.round(actualDeficit) + " kcal/day</strong> deficit from your maintenance level.";
+
+    var maxVal = Math.max(bmr, tdee, targetCalories);
+    animateBar(els.barBmr, (bmr / maxVal) * 100);
+    animateBar(els.barTdee, (tdee / maxVal) * 100);
+    animateBar(els.barTarget, (targetCalories / maxVal) * 100);
+
+    els.journeyCurrent.textContent = fmtWeight(currentKg);
+    renderWeightChart(curve, currentKg, targetKg);
+
+    var banner = els.heroDate.closest(".wlc-target-date-banner");
+    if (curve.reachable) {
+      banner.classList.remove("wlc-target-date-banner--warning");
+      els.heroDateLabel.textContent = "You'll reach your goal weight by";
+      els.heroDate.textContent = formatDate(horizonDate);
+      els.journeyDateLabel.textContent = formatDate(horizonDate);
+      els.journeyTarget.textContent = fmtWeight(targetKg);
+      els.journeyDuration.textContent = curve.horizonDays + " day" + (curve.horizonDays === 1 ? "" : "s");
+      els.plateauWarning.hidden = true;
+      els.weightChartCaption.textContent = "Your weight, projected with a dynamic model — not a straight line, since your calorie needs drop as you lose weight.";
+    } else {
+      banner.classList.add("wlc-target-date-banner--warning");
+      els.heroDateLabel.textContent = "At this pace, you'll likely level off around";
+      els.heroDate.textContent = fmtWeight(curve.wEq);
+      els.journeyDateLabel.textContent = "After 3+ years";
+      els.journeyTarget.textContent = "≈ " + fmtWeight(curve.endWeightKg);
+      els.journeyDuration.textContent = "3+ yrs";
+      els.plateauWarning.hidden = false;
+      els.plateauWarning.textContent = "Heads up: at your current calorie target, your body's energy needs keep dropping as you lose weight, so this plan's deficit shrinks toward zero over time. In the long run you're likely to level off around " + fmtWeight(curve.wEq) + " rather than reaching your " + fmtWeight(targetKg) + " goal (most of that slowdown happens within the first year or two, though full leveling-off can take longer). Recalculating your calorie target every 10–15 lb (5–7 kg) lost — lowering intake or raising activity — will keep you progressing toward your full goal.";
+      els.weightChartCaption.textContent = "The dashed line marks your " + fmtWeight(targetKg) + " goal, which this plan doesn't reach within the projection.";
+    }
+
+    els.results.hidden = false;
+    els.results.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+
+  setUnit("imperial");
+  setSex("female");
+})();
+</script>
+
+</body>
+</html>

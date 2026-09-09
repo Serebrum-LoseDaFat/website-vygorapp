@@ -4,6 +4,7 @@ import { StoreBadges } from "./StoreBadges";
 import { Instagram, Tiktok } from "./Icons";
 import { links } from "@/lib/config";
 import { disclaimer } from "@/content/site";
+import { tools } from "@/content/tools";
 
 /**
  * Site footer.
@@ -42,6 +43,16 @@ export function Footer() {
         { label: "Why AI", href: "/#why-ai" },
         { label: "Pricing", href: "/#pricing" },
         { label: "FAQ", href: "/#faq" },
+      ],
+    },
+    {
+      title: "Free tools",
+      // Listed individually as well as behind the directory: these pages are
+      // the site's search entry points, and a footer link straight to one is
+      // worth more than a link to the list that contains it.
+      items: [
+        { label: "All tools", href: "/tools" },
+        ...tools.map((tool) => ({ label: tool.name, href: `/tools/${tool.slug}` })),
       ],
     },
     {
@@ -107,7 +118,9 @@ export function Footer() {
             ) : null}
           </div>
 
-          <nav aria-label="Footer" className="grid grid-cols-2 gap-8 sm:grid-cols-4">
+          {/* Five groups. Three-up at sm rather than five, because five columns
+              in this space wrap "Weight Loss Calculator" onto three lines. */}
+          <nav aria-label="Footer" className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5">
             {groups.map((group) => {
               const items = group.items.filter((item) => item.href);
               if (items.length === 0) return null;
