@@ -1,0 +1,14 @@
+# Supplied documents that are served byte-for-byte.
+#
+# These files are returned to the browser unchanged by their route handlers, so
+# their bytes are part of the deliverable. This repository is worked on from
+# Windows with core.autocrlf=true, which would rewrite their line endings to
+# CRLF in the working copy — every line a byte longer than the file that was
+# supplied and signed off. `-text` switches that conversion off in both
+# directions, so what is checked out is what was committed, on any platform.
+#
+# Line endings do not change how a browser renders HTML. The point is that
+# "byte-for-byte" stays literally true and verifiable with a checksum, rather
+# than being true only on the machine that happens to have the right setting.
+src/content/tools/*.html   -text
+src/content/apple-ads-guide.html   -text
