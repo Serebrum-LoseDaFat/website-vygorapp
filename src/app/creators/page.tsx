@@ -13,7 +13,7 @@ import {
   creatorSegments,
   creatorContact,
 } from "@/content/creators";
-import { partnersEmail, siteUrl, links } from "@/lib/config";
+import { supportEmail as partnersEmail, siteUrl, links } from "@/lib/config";
 
 /**
  * The creator program page.
