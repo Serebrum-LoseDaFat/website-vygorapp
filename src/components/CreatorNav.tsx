@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowRight, Close, InstagramColor, TiktokColor } from "./Icons";
-import { links, partnersEmail } from "@/lib/config";
+import { links, supportEmail as partnersEmail } from "@/lib/config";
 
 /**
  * In-page section navigation for /creators. This page only.
