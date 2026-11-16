@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Reveal } from "@/components/Reveal";
 import { ButtonLink } from "@/components/Button";
+import { ApplyButton } from "@/components/ApplyButton";
 import { PhoneFrame } from "@/components/PhoneFrame";
 import { CreatorNav } from "@/components/CreatorNav";
 import { Check, Close, Plus, Sparkle, InstagramColor, TiktokColor } from "@/components/Icons";
@@ -136,9 +137,7 @@ export default function CreatorsPage() {
                 <p className="mt-4 text-[0.95rem] font-medium text-ink-3">{creatorsIntro.price}</p>
 
                 <div className="mt-9 flex flex-wrap items-center gap-4">
-                  <ButtonLink href={mailto} variant="primary" size="lg" withArrow>
-                    Apply to the program
-                  </ButtonLink>
+                  <ApplyButton href={mailto} />
                   {/* Out to the consumer site, not to "/" — a creator wants to
                       see what their own audience will land on. */}
                   <ButtonLink href={siteUrl} variant="secondary" size="lg" external withArrow>
@@ -189,7 +188,7 @@ export default function CreatorsPage() {
                     } as React.CSSProperties
                   }
                 >
-                  <PlatformChip icon={<InstagramColor size={21} />} label="@vygorapp" />
+                  <PlatformChip icon={<InstagramColor size={21} />} label="@vygor.app" />
                 </div>
               </div>
             </Reveal>
@@ -584,7 +583,7 @@ export default function CreatorsPage() {
                         className="flex items-center gap-2.5 rounded-full bg-tint py-2 pl-2 pr-4 text-[0.88rem] font-semibold text-ink ring-1 ring-line transition-colors hover:bg-mist"
                       >
                         <InstagramColor size={20} />
-                        @vygorapp
+                        @vygor.app
                       </a>
                     </li>
                   ) : null}
