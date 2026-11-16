@@ -45,7 +45,7 @@ const DEFAULTS = {
   privacy: "https://www.vygor.health/privacy-policy",
   terms: "https://www.vygor.health/terms-of-service",
   business: "https://www.vygor.health/",
-  instagram: "https://www.instagram.com/vygorapp/",
+  instagram: "https://www.instagram.com/vygor.app/",
   tiktok: "https://www.tiktok.com/@vygorapp",
   supportEmail: "hello@vygor.health",
   partnersEmail: "partners@vygor.health",
@@ -69,7 +69,10 @@ export const links = {
   terms: env(process.env.NEXT_PUBLIC_TERMS_URL, DEFAULTS.terms),
   /** The existing Vygor site, which carries all the enterprise content. */
   business: env(process.env.NEXT_PUBLIC_BUSINESS_URL, DEFAULTS.business),
-  instagram: env(process.env.NEXT_PUBLIC_INSTAGRAM_URL, DEFAULTS.instagram),
+  // Fixed rather than env-driven: the old NEXT_PUBLIC_INSTAGRAM_URL value
+  // (instagram.com/vygorapp) is a dead page, and a stale deploy variable would
+  // otherwise keep overriding the correct handle.
+  instagram: DEFAULTS.instagram,
   tiktok: env(process.env.NEXT_PUBLIC_TIKTOK_URL, DEFAULTS.tiktok),
 } as const;
 
