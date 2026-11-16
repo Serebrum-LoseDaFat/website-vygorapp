@@ -39,7 +39,7 @@ import { links, supportEmail as partnersEmail } from "@/lib/config";
  */
 
 const SECTIONS = [
-  { id: "what-you-get", label: "What you get" },
+  { id: "what-you-get", label: "How it works" },
   { id: "product", label: "Product" },
   { id: "best-practice", label: "Best practice" },
   { id: "compliance", label: "Compliance" },
