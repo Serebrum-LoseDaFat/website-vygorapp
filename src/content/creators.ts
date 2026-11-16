@@ -34,45 +34,37 @@ export const creatorsIntro = {
 };
 
 /**
- * What a creator gets in return.
+ * What a creator gets in return: how the program runs and what it pays.
  *
- * IMPORTANT — every item here is something the team has already committed to in
- * the creator brief. Nothing about money appears, because no commission, rev
- * share or fee has been specified anywhere, and inventing one would be a
- * promise the business has not made.
- *
- * `commercial` is the slot for it. Fill in the title and body once the terms are
- * agreed and it renders as a fifth card with no other change needed; leave it
- * null and the section simply shows four.
+ * These are the terms the team agreed in November 2026. If any figure changes
+ * (fee per video, commission, payout timing), change it here; the page has no
+ * other copy of them. The commission is 10% of Premium's first $79.99 payment,
+ * so keep it in step with the price in site.ts.
  */
 export const creatorBenefits = {
   kicker: "What you get",
-  title: "What you get out of it.",
-  lead:
-    "A partnership rather than a brief thrown over the wall. Here is what comes with it.",
+  title: "How it works and what you earn.",
+  lead: "",
   items: [
     {
-      title: "A code and a link that are yours",
-      body:
-        "Your own promo code and tracking link, so everything that comes from your audience is attributed to you and never to another creator.",
+      title: "Phase 1, test: $100",
+      body: "10 videos at $10 each, posted over about 2 weeks.",
     },
     {
-      title: "Angles written for your niche",
-      body:
-        "Seven segment playbooks with hooks, formats and a specific do and do-not list. You never start from a blank page.",
+      title: "Phase 2, monthly: $900 a month",
+      body: "If Phase 1 works: 30 videos a month at $30 each.",
     },
     {
-      title: "A reply within two working days",
+      title: "10% commission: $8.00 per subscriber",
       body:
-        "Send a caption, a script or a cut and get it back approved or annotated, fast enough that you can still post on schedule.",
+        "On every new subscriber who uses your code: 10% of their first $79.99 payment. Vygor has a 1-week free trial, so a subscriber counts once they stay past the trial and their first payment goes through. Paid monthly, 30 days after that payment. Refunded or cancelled subscriptions don't count.",
     },
     {
-      title: "A direct line to the team",
-      body:
-        "One inbox, read by the people who build the product. Ask about a feature, a claim or an edge case and get a real answer.",
+      title: "Free Vygor Premium",
+      body: "For your own use during the engagement.",
     },
   ],
-  /** e.g. { title: "...", body: "..." } once commercial terms are agreed. */
+  /** Optional fifth card. Leave null unless a new term is agreed. */
   commercial: null as { title: string; body: string } | null,
 };
 
