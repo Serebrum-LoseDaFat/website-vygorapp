@@ -61,7 +61,8 @@ export const creatorBenefits = {
     },
     {
       title: "Free Vygor Premium",
-      body: "For your own use during the engagement.",
+      body:
+        "A full year of Premium (worth $79.99) as our gift to you. Use it day to day, get to know every feature, and talk about the app from real experience.",
     },
   ],
   /** Optional fifth card. Leave null unless a new term is agreed. */
