@@ -192,7 +192,7 @@ export default function CreatorsPage() {
                 </div>
 
                 <div
-                  className="float-slow absolute -right-3 top-[4%] sm:-right-8"
+                  className="float-slow absolute right-3 top-[2%]"
                   style={
                     {
                       "--drift": "7px",
