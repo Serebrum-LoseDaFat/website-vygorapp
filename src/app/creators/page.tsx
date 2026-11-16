@@ -149,59 +149,58 @@ export default function CreatorsPage() {
               </div>
             </Reveal>
 
-            {/* Two transparent phone cut-outs (phone, pop-out cards and soft shadows only), staggered: the free AI Macro Tracker
-              in front and higher (the newest message), Contests lower and to the right.
-              They already carry their own device frame and caption, so they render as
-              plain images, never inside PhoneFrame. Files live in public/creators;
-              to swap one, upload under a NEW file name (images are cached for a year).
+            {/* Same arrangement as the homepage hero (HeroPhones): one larger phone in
+              front, a smaller one set back, lower and lightly overlapped, both
+              drifting vertically only. Front: the free AI Macro Tracker. Behind:
+              Contests. The images are transparent cut-outs (phone, pop-out cards
+              and soft shadows) in public/creators; to swap one, upload under a NEW
+              file name, because images are cached for a year.
 
-              Only the two platform chips move, slowly; float-slow already switches
-              itself off under prefers-reduced-motion. */}
+              The cut-outs carry about 9% transparent margin on each side, so the
+              image overlap below is larger than the homepage's; the visible phone
+              overlap matches it (about 1.5rem on desktop).
+
+              The two platform chips sit inside the phone wrappers, so they stay
+              attached to their phone and move with it instead of floating free. */}
             <Reveal delay={120} y={24}>
-              <div className="relative mx-auto w-fit lg:ml-auto lg:mr-0">
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 -z-10 m-auto h-[70%] w-[85%] rounded-[50%] bg-cyan-500/18 blur-3xl"
-                />
+              <div className="relative flex justify-center pb-14 pl-[7rem] sm:pl-[9rem] lg:pb-20 lg:pl-[10rem]">
+                <div className="relative">
+                  {/* Contests: behind, smaller, lower. */}
+                  <div
+                    className="float-slow absolute bottom-[-6%] left-[-7rem] z-0 sm:bottom-[-7%] sm:left-[-9rem] lg:bottom-[-9%] lg:left-[-10rem]"
+                    style={{ "--tilt": "0deg", "--drift": "13px", "--float-duration": "11s", "--float-delay": "-3.5s" } as React.CSSProperties}
+                  >
+                    <Image
+                      src="/creators/creator-hero-contests-background%20removed.png"
+                      alt="Vygor weight-loss and steps contests, free to create and join"
+                      width={1290}
+                      height={2106}
+                      sizes="(max-width: 640px) 160px, (max-width: 1024px) 200px, 232px"
+                      className="h-auto w-[10rem] sm:w-[12.5rem] lg:w-[14.5rem]"
+                    />
+                    <div className="absolute -left-3 bottom-[20%] z-20">
+                      <PlatformChip icon={<TiktokColor size={21} />} label="@vygorapp" />
+                    </div>
+                  </div>
 
-                <div className="flex items-start gap-1 sm:gap-2">
-                  <Image
-                    src="/creators/creator-hero-macros-background%20removed.png"
-                    alt="Vygor AI Macro Tracker, free: log a meal from a photo, the gallery, a barcode or by typing it"
-                    width={1290}
-                    height={2252}
-                    priority
-                    sizes="(min-width: 640px) 252px, 42vw"
-                    className="h-auto w-[42vw] max-w-[252px]"
-                  />
-                  <Image
-                    src="/creators/creator-hero-contests-background%20removed.png"
-                    alt="Vygor weight-loss and steps contests, free to create and join"
-                    width={1290}
-                    height={2106}
-                    sizes="(min-width: 640px) 252px, 42vw"
-                    className="mt-14 sm:mt-20 h-auto w-[42vw] max-w-[252px]"
-                  />
-                </div>
-
-                <div
-                  className="float-slow absolute -left-4 top-[58%] sm:-left-10"
-                  style={{ "--drift": "9px", "--float-duration": "8.5s" } as React.CSSProperties}
-                >
-                  <PlatformChip icon={<TiktokColor size={21} />} label="@vygorapp" />
-                </div>
-
-                <div
-                  className="float-slow absolute right-3 top-[2%]"
-                  style={
-                    {
-                      "--drift": "7px",
-                      "--float-duration": "11s",
-                      "--float-delay": "-3s",
-                    } as React.CSSProperties
-                  }
-                >
-                  <PlatformChip icon={<InstagramColor size={21} />} label="@vygor.app" />
+                  {/* AI Macro Tracker: in front and dominant. */}
+                  <div
+                    className="float-slow relative z-10"
+                    style={{ "--tilt": "0deg", "--drift": "10px", "--float-duration": "9s", "--float-delay": "0s" } as React.CSSProperties}
+                  >
+                    <Image
+                      src="/creators/creator-hero-macros-background%20removed.png"
+                      alt="Vygor AI Macro Tracker, free: log a meal from a photo, the gallery, a barcode or by typing it"
+                      width={1290}
+                      height={2252}
+                      priority
+                      sizes="(max-width: 640px) 208px, (max-width: 1024px) 256px, 296px"
+                      className="h-auto w-[13rem] sm:w-[16rem] lg:w-[18.5rem]"
+                    />
+                    <div className="absolute -right-3 top-[30%] z-20">
+                      <PlatformChip icon={<InstagramColor size={21} />} label="@vygor.app" />
+                    </div>
+                  </div>
                 </div>
               </div>
             </Reveal>
