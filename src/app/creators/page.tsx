@@ -149,7 +149,7 @@ export default function CreatorsPage() {
               </div>
             </Reveal>
 
-            {/* Two finished App Store artboards, staggered: the free AI Macro Tracker
+            {/* Two transparent phone cut-outs (phone, pop-out cards and soft shadows only), staggered: the free AI Macro Tracker
               in front and higher (the newest message), Contests lower and to the right.
               They already carry their own device frame and caption, so they render as
               plain images, never inside PhoneFrame. Files live in public/creators;
@@ -164,23 +164,23 @@ export default function CreatorsPage() {
                   className="absolute inset-0 -z-10 m-auto h-[70%] w-[85%] rounded-[50%] bg-cyan-500/18 blur-3xl"
                 />
 
-                <div className="flex items-start gap-3 sm:gap-5">
+                <div className="flex items-start gap-1 sm:gap-2">
                   <Image
-                    src="/creators/Free%20AI%20Calorie%20%26%20Macro%20Tracker.png"
+                    src="/creators/creator-hero-macros-background%20removed.png"
                     alt="Vygor AI Macro Tracker, free: log a meal from a photo, the gallery, a barcode or by typing it"
                     width={1290}
-                    height={2796}
+                    height={2252}
                     priority
-                    sizes="(min-width: 640px) 236px, 40vw"
-                    className="h-auto w-[40vw] max-w-[236px] rounded-[1.6rem] shadow-[0_24px_50px_-20px_rgb(6_34_49/0.45)] ring-1 ring-black/5"
+                    sizes="(min-width: 640px) 252px, 42vw"
+                    className="h-auto w-[42vw] max-w-[252px]"
                   />
                   <Image
-                    src="/creators/Free%20Challenges.png"
+                    src="/creators/creator-hero-contests-background%20removed.png"
                     alt="Vygor weight-loss and steps contests, free to create and join"
                     width={1290}
-                    height={2796}
-                    sizes="(min-width: 640px) 236px, 40vw"
-                    className="mt-14 sm:mt-20 h-auto w-[40vw] max-w-[236px] rounded-[1.6rem] shadow-[0_24px_50px_-20px_rgb(6_34_49/0.45)] ring-1 ring-black/5"
+                    height={2106}
+                    sizes="(min-width: 640px) 252px, 42vw"
+                    className="mt-14 sm:mt-20 h-auto w-[42vw] max-w-[252px]"
                   />
                 </div>
 
