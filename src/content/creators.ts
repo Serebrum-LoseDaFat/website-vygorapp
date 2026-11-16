@@ -29,7 +29,7 @@ export const creatorsIntro = {
   title: "Your dietitian, trainer and coach — without the appointments.",
   accent: "without the appointments.",
   lead:
-    "Vygor is a weight management super app: six AI tools in one subscription, all working from the same plan. Partner with us and get the angles, the rules and the code you need to make content that actually converts.",
+    "Vygor is a weight management super app: six AI tools all working from the same plan, and the AI Macro Tracker is free to use. Partner with us and get the angles, the rules and the code you need to make content that actually converts.",
   price: "Free to download. Premium is $79.99 a year.",
 };
 
