@@ -61,20 +61,6 @@ function SectionKicker({ children }: { children: React.ReactNode }) {
   );
 }
 
-/**
- * A platform pill that drifts beside the hero artwork. Decoration, so it carries
- * a handle and nothing else — a follower count or an engagement figure here
- * would be invented, and the site does not publish numbers it cannot support.
- */
-function PlatformChip({ icon, label }: { icon: React.ReactNode; label: string }) {
-  return (
-    <span className="flex items-center gap-2.5 rounded-full bg-white/95 py-2 pl-2 pr-4 text-[0.82rem] font-semibold text-ink shadow-[0_12px_34px_-12px_rgb(6_34_49/0.5)] ring-1 ring-line backdrop-blur-sm">
-      {icon}
-      {label}
-    </span>
-  );
-}
-
 /** The shared open/close affordance on every disclosure card. */
 function Chevron() {
   return (
@@ -160,14 +146,14 @@ export default function CreatorsPage() {
               image overlap below is larger than the homepage's; the visible phone
               overlap matches it (about 1.5rem on desktop).
 
-              The two platform chips sit inside the phone wrappers, so they stay
-              attached to their phone and move with it instead of floating free. */}
+              On screens 1460px and wider the pair grows about 15% to use the
+              column; narrower screens keep the sizes that already fit. */}
             <Reveal delay={120} y={24}>
-              <div className="relative flex justify-center pb-14 pl-[7rem] sm:pl-[9rem] lg:pb-20 lg:pl-[10rem]">
+              <div className="relative flex justify-center pb-14 pl-[7rem] sm:pl-[9rem] lg:pb-20 lg:pl-[10rem] min-[1460px]:pl-[11.5rem]">
                 <div className="relative">
                   {/* Contests: behind, smaller, lower. */}
                   <div
-                    className="float-slow absolute bottom-[-6%] left-[-7rem] z-0 sm:bottom-[-7%] sm:left-[-9rem] lg:bottom-[-9%] lg:left-[-10rem]"
+                    className="float-slow absolute bottom-[-6%] left-[-7rem] z-0 sm:bottom-[-7%] sm:left-[-9rem] lg:bottom-[-9%] lg:left-[-10rem] min-[1460px]:left-[-11.5rem]"
                     style={{ "--tilt": "0deg", "--drift": "13px", "--float-duration": "11s", "--float-delay": "-3.5s" } as React.CSSProperties}
                   >
                     <Image
@@ -175,12 +161,9 @@ export default function CreatorsPage() {
                       alt="Vygor weight-loss and steps contests, free to create and join"
                       width={1290}
                       height={2106}
-                      sizes="(max-width: 640px) 160px, (max-width: 1024px) 200px, 232px"
-                      className="h-auto w-[10rem] sm:w-[12.5rem] lg:w-[14.5rem]"
+                      sizes="(max-width: 640px) 160px, (max-width: 1024px) 200px, (max-width: 1460px) 232px, 264px"
+                      className="h-auto w-[10rem] sm:w-[12.5rem] lg:w-[14.5rem] min-[1460px]:w-[16.5rem]"
                     />
-                    <div className="absolute -left-3 bottom-[20%] z-20">
-                      <PlatformChip icon={<TiktokColor size={21} />} label="@vygorapp" />
-                    </div>
                   </div>
 
                   {/* AI Macro Tracker: in front and dominant. */}
@@ -194,12 +177,9 @@ export default function CreatorsPage() {
                       width={1290}
                       height={2252}
                       priority
-                      sizes="(max-width: 640px) 208px, (max-width: 1024px) 256px, 296px"
-                      className="h-auto w-[13rem] sm:w-[16rem] lg:w-[18.5rem]"
+                      sizes="(max-width: 640px) 208px, (max-width: 1024px) 256px, (max-width: 1460px) 296px, 340px"
+                      className="h-auto w-[13rem] sm:w-[16rem] lg:w-[18.5rem] min-[1460px]:w-[21.25rem]"
                     />
-                    <div className="absolute -right-3 top-[30%] z-20">
-                      <PlatformChip icon={<InstagramColor size={21} />} label="@vygor.app" />
-                    </div>
                   </div>
                 </div>
               </div>
