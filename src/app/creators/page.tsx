@@ -147,13 +147,15 @@ export default function CreatorsPage() {
               overlap matches it (about 1.5rem on desktop).
 
               On screens 1460px and wider the pair grows about 15% to use the
-              column; narrower screens keep the sizes that already fit. */}
+              column; narrower screens keep the sizes that already fit. The
+              breakpoint is written in rem (91.25rem) like Tailwind's own: a px
+              value sorts before lg: and never applies. */}
             <Reveal delay={120} y={24}>
-              <div className="relative flex justify-center pb-14 pl-[7rem] sm:pl-[9rem] lg:pb-20 lg:pl-[10rem] min-[1460px]:pl-[11.5rem]">
+              <div className="relative flex justify-center pb-14 pl-[7rem] sm:pl-[9rem] lg:pb-20 lg:pl-[10rem] min-[91.25rem]:pl-[11.5rem]">
                 <div className="relative">
                   {/* Contests: behind, smaller, lower. */}
                   <div
-                    className="float-slow absolute bottom-[-6%] left-[-7rem] z-0 sm:bottom-[-7%] sm:left-[-9rem] lg:bottom-[-9%] lg:left-[-10rem] min-[1460px]:left-[-11.5rem]"
+                    className="float-slow absolute bottom-[-6%] left-[-7rem] z-0 sm:bottom-[-7%] sm:left-[-9rem] lg:bottom-[-9%] lg:left-[-10rem] min-[91.25rem]:left-[-11.5rem]"
                     style={{ "--tilt": "0deg", "--drift": "13px", "--float-duration": "11s", "--float-delay": "-3.5s" } as React.CSSProperties}
                   >
                     <Image
@@ -162,7 +164,7 @@ export default function CreatorsPage() {
                       width={1290}
                       height={2106}
                       sizes="(max-width: 640px) 160px, (max-width: 1024px) 200px, (max-width: 1460px) 232px, 264px"
-                      className="h-auto w-[10rem] sm:w-[12.5rem] lg:w-[14.5rem] min-[1460px]:w-[16.5rem]"
+                      className="h-auto w-[10rem] sm:w-[12.5rem] lg:w-[14.5rem] min-[91.25rem]:w-[16.5rem]"
                     />
                   </div>
 
@@ -178,7 +180,7 @@ export default function CreatorsPage() {
                       height={2252}
                       priority
                       sizes="(max-width: 640px) 208px, (max-width: 1024px) 256px, (max-width: 1460px) 296px, 340px"
-                      className="h-auto w-[13rem] sm:w-[16rem] lg:w-[18.5rem] min-[1460px]:w-[21.25rem]"
+                      className="h-auto w-[13rem] sm:w-[16rem] lg:w-[18.5rem] min-[91.25rem]:w-[21.25rem]"
                     />
                   </div>
                 </div>
