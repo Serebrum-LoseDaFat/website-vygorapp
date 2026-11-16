@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 import { ButtonLink } from "@/components/Button";
+import { SendDraftButton } from "@/components/SendDraftButton";
 import { ApplyButton } from "@/components/ApplyButton";
 import { PhoneFrame } from "@/components/PhoneFrame";
 import { CreatorNav } from "@/components/CreatorNav";
@@ -147,21 +149,14 @@ export default function CreatorsPage() {
               </div>
             </Reveal>
 
-            {/* Phone with the contest screen — the one feature a creator can
-                point their own audience at — and two platform chips drifting
-                beside it.
+            {/* Two finished App Store artboards, staggered: the free AI Macro Tracker
+              in front and higher (the newest message), Contests lower and to the right.
+              They already carry their own device frame and caption, so they render as
+              plain images, never inside PhoneFrame. Files live in public/creators;
+              to swap one, upload under a NEW file name (images are cached for a year).
 
-                An illustration with the App Store listing laid over it was tried
-                here and rejected: the product itself is the more persuasive
-                image on a page asking someone to make content about it.
-
-                Only the chips move. The screenshot never rotates, tilts or
-                drifts: product UI stays upright and unaltered, and the chips are
-                our own decoration rather than cropped app pixels floated back
-                over the screen they came from. Motion guidance is to keep moving
-                elements to one or two per view, so it is two, both slow and
-                low-amplitude, and `float-slow` already disables itself under
-                prefers-reduced-motion. */}
+              Only the two platform chips move, slowly; float-slow already switches
+              itself off under prefers-reduced-motion. */}
             <Reveal delay={120} y={24}>
               <div className="relative mx-auto w-fit lg:ml-auto lg:mr-0">
                 <div
@@ -169,17 +164,35 @@ export default function CreatorsPage() {
                   className="absolute inset-0 -z-10 m-auto h-[70%] w-[85%] rounded-[50%] bg-cyan-500/18 blur-3xl"
                 />
 
-                <PhoneFrame id="contests" width={286} proportional priority />
+                <div className="flex items-start gap-3 sm:gap-5">
+                  <Image
+                    src="/creators/Free%20AI%20Calorie%20%26%20Macro%20Tracker.png"
+                    alt="Vygor AI Macro Tracker, free: log a meal from a photo, the gallery, a barcode or by typing it"
+                    width={1290}
+                    height={2796}
+                    priority
+                    sizes="(min-width: 640px) 236px, 40vw"
+                    className="h-auto w-[40vw] max-w-[236px] rounded-[1.6rem] shadow-[0_24px_50px_-20px_rgb(6_34_49/0.45)] ring-1 ring-black/5"
+                  />
+                  <Image
+                    src="/creators/Free%20Challenges.png"
+                    alt="Vygor weight-loss and steps contests, free to create and join"
+                    width={1290}
+                    height={2796}
+                    sizes="(min-width: 640px) 236px, 40vw"
+                    className="mt-14 sm:mt-20 h-auto w-[40vw] max-w-[236px] rounded-[1.6rem] shadow-[0_24px_50px_-20px_rgb(6_34_49/0.45)] ring-1 ring-black/5"
+                  />
+                </div>
 
                 <div
-                  className="float-slow absolute -left-4 top-[16%] sm:-left-10"
+                  className="float-slow absolute -left-4 top-[58%] sm:-left-10"
                   style={{ "--drift": "9px", "--float-duration": "8.5s" } as React.CSSProperties}
                 >
                   <PlatformChip icon={<TiktokColor size={21} />} label="@vygorapp" />
                 </div>
 
                 <div
-                  className="float-slow absolute -right-3 bottom-[18%] sm:-right-8"
+                  className="float-slow absolute -right-3 top-[4%] sm:-right-8"
                   style={
                     {
                       "--drift": "7px",
@@ -621,9 +634,7 @@ export default function CreatorsPage() {
                   ))}
                 </ul>
 
-                <ButtonLink href={mailto} variant="primary" size="md" className="mt-7" withArrow>
-                  Send a draft
-                </ButtonLink>
+                <SendDraftButton href={mailto} email={partnersEmail} />
               </div>
             </Reveal>
           </div>
