@@ -285,8 +285,8 @@ export const pricing = {
   plan: {
     name: "Vygor Premium",
     price: "$79.99",
-    period: "per year",
-    blurb: "One plan. Everything included. No tiers to compare.",
+    period: "per year, after a 1-week free trial",
+    blurb: "The AI Macro Tracker and Contests are free. Premium unlocks the other four tools.",
     includes: [
       "AI Dietitian and meal plans",
       "AI Recipes, with videos",
@@ -295,10 +295,12 @@ export const pricing = {
       "Contests",
       "Analytics",
     ],
+    /** Free for everyone; tagged "Free" in the list above. */
+    free: ["AI Macro Tracker", "Contests"],
     cta: "Get Vygor",
   },
   disclaimer:
-    "Competitor prices are list prices for a standard individual annual plan in the US, checked in August 2026, and are shown for comparison only — they change with promotions and region. Vygor is free to download and the basic version is free to use for as long as you like; Premium is $79.99 per year on the App Store.",
+    "Competitor prices are list prices for a standard individual annual plan in the US, checked in August 2026, and are shown for comparison only — they change with promotions and region. Vygor is free to download, and the AI Macro Tracker and Contests are free for as long as you like. 1-week free trial, then Premium is $79.99 a year on the App Store.",
 };
 
 /**
@@ -325,7 +327,7 @@ export const contact = {
 export const faqIntro = {
   kicker: "FAQ",
   title: "Frequently asked questions",
-  lead: "How Vygor builds your plan, what it can track, and what the subscription covers.",
+  lead: "How Vygor builds your plan, what it can track, and what's free and what Premium adds.",
 };
 
 /**
@@ -362,7 +364,7 @@ export const faqGroups = [
     items: [
       { q: "Which devices does Vygor support?", a: "Vygor runs on iPhone, and also supports Apple Watch and Apple Vision. It syncs with Apple Health automatically so your progress stays in one place. An Android version is not available yet." },
       { q: "Is my data private?", a: "Vygor states that it never sells your profile information to anyone. According to its App Store privacy disclosure, the data it collects — including contact info, photos and device identifiers — is not linked to your identity. The full privacy policy has the complete detail." },
-      { q: "How much does Vygor cost?", a: "Vygor is free to download and the basic version is free to use for as long as you like. Upgrading is a single subscription — Premium at $79.99 per year — with no tiers to compare and nothing held back. Prices shown on the App Store are the definitive ones and may vary by region." },
+      { q: "How much does Vygor cost?", a: "Vygor is free to download, and the AI Macro Tracker and Contests are free for as long as you like. Premium starts with a 1-week free trial, then $79.99 a year, and unlocks all six tools: AI Dietitian, AI Recipes, AI Trainer and Analytics, as well as the tracker and Contests. Prices on the App Store are final and may vary by region." },
     ],
   },
 ] as const;
