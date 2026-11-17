@@ -112,7 +112,17 @@ export function Pricing() {
                       <span className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-white/15 text-aqua-300">
                         <Check size={12} />
                       </span>
-                      <span className="text-white/85">{item}</span>
+                      <span className="text-white/85">
+                        {item}
+                        {/* Free for everyone, not only Premium: tagged so the list still shows
+                            all six tools while making the free ones obvious. Leaf green carries
+                            dark text only (see globals.css). */}
+                        {(pricing.plan.free as readonly string[]).includes(item) ? (
+                          <span className="ml-2 inline-block rounded-full bg-leaf-500 px-2 py-0.5 align-middle text-[0.75rem] font-bold leading-none text-deep">
+                            Free
+                          </span>
+                        ) : null}
+                      </span>
                     </li>
                   ))}
                 </ul>
