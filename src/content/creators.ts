@@ -29,7 +29,7 @@ export const creatorsIntro = {
   title: "Your dietitian, trainer and coach — without the appointments.",
   accent: "without the appointments.",
   lead:
-    "Vygor is a weight management super app: six AI tools all working from the same plan, and the AI Macro Tracker is free to use. Partner with us and get the angles, the rules and the code you need to make content that actually converts.",
+    "Vygor is a weight management super app: six tools working from the same plan, and the AI Macro Tracker and Contests are free to use. Partner with us and get the angles, the rules and the code you need to make content that actually converts.",
   price: "Free to download. Premium is $79.99 a year.",
 };
 
@@ -76,7 +76,7 @@ export const creatorBenefits = {
 export const creatorProduct = {
   title: "Know what you are promoting.",
   lead:
-    "Vygor is a weight management super app — six AI tools in one subscription, all working from the same plan. Free to download, with Premium at $79.99 a year.",
+    "Vygor is a weight management super app — six tools working from the same plan. The AI Macro Tracker and Contests are free, so your audience can try Vygor without paying. There is a 1-week free trial, then Premium at $79.99 a year.",
   /**
    * Three of these use their own source screenshot rather than the one the
    * homepage uses. Those screens bury the part that explains the tool below a
@@ -105,7 +105,7 @@ export const creatorProduct = {
     },
     {
       name: "AI Macro Tracker",
-      tagline: "Log a meal from a photo",
+      tagline: "Free: log a meal from a photo",
       screen: "tracker",
       body: "Photograph the plate, scan a barcode, pick from the gallery or type it. Vygor returns the calories, carbs, protein and fat and files it against the day. This is the feature that demos best on camera.",
     },
@@ -117,7 +117,7 @@ export const creatorProduct = {
     },
     {
       name: "Contests",
-      tagline: "Challenges they can run with followers",
+      tagline: "Free: challenges they can run with followers",
       screen: "creator-contests",
       body: "Weight or step competitions with friends, family or an audience — a shared start, a target and a countdown. The most useful feature for a creator, because it turns a post into something their followers join.",
     },
