@@ -137,8 +137,9 @@ export default function CreatorsPage() {
 
             {/* Same arrangement as the homepage hero (HeroPhones): one larger phone in
               front, a smaller one set back, lower and lightly overlapped, both
-              drifting vertically only. Front: the free AI Macro Tracker. Behind:
-              Contests. The images are transparent cut-outs (phone, pop-out cards
+              drifting vertically only. Front: Premium, the paid tools a creator
+              earns from, marked by the PREMIUM badge in its own artwork. Behind:
+              the free AI Macro Tracker, so the pair reads "start free, upgrade". The images are transparent cut-outs (phone, pop-out cards
               and soft shadows) in public/creators; to swap one, upload under a NEW
               file name, because images are cached for a year.
 
@@ -153,31 +154,31 @@ export default function CreatorsPage() {
             <Reveal delay={120} y={24}>
               <div className="relative flex justify-center pb-14 pl-[7rem] sm:pl-[9rem] lg:pb-20 lg:pl-[10rem] min-[91.25rem]:pl-[11.5rem]">
                 <div className="relative">
-                  {/* Contests: behind, smaller, lower. */}
+                  {/* Free AI Macro Tracker: behind, smaller, lower. */}
                   <div
                     className="float-slow absolute bottom-[-6%] left-[-7rem] z-0 sm:bottom-[-7%] sm:left-[-9rem] lg:bottom-[-9%] lg:left-[-10rem] min-[91.25rem]:left-[-11.5rem]"
                     style={{ "--tilt": "0deg", "--drift": "13px", "--float-duration": "11s", "--float-delay": "-3.5s" } as React.CSSProperties}
-                  >
-                    <Image
-                      src="/creators/creator-hero-contests-background%20removed.png"
-                      alt="Vygor weight-loss and steps contests, free to create and join"
-                      width={1290}
-                      height={2106}
-                      sizes="(max-width: 640px) 160px, (max-width: 1024px) 200px, (max-width: 1460px) 232px, 264px"
-                      className="h-auto w-[10rem] sm:w-[12.5rem] lg:w-[14.5rem] min-[91.25rem]:w-[16.5rem]"
-                    />
-                  </div>
-
-                  {/* AI Macro Tracker: in front and dominant. */}
-                  <div
-                    className="float-slow relative z-10"
-                    style={{ "--tilt": "0deg", "--drift": "10px", "--float-duration": "9s", "--float-delay": "0s" } as React.CSSProperties}
                   >
                     <Image
                       src="/creators/creator-hero-macros-background%20removed.png"
                       alt="Vygor AI Macro Tracker, free: log a meal from a photo, the gallery, a barcode or by typing it"
                       width={1290}
                       height={2252}
+                      sizes="(max-width: 640px) 160px, (max-width: 1024px) 200px, (max-width: 1460px) 232px, 264px"
+                      className="h-auto w-[10rem] sm:w-[12.5rem] lg:w-[14.5rem] min-[91.25rem]:w-[16.5rem]"
+                    />
+                  </div>
+
+                  {/* Premium (meal plans, AI recipes, exercise plans): in front and dominant. */}
+                  <div
+                    className="float-slow relative z-10"
+                    style={{ "--tilt": "0deg", "--drift": "10px", "--float-duration": "9s", "--float-delay": "0s" } as React.CSSProperties}
+                  >
+                    <Image
+                      src="/creators/PREMIUM-cutout.png"
+                      alt="Vygor Premium: AI meal plans with daily macros, AI recipes and exercise plans"
+                      width={1290}
+                      height={2476}
                       priority
                       sizes="(max-width: 640px) 208px, (max-width: 1024px) 256px, (max-width: 1460px) 296px, 340px"
                       className="h-auto w-[13rem] sm:w-[16rem] lg:w-[18.5rem] min-[91.25rem]:w-[21.25rem]"
