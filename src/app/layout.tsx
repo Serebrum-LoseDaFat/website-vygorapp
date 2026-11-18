@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
+import { EmailChooser } from "@/components/EmailChooser";
 import { siteUrl } from "@/lib/config";
 import { icon } from "@/content/screens";
 
@@ -99,6 +100,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Nav />
         <main id="main">{children}</main>
         <Footer />
+        {/* One email chooser for the whole site: any mailto: link opens it
+            (Gmail, Outlook on the web, mail app, copy address). */}
+        <EmailChooser />
       </body>
     </html>
   );
