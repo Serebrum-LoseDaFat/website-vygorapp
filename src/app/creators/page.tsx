@@ -143,20 +143,21 @@ export default function CreatorsPage() {
               and soft shadows) in public/creators; to swap one, upload under a NEW
               file name, because images are cached for a year.
 
-              The cut-outs carry about 9% transparent margin on each side, so the
-              image overlap below is larger than the homepage's; the visible phone
-              overlap matches it (about 1.5rem on desktop).
+              The Premium phone starts at about 95% of the Macro Tracker image's
+              width, so the full "FREE AI CALORIE & MACRO COUNTER" ribbon stays
+              visible. Sizes step down at lg (two columns beside the rail, narrow)
+              and back up at xl and 91.25rem, so the pair always fits its column.
 
               On screens 1460px and wider the pair grows about 15% to use the
               column; narrower screens keep the sizes that already fit. The
               breakpoint is written in rem (91.25rem) like Tailwind's own: a px
               value sorts before lg: and never applies. */}
             <Reveal delay={120} y={24}>
-              <div className="relative flex justify-center pb-14 pl-[7rem] sm:pl-[9rem] lg:pb-20 lg:pl-[10rem] min-[91.25rem]:pl-[11.5rem]">
+              <div className="relative flex justify-center pb-14 pl-[9rem] sm:pl-[11.5rem] lg:pb-20 lg:pl-[8.25rem] xl:pl-[11.75rem] min-[91.25rem]:pl-[13.75rem]">
                 <div className="relative">
                   {/* Free AI Macro Tracker: behind, smaller, lower. */}
                   <div
-                    className="float-slow absolute bottom-[-6%] left-[-7rem] z-0 sm:bottom-[-7%] sm:left-[-9rem] lg:bottom-[-9%] lg:left-[-10rem] min-[91.25rem]:left-[-11.5rem]"
+                    className="float-slow absolute bottom-[-6%] left-[-9rem] z-0 sm:bottom-[-7%] sm:left-[-11.5rem] lg:bottom-[-9%] lg:left-[-8.25rem] xl:left-[-11.75rem] min-[91.25rem]:left-[-13.75rem]"
                     style={{ "--tilt": "0deg", "--drift": "13px", "--float-duration": "11s", "--float-delay": "-3.5s" } as React.CSSProperties}
                   >
                     <Image
@@ -164,8 +165,8 @@ export default function CreatorsPage() {
                       alt="Vygor AI Macro Tracker, free: log a meal from a photo, the gallery, a barcode or by typing it"
                       width={1290}
                       height={2252}
-                      sizes="(max-width: 640px) 160px, (max-width: 1024px) 200px, (max-width: 1460px) 232px, 264px"
-                      className="h-auto w-[10rem] sm:w-[12.5rem] lg:w-[14.5rem] min-[91.25rem]:w-[16.5rem]"
+                      sizes="(max-width: 640px) 152px, (max-width: 1024px) 192px, (max-width: 1280px) 140px, (max-width: 1460px) 196px, 232px"
+                      className="h-auto w-[9.5rem] sm:w-[12rem] lg:w-[8.75rem] xl:w-[12.25rem] min-[91.25rem]:w-[14.5rem]"
                     />
                   </div>
 
@@ -175,13 +176,13 @@ export default function CreatorsPage() {
                     style={{ "--tilt": "0deg", "--drift": "10px", "--float-duration": "9s", "--float-delay": "0s" } as React.CSSProperties}
                   >
                     <Image
-                      src="/creators/PREMIUM-cutout.png"
+                      src="/creators/creator-hero-PREMIUM.png"
                       alt="Vygor Premium: AI meal plans with daily macros, AI recipes and exercise plans"
                       width={1290}
                       height={2476}
                       priority
-                      sizes="(max-width: 640px) 208px, (max-width: 1024px) 256px, (max-width: 1460px) 296px, 340px"
-                      className="h-auto w-[13rem] sm:w-[16rem] lg:w-[18.5rem] min-[91.25rem]:w-[21.25rem]"
+                      sizes="(max-width: 640px) 196px, (max-width: 1024px) 248px, (max-width: 1280px) 180px, (max-width: 1460px) 252px, 304px"
+                      className="h-auto w-[12.25rem] sm:w-[15.5rem] lg:w-[11.25rem] xl:w-[15.75rem] min-[91.25rem]:w-[19rem]"
                     />
                   </div>
                 </div>
